@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 
 
+"""
+AUTHOR: Hao Yu (yuhao@genomics.cn)
+DATE:   2019-08-19
+"""
+
+
 from sys import (argv, stderr)
 from pandas import (DataFrame, read_table, read_csv)
 from cv2 import imwrite

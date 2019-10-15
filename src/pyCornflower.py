@@ -16,9 +16,12 @@ from Cornflower.fastExpression import fast_extract_expression
 
 
 if __name__ == '__main__':
-    expression_matrix_encoding(argv[1], basename(argv[1]).split('.')[0])
-    exp_matrix = expression_matrix_decoding(argv[1] + '.png.gz')
+    if argv[1] == 'format':
+        expression_matrix_encoding(argv[2], basename(argv[2]).split('.')[0])
 
-    exp_value = fast_extract_expression(exp_matrix, basename(argv[1]).split('.')[0], argv[2], argv[3])
+    if argv[1] == 'search':
+        exp_matrix = expression_matrix_decoding(argv[2] + '.png.gz')
 
-    print(exp_value)
+        exp_value = fast_extract_expression(exp_matrix, basename(argv[2]).split('.')[0], argv[3], argv[4])
+
+        print(exp_value)

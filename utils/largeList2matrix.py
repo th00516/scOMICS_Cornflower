@@ -21,25 +21,29 @@ def largeList2matrix(largeList_path):
         with gopen(largeList_path, 'rb') as IFH:
             IFH.readline()
             IFH.readline()
-            max_col, max_row, _ = IFH.readline().decode(encoding='utf-8').split()
-            max_col = int(max_col)
+            max_row, max_col, _ = IFH.readline().decode(encoding='utf-8').split()
             max_row = int(max_row)
+            max_col = int(max_col)
 
-            size = max_col * max_row
+            size = max_row * max_col
 
             ####################################################
             # Generate a frame for accommodating all the value #
             ####################################################
             step_len = 0
             for i in range(1, (size + 1), max_col):
+                frm_buf = []
+
                 for j in range(1, (max_col + 1)):
                     frm = gcompress('0.00e+00,'.encode(encoding='utf-8'))
                     if j == max_col:
                         frm = gcompress('0.00e+00\n'.encode(encoding='utf-8'))
 
-                    OFH.write(frm)
+                    frm_buf.append(frm)
 
                     step_len = len(frm)
+
+                OFH.write(asarray(frm_buf).tobytes())
             ####################################################
 
             ############################
@@ -53,9 +57,9 @@ def largeList2matrix(largeList_path):
 
                 buffer = asarray(list(char.split(asarray(buffer.split('\n')[:-1]))))
 
-                for col, row, val in buffer:
-                    col = int(col)
+                for row, col, val in buffer:
                     row = int(row)
+                    col = int(col)
 
                     dat = gcompress((val + ',').encode(encoding='utf-8'))
                     if col == max_col:

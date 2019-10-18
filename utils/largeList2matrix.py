@@ -16,7 +16,7 @@ from numpy import (asarray, char)
 
 def largeList2matrix(largeList_path):
     """"""
-    with open(basename(largeList_path) + '.csv.gz', 'w+b') as OFH:
+    with open(basename(largeList_path) + '.csv.lz', 'w+b') as OFH:
         with gopen(largeList_path, 'rb') as IFH:
             IFH.readline()
             IFH.readline()

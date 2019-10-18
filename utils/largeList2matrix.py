@@ -7,11 +7,10 @@ DATE:   2019-10-15
 """
 
 
-from sys import (argv, stderr)
-from os import SEEK_SET
+from sys import argv
 from os.path import basename
-from gzip import (open as gopen, compress as gcompress)
-# from lzma import (open as lopen, compress as lcompress)
+from gzip import open as gopen
+from lzma import compress, decompress
 from numpy import (asarray, char)
 
 
@@ -22,58 +21,35 @@ def largeList2matrix(largeList_path):
             IFH.readline()
             IFH.readline()
             max_row, max_col, _ = IFH.readline().decode(encoding='utf-8').split()
-            max_row = int(max_row)
             max_col = int(max_col)
-
-            size = max_row * max_col
 
             ####################################################
             # Generate a frame for accommodating all the value #
             ####################################################
-            step_len = 0
-            for i in range(1, (size + 1), max_col):
-                frm_buf = []
+            new_line = compress(('0.00e+00,' * (max_col - 1) + '0.00e+00\n').encode(encoding='utf-8'))
 
-                for j in range(1, (max_col + 1)):
-                    frm = gcompress('0.00e+00,'.encode(encoding='utf-8'))
-                    if j == max_col:
-                        frm = gcompress('0.00e+00\n'.encode(encoding='utf-8'))
-
-                    frm_buf.append(frm)
-
-                    step_len = len(frm)
-
-                OFH.write(asarray(frm_buf).tobytes())
-            ####################################################
-
-            ############################
-            # Fill data into the frame #
-            ############################
-            buffer = IFH.read(536870912)  # buffer = 512M
+            buffer = IFH.read(104857600)  # buffer = 100M
             while buffer:
                 buffer = buffer.decode(encoding='utf-8')
                 while buffer[-1] != '\n':
                     buffer += IFH.read(1).decode(encoding='utf-8')
 
-                buffer = asarray(list(char.split(asarray(buffer.split('\n')[:-1]))))
-
-                for row, col, val in buffer:
+                n = 1
+                frameBuf = decompress(new_line).decode(encoding='utf-8').split(',')
+                for row, col, val in asarray(list(char.split(asarray(buffer.split('\n')[:-1])))):
                     row = int(row)
                     col = int(col)
 
-                    dat = gcompress((val + ',').encode(encoding='utf-8'))
-                    if col == max_col:
-                        dat = gcompress((val + '\n').encode(encoding='utf-8'))
+                    if row > n:
+                        OFH.write(compress(''.join(','.join(frameBuf)).encode(encoding='utf-8')))
+                        n += 1
+                        frameBuf = decompress(new_line).decode(encoding='utf-8').split(',')
 
-                    if len(dat) == step_len:
-                        OFH.seek((((row - 1) * max_col + col) - 1) * step_len, SEEK_SET)
-                        OFH.write(dat)
-                    else:
-                        print('Compression failed.', file=stderr)
-                        exit(1)
+                    frameBuf[col - 1] = val
+                OFH.write(compress(''.join(','.join(frameBuf)).encode(encoding='utf-8')))
 
-                buffer = IFH.read(536870912)
-            ############################
+                buffer = IFH.read(104857600)
+            ####################################################
 
 
 if __name__ == '__main__':

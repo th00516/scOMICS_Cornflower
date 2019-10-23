@@ -21,7 +21,7 @@ def largeList2matrix(largeList_path):
         with gopen(largeList_path, 'rb') as IFH:
             IFH.readline()
             IFH.readline()
-            max_row, max_col, _ = IFH.readline().decode().split()
+            _, max_col, _ = IFH.readline().decode().split()
             max_col = int(max_col)
 
             ####################################################

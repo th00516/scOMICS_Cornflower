@@ -9,14 +9,15 @@ DATE:   2019-10-15
 
 from sys import argv
 from os.path import basename
+from os import SEEK_SET
 from gzip import (open as gopen, compress as gcompress)
-from lz4.block import (compress as lcompress, decompress as ldecompress)
+from io import BytesIO
 from numpy import (asarray, char)
 
 
 def largeList2matrix(largeList_path):
     """"""
-    with open(basename(largeList_path) + '.csv.gz', 'w+b') as OFH:
+    with open(basename(largeList_path) + '.csv.gz', 'wb') as OFH:
         with gopen(largeList_path, 'rb') as IFH:
             IFH.readline()
             IFH.readline()
@@ -26,30 +27,37 @@ def largeList2matrix(largeList_path):
             ####################################################
             # Generate a frame for accommodating all the value #
             ####################################################
-            new_line = lcompress(''.join(('0.00e+00,' * (max_col - 1), '0.00e+00\n')).encode())
+            new_line = ''.join(('0.00e+00,' * (max_col - 1), '0.00e+00\n')).encode()
             ####################################################
+
+            frameBuf = BytesIO(new_line)
 
             buffer = IFH.read(209715200)  # IO buffer = 200M
             while buffer:
-                buffer = buffer.decode()
-                while buffer[-1] != '\n':
-                    buffer += IFH.read(1).decode()
+                while buffer[-1] != 10:
+                    buffer += IFH.read(1)
 
                 n = 1
-                frameBuf = ldecompress(new_line).decode().split(',')
-                for row, col, val in asarray(list(char.split(asarray(buffer.split('\n')[:-1])))):
+                for row, col, val in list(char.split(asarray(buffer.decode().split('\n')[:-1]))):
                     row = int(row)
                     col = int(col)
 
                     if row > n:
-                        OFH.write(gcompress(''.join(','.join(frameBuf)).encode()))
-                        n += 1
-                        frameBuf = ldecompress(new_line).decode().split(',')
+                        frameBuf.seek(0, SEEK_SET)
+                        OFH.write(gcompress(frameBuf.read()))
+                        frameBuf.close()
 
-                    frameBuf[col - 1] = val
-                OFH.write(gcompress(''.join(','.join(frameBuf)).encode()))
+                        n += 1
+                        frameBuf = BytesIO(new_line)
+
+                    frameBuf.seek((col - 1) * 9, SEEK_SET)
+                    frameBuf.write(val.encode())
 
                 buffer = IFH.read(209715200)
+
+            frameBuf.seek(0, SEEK_SET)
+            OFH.write(gcompress(frameBuf.read()))
+            frameBuf.close()
 
 
 if __name__ == '__main__':

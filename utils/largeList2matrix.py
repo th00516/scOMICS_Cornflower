@@ -7,7 +7,7 @@ DATE:   2019-10-15
 """
 
 
-from sys import argv
+from sys import (argv, stderr)
 from os.path import basename
 from os import SEEK_SET
 from gzip import (open as gopen, compress as gcompress)
@@ -21,7 +21,8 @@ def largeList2matrix(largeList_path):
         with gopen(largeList_path, 'rb') as IFH:
             IFH.readline()
             IFH.readline()
-            _, max_col, _ = IFH.readline().decode().split()
+            max_row, max_col, _ = IFH.readline().decode().split()
+            max_row = int(max_row)
             max_col = int(max_col)
 
             ####################################################
@@ -32,7 +33,7 @@ def largeList2matrix(largeList_path):
 
             frameBuf = BytesIO(new_line)
 
-            buffer = IFH.read(209715200)  # IO buffer = 200M
+            buffer = IFH.read(268435456)  # IO buffer = 256M
             while buffer:
                 while buffer[-1] != 10:
                     buffer += IFH.read(1)
@@ -41,6 +42,10 @@ def largeList2matrix(largeList_path):
                 for row, col, val in list(char.split(asarray(buffer.decode().split('\n')[:-1]))):
                     row = int(row)
                     col = int(col)
+
+                    if row > max_row or col > max_col:
+                        print('Coordinates out of range in row ' + str(n) + '.', file=stderr)
+                        continue
 
                     if row > n:
                         frameBuf.seek(0, SEEK_SET)
@@ -53,7 +58,7 @@ def largeList2matrix(largeList_path):
                     frameBuf.seek((col - 1) * 9, SEEK_SET)
                     frameBuf.write(val.encode())
 
-                buffer = IFH.read(209715200)
+                buffer = IFH.read(268435456)
 
             frameBuf.seek(0, SEEK_SET)
             OFH.write(gcompress(frameBuf.read()))

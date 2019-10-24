@@ -33,18 +33,20 @@ def largeList2matrix(largeList_path):
 
             frameBuf = BytesIO(new_line)
 
-            buffer = IFH.read(268435456)  # IO buffer = 256M
-            while buffer:
-                while buffer[-1] != 10:
-                    buffer += IFH.read(1)
+            buffer = bytearray(IFH.read(268435456))  # IO buffer = 256M
 
-                n = 1
+            n = 1
+            while buffer:
+                while not buffer.endswith(b'\n'):
+                    buffer.extend(bytearray(IFH.read(1)))
+
                 for row, col, val in list(char.split(asarray(buffer.decode().split('\n')[:-1]))):
                     row = int(row)
                     col = int(col)
+                    val = val.encode()
 
                     if row > max_row or col > max_col:
-                        print('Coordinates out of range in row ' + str(n) + '.', file=stderr)
+                        print('Coordinates out of range in r' + str(row) + 'c' + str(col) + '.', file=stderr)
                         continue
 
                     if row > n:
@@ -56,9 +58,9 @@ def largeList2matrix(largeList_path):
                         frameBuf = BytesIO(new_line)
 
                     frameBuf.seek((col - 1) * 9, SEEK_SET)
-                    frameBuf.write(val.encode())
+                    frameBuf.write(val)
 
-                buffer = IFH.read(268435456)
+                buffer = bytearray(IFH.read(268435456))
 
             frameBuf.seek(0, SEEK_SET)
             OFH.write(gcompress(frameBuf.read()))

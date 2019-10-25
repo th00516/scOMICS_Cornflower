@@ -31,11 +31,11 @@ def largeList2matrix(largeList_path):
             new_line = ''.join(('0.00e+00,' * (max_col - 1), '0.00e+00\n')).encode()
             ####################################################
 
+            n = 1
             frameBuf = BytesIO(new_line)
 
             buffer = bytearray(IFH.read(268435456))  # IO buffer = 256M
 
-            n = 1
             while buffer:
                 while not buffer.endswith(b'\n'):
                     buffer.extend(bytearray(IFH.read(1)))

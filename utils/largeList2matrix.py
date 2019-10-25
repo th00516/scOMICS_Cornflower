@@ -9,6 +9,7 @@ DATE:   2019-10-15
 
 from sys import (argv, stderr)
 from os.path import basename
+from enum import Enum
 from os import SEEK_SET
 from gzip import (open as gopen, compress as gcompress)
 from io import BytesIO
@@ -56,7 +57,7 @@ def store_info(prefix, row_arr, col_arr):
     connector.commit()
 
 
-def largeList2matrix(largeList_path):
+def largeList2matrix(largeList_path, flag):
     """"""
     prefix = str(basename(largeList_path)).split('.')[0]
 
@@ -91,8 +92,9 @@ def largeList2matrix(largeList_path):
                     col = int(col)
                     val = val.encode()
 
-                    row_arr.add(('FE%07d' % row, row))
-                    col_arr.add(('SA%07d' % col, col))
+                    if flag == 1:
+                        row_arr.add(('FE%07d' % row, row))
+                        col_arr.add(('SA%07d' % col, col))
 
                     if row > max_row or col > max_col:
                         print('Coordinates out of range in r' + str(row) + 'c' + str(col) + '.', file=stderr)
@@ -115,10 +117,15 @@ def largeList2matrix(largeList_path):
             OFH.write(gcompress(frameBuf.read()))
             frameBuf.close()
 
-    row_arr = sorted(row_arr, key=lambda x: x[1])
-    col_arr = sorted(col_arr, key=lambda x: x[1])
-    store_info(prefix, tuple(row_arr), tuple(col_arr))
+    if flag == 1:
+        row_arr = sorted(row_arr, key=lambda x: x[1])
+        col_arr = sorted(col_arr, key=lambda x: x[1])
+        store_info(prefix, tuple(row_arr), tuple(col_arr))
 
 
 if __name__ == '__main__':
-    largeList2matrix(argv[1])
+    class flags(Enum):
+        nosql = 0
+        mysql = 1
+
+    largeList2matrix(argv[1], flags.nosql.value)

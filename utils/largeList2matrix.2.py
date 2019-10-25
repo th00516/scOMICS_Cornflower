@@ -10,9 +10,7 @@ DATE:   2019-10-15
 from sys import (argv, stderr)
 from os.path import basename
 from enum import Enum
-from os import SEEK_SET
-from gzip import (open as gopen, compress as gcompress)
-from io import BytesIO
+from gzip import open
 from numpy import (asarray, char)
 from mysql.connector import connect
 
@@ -64,22 +62,21 @@ def largeList2matrix(largeList_path, flag):
     row_arr = set()
     col_arr = set()
 
-    with open(prefix + '.csv.gz', 'wb') as OFH:
-        with gopen(largeList_path, 'rb') as IFH:
+    with open(prefix + '.b_mat', 'wb') as OFH:
+        with open(largeList_path, 'rb') as IFH:
             IFH.readline()
             IFH.readline()
+
             max_row, max_col, _ = IFH.readline().decode().split()
             max_row = int(max_row)
             max_col = int(max_col)
 
-            ####################################################
-            # Generate a frame for accommodating all the value #
-            ####################################################
-            new_line = ''.join(('0.00e+00,' * (max_col - 1), '0.00e+00\n')).encode()
-            ####################################################
+            OFH.write(bytes((max_col // 256 ** 2,)))
+            OFH.write(bytes((max_col % 256 ** 2 // 256 ** 1,)))
+            OFH.write(bytes((max_col % 256 ** 2 % 256 ** 1 // 256 ** 0,)))
 
             n = 1
-            frameBuf = BytesIO(new_line)
+            frameBuf = bytearray(max_col * 2)
             buffer = bytearray(IFH.read(268435456))  # IO buffer = 256M
 
             while buffer:
@@ -89,32 +86,33 @@ def largeList2matrix(largeList_path, flag):
                 for row, col, val in list(char.split(asarray(buffer.decode().split('\n')[:-1]))):
                     row = int(row)
                     col = int(col)
-                    val = val.encode()
+                    val = int(float(val))
+
+                    val = 256 ** 2 if val > 256 ** 2 else val
+
+                    val_h = val // 256 ** 1
+                    val_l = val % 256 ** 1 // 256 ** 0
 
                     if flag == 1:
-                        row_arr.add(('FE%07d' % row, row))
-                        col_arr.add(('SA%07d' % col, col))
+                        row_arr.add(('FE%06d' % row, row))
+                        col_arr.add(('SA%08d' % col, col))
 
                     if row > max_row or col > max_col:
                         print('Coordinates out of range in r' + str(row) + 'c' + str(col) + '.', file=stderr)
                         continue
 
                     if row > n:
-                        frameBuf.seek(0, SEEK_SET)
-                        OFH.write(gcompress(frameBuf.read()))
-                        frameBuf.close()
+                        OFH.write(frameBuf)
 
                         n += 1
-                        frameBuf = BytesIO(new_line)
+                        frameBuf = bytearray(max_col * 2)
 
-                    frameBuf.seek((col - 1) * 9, SEEK_SET)
-                    frameBuf.write(val)
+                    frameBuf[(col - 1) * 2] = val_h
+                    frameBuf[(col - 1) * 2 + 1] = val_l
 
                 buffer = bytearray(IFH.read(268435456))
 
-            frameBuf.seek(0, SEEK_SET)
-            OFH.write(gcompress(frameBuf.read()))
-            frameBuf.close()
+            OFH.write(frameBuf)
 
     if flag == 1:
         row_arr = sorted(row_arr, key=lambda x: x[1])
@@ -122,9 +120,28 @@ def largeList2matrix(largeList_path, flag):
         store_info(prefix, tuple(row_arr), tuple(col_arr))
 
 
-if __name__ == '__main__':
-    class flags(Enum):
-        nosql = 0
-        mysql = 1
+def search_exp_value(matirx_path, row, col):
+    """"""
+    with open(matirx_path, 'rb') as IFH:
+        max_col = int(ord(IFH.read(1))) * 256 ** 2 + \
+                  int(ord(IFH.read(1))) * 256 ** 1 + \
+                  int(ord(IFH.read(1))) * 256 ** 0
 
-    largeList2matrix(argv[1], flags.nosql.value)
+        IFH.seek(3 + ((row - 1) * max_col + (col - 1)) * 2, 0)
+        val = int(ord(IFH.read(1))) * 256 ** 1 + int(ord(IFH.read(1))) * 256 ** 0
+        print('%d\t%d\t%.2e' % (row, col, val))
+
+
+if __name__ == '__main__':
+    if argv[1] == 'trans':
+        class flags(Enum):
+            nosql = 0
+            mysql = 1
+
+        largeList2matrix(argv[2], flags.nosql.value)
+
+    elif argv[1] == 'show':
+        search_exp_value(argv[2], int(argv[3]), int(argv[4]))
+
+    else:
+        print('Bad command.', file=stderr)

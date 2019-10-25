@@ -56,8 +56,8 @@ def expression_matrix_encoding(exp_mat):
     cursor.execute(sql_create_table_row)
     cursor.execute(sql_create_table_col)
 
-    sql_insert_row = ' '.join(('INSERT INTO', '`' + table + '.row`', '(`row`, `coor`) VALUES (%s, %s);'))
-    sql_insert_col = ' '.join(('INSERT INTO', '`' + table + '.col`', '(`col`, `coor`) VALUES (%s, %s);'))
+    sql_insert_row = 'INSERT INTO `' + table + '.row` (`row`, `coor`) VALUES (%s, %s);'
+    sql_insert_col = 'INSERT INTO `' + table + '.col` (`col`, `coor`) VALUES (%s, %s);'
 
     exp_img_row = tuple(zip(exp_img_row, range(0, len(exp_img_row))))
     exp_img_col = tuple(zip(exp_img_col, range(0, len(exp_img_col))))
@@ -65,8 +65,8 @@ def expression_matrix_encoding(exp_mat):
     cursor.executemany(sql_insert_row, exp_img_row)
     cursor.executemany(sql_insert_col, exp_img_col)
 
-    sql_index_row = ' '.join(('CREATE UNIQUE INDEX', '`' + table + '.row` ON `' + table + '.row` (`row`)'))
-    sql_index_col = ' '.join(('CREATE UNIQUE INDEX', '`' + table + '.col` ON `' + table + '.col` (`col`)'))
+    sql_index_row = 'CREATE UNIQUE INDEX `' + table + '.row` ON `' + table + '.row` (`row`)'
+    sql_index_col = 'CREATE UNIQUE INDEX `' + table + '.col` ON `' + table + '.col` (`col`)'
 
     cursor.execute(sql_index_row)
     cursor.execute(sql_index_col)

@@ -9,45 +9,53 @@ DATE:   2019-10-15
 
 from sys import (argv, stderr)
 from os.path import basename
-from enum import Enum
-from gzip import open
+from gzip import (open as gopen, compress, decompress)
 from numpy import (asarray, char)
 from mysql.connector import connect
 
 
+config = {'host': 'localhost',
+          'user': 'yuhao',
+          'password': '#92064rmf',
+          'port': 3306,
+          'database': 'cornflowerDB',
+          'charset': 'utf8'
+          }
+
+
 def store_info(prefix, row_arr, col_arr):
     """"""
-    config = {'host': 'localhost',
-              'user': 'yuhao',
-              'password': '#92064rmf',
-              'port': 3306,
-              'database': 'cornflowerDB',
-              'charset': 'utf8'
-              }
-
     connector = connect(**config)
     cursor = connector.cursor()
 
     sql_create_table_row = 'CREATE TABLE IF NOT EXISTS `' + \
                            prefix + \
                            '.row` (' \
-                           '`id` INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY, ' \
-                           '`gene` TEXT NOT NULL, ' \
-                           '`row` INT UNSIGNED NOT NULL' \
+                           '`ID` INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY, ' \
+                           '`FE1` TEXT NOT NULL, ' \
+                           '`FE2` TEXT NOT NULL, ' \
+                           '`FE3` TEXT NOT NULL, ' \
+                           '`ROW_LEN` INT UNSIGNED NOT NULL, ' \
+                           '`ROW_LOC` INT UNSIGNED NOT NULL' \
                            ') ENGINE=INNODB DEFAULT CHARSET=utf8;'
     sql_create_table_col = 'CREATE TABLE IF NOT EXISTS `' + \
                            prefix + \
                            '.col` (' \
-                           '`id` INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY, ' \
-                           '`cell` TEXT NOT NULL, ' \
-                           '`col` INT UNSIGNED NOT NULL' \
+                           '`ID` INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY, ' \
+                           '`SA1` TEXT NOT NULL, ' \
+                           '`SA2` TEXT NOT NULL, ' \
+                           '`SA3` TEXT NOT NULL, ' \
+                           '`SA4` TEXT NOT NULL, ' \
+                           '`COL_LOC` INT UNSIGNED NOT NULL' \
                            ') ENGINE=INNODB DEFAULT CHARSET=utf8;'
 
     cursor.execute(sql_create_table_row)
     cursor.execute(sql_create_table_col)
 
-    sql_insert_row = 'INSERT INTO `' + prefix + '.row` (`gene`, `row`) VALUES (%s, %s)'
-    sql_insert_col = 'INSERT INTO `' + prefix + '.col` (`cell`, `col`) VALUES (%s, %s)'
+    sql_insert_row = 'INSERT INTO `' + prefix + '.row` (`FE1`, `FE2`, `FE3`, `ROW_LEN`, `ROW_LOC`) ' \
+                                                'VALUES (%s, %s, %s, %s, %s)'
+    sql_insert_col = 'INSERT INTO `' + prefix + '.col` (`SA1`, `SA2`, `SA3`, `SA4`, `COL_LOC`) ' \
+                                                'VALUES (%s, %s, %s, %s, %s)'
 
     cursor.executemany(sql_insert_row, row_arr)
     cursor.executemany(sql_insert_col, col_arr)
@@ -55,7 +63,34 @@ def store_info(prefix, row_arr, col_arr):
     connector.commit()
 
 
-def largeList2matrix(largeList_path, flag):
+def get_info(prefix, row, col):
+    """"""
+    connector = connect(**config)
+    cursor = connector.cursor()
+
+    row = '%06x' % row
+    col = '%08x' % col
+
+    sql_select_row = 'SELECT `ROW_LEN`, `ROW_LOC` from `' + prefix + '.row` WHERE ' \
+                                                           '`FE1` = "' + row[:2] + '" and ' \
+                                                           '`FE2` = "' + row[2:4] + '" and ' \
+                                                           '`FE3` = "' + row[4:] + '";'
+    sql_select_col = 'SELECT `COL_LOC` from `' + prefix + '.col` WHERE ' \
+                                                           '`SA1` = "' + col[:2] + '" and ' \
+                                                           '`SA2` = "' + col[2:4] + '" and ' \
+                                                           '`SA3` = "' + col[4:6] + '" and ' \
+                                                           '`SA4` = "' + col[6:] + '";'
+
+    cursor.execute(sql_select_row)
+    row_len, feature_loc = cursor.fetchone()
+
+    cursor.execute(sql_select_col)
+    sample_loc = cursor.fetchone()[0]
+
+    return row_len, feature_loc, sample_loc
+
+
+def largeList2matrix(largeList_path):
     """"""
     prefix = str(basename(largeList_path)).split('.')[0]
 
@@ -63,7 +98,7 @@ def largeList2matrix(largeList_path, flag):
     col_arr = set()
 
     with open(prefix + '.b_mat', 'wb') as OFH:
-        with open(largeList_path, 'rb') as IFH:
+        with gopen(largeList_path, 'rb') as IFH:
             IFH.readline()
             IFH.readline()
 
@@ -71,11 +106,8 @@ def largeList2matrix(largeList_path, flag):
             max_row = int(max_row)
             max_col = int(max_col)
 
-            OFH.write(bytes((max_col // 256 ** 2,)))
-            OFH.write(bytes((max_col % 256 ** 2 // 256 ** 1,)))
-            OFH.write(bytes((max_col % 256 ** 2 % 256 ** 1 // 256 ** 0,)))
-
-            n = 1
+            fe_id = 1
+            sa_id = 1
             frameBuf = bytearray(max_col * 2)
             buffer = bytearray(IFH.read(268435456))  # IO buffer = 256M
 
@@ -93,55 +125,64 @@ def largeList2matrix(largeList_path, flag):
                     val_h = val // 256 ** 1
                     val_l = val % 256 ** 1 // 256 ** 0
 
-                    if flag == 1:
-                        row_arr.add(('FE%06d' % row, row))
-                        col_arr.add(('SA%08d' % col, col))
-
                     if row > max_row or col > max_col:
                         print('Coordinates out of range in r' + str(row) + 'c' + str(col) + '.', file=stderr)
                         continue
 
-                    if row > n:
-                        OFH.write(frameBuf)
+                    while row - fe_id > 0:
+                        l0 = OFH.tell()
+                        OFH.write(compress(frameBuf))
+                        l1 = OFH.tell()
 
-                        n += 1
+                        row_hex = '%06x' % fe_id
+                        row_arr.add((row_hex[:2], row_hex[2:4], row_hex[4:], l1 - l0, l0))
+
+                        fe_id += 1
                         frameBuf = bytearray(max_col * 2)
+
+                    while col - sa_id > 0:
+                        col_hex = '%08x' % sa_id
+                        col_arr.add((col_hex[:2], col_hex[2:4], col_hex[4:6], col_hex[6:], (sa_id - 1) * 2))
+
+                        sa_id += 1
 
                     frameBuf[(col - 1) * 2] = val_h
                     frameBuf[(col - 1) * 2 + 1] = val_l
 
                 buffer = bytearray(IFH.read(268435456))
 
-            OFH.write(frameBuf)
+            l0 = OFH.tell()
+            OFH.write(compress(frameBuf))
+            l1 = OFH.tell()
 
-    if flag == 1:
-        row_arr = sorted(row_arr, key=lambda x: x[1])
-        col_arr = sorted(col_arr, key=lambda x: x[1])
-        store_info(prefix, tuple(row_arr), tuple(col_arr))
+            row_hex = '%06x' % fe_id
+            row_arr.add((row_hex[:2], row_hex[2:4], row_hex[4:], l1 - l0, l0))
+
+    row_arr = sorted(row_arr, key=lambda x: int(''.join(x[0:3]), 16))
+    col_arr = sorted(col_arr, key=lambda x: int(''.join(x[0:4]), 16))
+    store_info(prefix, tuple(row_arr), tuple(col_arr))
 
 
-def search_exp_value(matirx_path, row, col):
+def find_exp_value(matirx_path, feature, sample):
     """"""
-    with open(matirx_path, 'rb') as IFH:
-        max_col = int(ord(IFH.read(1))) * 256 ** 2 + \
-                  int(ord(IFH.read(1))) * 256 ** 1 + \
-                  int(ord(IFH.read(1))) * 256 ** 0
+    prefix = str(basename(matirx_path)).split('.')[0]
+    row_len, feature_loc, sample_loc = get_info(prefix, feature, sample)
 
-        IFH.seek(3 + ((row - 1) * max_col + (col - 1)) * 2, 0)
-        val = int(ord(IFH.read(1))) * 256 ** 1 + int(ord(IFH.read(1))) * 256 ** 0
-        print('%d\t%d\t%.2e' % (row, col, val))
+    with open(matirx_path, 'rb') as IFH:
+        IFH.seek(feature_loc, 0)
+        line = decompress(IFH.read(row_len))
+
+        exp_value = line[sample_loc] * 256 ** 1 + line[sample_loc + 1] * 256 ** 0
+
+        print(feature, sample, '%.2e' % exp_value)
 
 
 if __name__ == '__main__':
-    if argv[1] == 'trans':
-        class flags(Enum):
-            nosql = 0
-            mysql = 1
+    if argv[1] == 'conv':
+        largeList2matrix(argv[2])
 
-        largeList2matrix(argv[2], flags.nosql.value)
-
-    elif argv[1] == 'show':
-        search_exp_value(argv[2], int(argv[3]), int(argv[4]))
+    elif argv[1] == 'find':
+        find_exp_value(argv[2], int(argv[3]), int(argv[4]))
 
     else:
         print('Bad command.', file=stderr)

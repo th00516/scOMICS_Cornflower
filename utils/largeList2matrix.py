@@ -68,6 +68,7 @@ def largeList2matrix(largeList_path, flag):
         with gopen(largeList_path, 'rb') as IFH:
             IFH.readline()
             IFH.readline()
+
             max_row, max_col, _ = IFH.readline().decode().split()
             max_row = int(max_row)
             max_col = int(max_col)
@@ -80,13 +81,13 @@ def largeList2matrix(largeList_path, flag):
 
             n = 1
             frameBuf = BytesIO(new_line)
-            buffer = bytearray(IFH.read(268435456))  # IO buffer = 256M
+            buf = bytearray(IFH.read(268435456))  # IO buffer = 256M
 
-            while buffer:
-                while not buffer.endswith(b'\n'):
-                    buffer.extend(bytearray(IFH.read(1)))
+            while buf:
+                while not buf.endswith(b'\n'):
+                    buf.extend(bytearray(IFH.read(1)))
 
-                for row, col, val in list(char.split(asarray(buffer.decode().split('\n')[:-1]))):
+                for row, col, val in list(char.split(asarray(buf.decode().split('\n')[:-1]))):
                     row = int(row)
                     col = int(col)
                     val = val.encode()
@@ -110,7 +111,7 @@ def largeList2matrix(largeList_path, flag):
                     frameBuf.seek((col - 1) * 9, SEEK_SET)
                     frameBuf.write(val)
 
-                buffer = bytearray(IFH.read(268435456))
+                buf = bytearray(IFH.read(268435456))
 
             frameBuf.seek(0, SEEK_SET)
             OFH.write(gcompress(frameBuf.read()))

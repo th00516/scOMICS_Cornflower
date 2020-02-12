@@ -11,24 +11,28 @@
 
   <body>
     <div class="heaFram">
-      <div class="titFram"><h1>{{ title }}</h1></div> <!--标题栏-->
+      <div class="titFram"><h1>Hello&nbsp;scOmics!</h1></div> <!--标题栏-->
 
-      <div class="navFram">
-        <div class="navWidget"><h3>{{ nav1 }}</h3></div>  <!--导航栏1-->
-        <div class="navWidget"><h3>{{ nav2 }}</h3></div>  <!--导航栏2-->
-        <div class="navWidget"><h3>{{ nav3 }}</h3></div>  <!--导航栏3-->
-        <div class="navWidget"><h3>{{ nav4 }}</h3></div>  <!--导航栏4-->
-        <div class="navWidget"><h3>{{ nav5 }}</h3></div>  <!--导航栏5-->
-      </div>
-      
-      <div class="seaFram">
-        <input type="text" class="inpWidget" placeholder="Input keyword" />
-        <input type="button" class="butWidget" value="SEARCH" />
+      <div class="rigFram">
+        <div class="navFram">
+          <div class="navWidget"><h3>{{ nav1 }}</h3></div>  <!--导航栏1-->
+          <div class="navWidget"><h3>{{ nav2 }}</h3></div>  <!--导航栏2-->
+          <div class="navWidget"><h3>{{ nav3 }}</h3></div>  <!--导航栏3-->
+        </div>
+
+        <div class="seaFram">
+          <input type="text" class="inpWidget" placeholder="Input keyword" />
+          <input type="button" class="butWidget" value="SEARCH" />
+        </div>
       </div>
     </div>
     
     <div class="maiFram">
-      <h1>{{ context }}</h1>
+      <h1>{{ main context }}</h1>
+    </div>
+    
+    <div class="botFram">
+      <h1>{{ bottom context }}</h1>
     </div>
   </body>
 

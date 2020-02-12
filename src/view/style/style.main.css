@@ -1,43 +1,59 @@
 body {
-  min-width:820px;
+  min-width:830px;
+  margin:1px;
+
   display:-webkit-flex;
   display:flex;
   flex-flow:column nowrap;
-  justify-content:center;
-  align-items:center
+  justify-content:space-between;
+  align-items:center;
+  
+  font-family:"Georgia";
+  text-shadow: 2px 2px 2px grey;
 }
 
-/*--head frame--*/
+/*--head Region--*/
 
-.heaFram {
+.heaRegi {
   max-width:1000px;
   width:100%;
-  border-style:dotted;
-  border-width:1px;
+  margin:1px;
+  
   display:-webkit-flex;
   display:flex;
   flex-flow:row nowrap;
   justify-content:space-between;
+  align-items:center;
 }
 
 .titFram {
   height:80px;
-  border-style:dotted;
-  border-width:1px;
+  margin:1px;s
+  
   display:-webkit-flex;
   display:flex;
   flex-flow:row nowrap;
   justify-content:center;
   align-items:center;
-  font-family:"Georgia";
+  
   font-style:italic;
 }
 
-.navFram {
-  width:320px;
+.sidFram {
   height:80px;
-  border-style:dotted;
-  border-width:1px;
+  margin:1px;
+  
+  display:-webkit-flex;
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.navFram {
+  height:80px;
+  margin:1px;
+  
   display:-webkit-flex;
   display:flex;
   flex-flow:row nowrap;
@@ -46,10 +62,11 @@ body {
 }
 
 .navWidget {
-  width:100px;
   height:50px;
-  border-style:dotted;
-  border-width:1px;
+  margin:10px;
+  border-bottom-style:solid;
+  border-bottom-width:2px;
+  
   display:-webkit-flex;
   display:flex;
   flex-flow:row nowrap;
@@ -59,8 +76,8 @@ body {
 
 .seaFram {
   height:80px;
-  border-style:dotted;
-  border-width:1px;
+  margin:1px;
+  
   display:-webkit-flex;
   display:flex;
   flex-flow:row nowrap;
@@ -68,40 +85,46 @@ body {
   align-items:center;
 }
 
-/*--main frame--*/
-
-.maiFram {
-  max-width:1000px;
-  width:100%;
-  height:500px;
-  border-style:dotted;
-  border-width:1px;
-  display:-webkit-flex;
-  display:flex;
-  flex-flow:row wrap;
-  justify-content:space-around;
+.seaInpWidget {
+  width:130px;
+  height:30px;
+  margin:2px;
+  border-style:none;
 }
 
-/*--bottom frame--*/
-
-.botFram {
-  max-width:1000px;
-  width:100%;
-  height:300px;
-  border-style:dotted;
+.seaButWidget {
+  width:75px;
+  height:25px;
+  margin:2px;
+  border-style:solid;
   border-width:1px;
-  display:-webkit-flex;
-  display:flex;
-  flex-flow:row wrap;
-  justify-content:space-around;
+  
+  box-shadow: 2px 2px 2px grey;
 }
 
-/*--common frame & widget--*/
+/*--main Region--*/
 
-.rigFram {
+.maiRegi {
+  height: 500px;
+  
+  max-width:1000px;
+  width:100%;
+  margin:1px;
+  
+  display:-webkit-flex;
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content:space-between;
+  align-items:stretch;
+}
+
+.lefFram {
+  width:25%;
   height:80px;
+  margin:1px;
   border-style:dotted;
   border-width:1px;
+  
   display:-webkit-flex;
   display:flex;
   flex-flow:row nowrap;
@@ -109,17 +132,63 @@ body {
   align-items:center;
 }
 
-.inpWidget {
-  width:150px;
-  height:30px;
+.midFram {
+  width:55%;
+  height:80px;
+  margin:1px;
+  border-style:dotted;
+  border-width:1px;
+  
+  display:-webkit-flex;
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.rigFram {
+  width:20%;
+  height:80px;
+  margin:1px;
+  border-style:dotted;
+  border-width:1px;
+  
+  display:-webkit-flex;
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content:space-between;
+  align-items:center;
+}
+
+/*--bottom Region--*/
+
+.botRegi {  
+  max-width:1000px;
+  width:100%;
+  margin:1px;
+  
+  display:-webkit-flex;
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content:space-around;
+  align-items:stretch;
+}
+
+/*--common sytle--*/
+
+.splLinR {
+  max-width:1000px;
+  min-width:830px;
+  width:100%;
+  margin:18px;
   border-style:solid;
   border-width:1px;
 }
 
-.butWidget {
-  width:70px;
-  height:34px;
+.splLinC {
+  width:0px;
+  height:100%;
+  margin:3px;
   border-style:solid;
   border-width:1px;
-  font-family:"Georgia";
 }

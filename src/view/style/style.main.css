@@ -1,6 +1,6 @@
 body {
   min-width:830px;
-  margin:1px;
+  margin:10px;
 
   display:-webkit-flex;
   display:flex;
@@ -63,7 +63,7 @@ body {
 
 .navWidget {
   height:50px;
-  margin:10px;
+  margin:5px;
   border-bottom-style:solid;
   border-bottom-width:2px;
   

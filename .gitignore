@@ -1,6 +1,2 @@
-utils/test.curses.py
 .DS_Store
 .idea
-0.test_data/
-venv
-src/Cornflower/__pycache__

@@ -72,7 +72,7 @@ a {
   justify-content:center;
   align-items:center;
   
-  transition:height 0.6s;
+  transition:height 0.3s;
 }
 
 .seaFram {
@@ -86,7 +86,7 @@ a {
 }
 
 .seaInpWidget {
-  width:135px;
+  width:95px;
   height:30px;
   margin:2px;
   border-style:none;
@@ -95,6 +95,8 @@ a {
   
   font-style:italic;
   font-size: 14px;
+  
+  transition:width 0.3s, height 0.3s;
 }
 
 .seaButWidget {
@@ -123,20 +125,7 @@ a {
 }
 
 .lefFram {
-  width:25%;
-  height:80px;
-  margin:1px;
-  border-style:dotted;
-  border-width:1px;
-  
-  display:flex;
-  flex-flow:row nowrap;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.midFram {
-  width:55%;
+  width:35%;
   height:80px;
   margin:1px;
   border-style:dotted;
@@ -149,7 +138,7 @@ a {
 }
 
 .rigFram {
-  width:20%;
+  width:75%;
   height:80px;
   margin:1px;
   border-style:dotted;

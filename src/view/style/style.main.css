@@ -1,5 +1,5 @@
 body {
-  min-width:800px;
+  min-width:820px;
   display:-webkit-flex;
   display:flex;
   flex-flow:column nowrap;
@@ -17,7 +17,7 @@ body {
   display:-webkit-flex;
   display:flex;
   flex-flow:row nowrap;
-  justify-content:space-around;
+  justify-content:space-between;
 }
 
 .titFram {
@@ -34,13 +34,14 @@ body {
 }
 
 .navFram {
+  width:320px;
   height:80px;
   border-style:dotted;
   border-width:1px;
   display:-webkit-flex;
   display:flex;
   flex-flow:row nowrap;
-  justify-content:space-between;
+  justify-content:space-around;
   align-items:center;
 }
 

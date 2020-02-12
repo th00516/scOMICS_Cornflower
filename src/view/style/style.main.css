@@ -29,7 +29,7 @@ body {
   flex-flow:row nowrap;
   justify-content:center;
   align-items:center;
-  font-family:"Georgia", "Times New Roman";
+  font-family:"Georgia";
   font-style:italic;
 }
 
@@ -116,8 +116,9 @@ body {
 }
 
 .butWidget {
-  width:60px;
+  width:70px;
   height:34px;
   border-style:solid;
   border-width:1px;
+  font-family:"Georgia";
 }

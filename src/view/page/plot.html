@@ -4,44 +4,62 @@
   <head>
     <meta charset="utf-8" />
       
-    <link rel="stylesheet" type="text/css" href="./style/style.main.css">
-    <link rel="stylesheet" type="text/css" href="./style/style.anim.css">
+    <link rel="stylesheet" type="text/css" href="../style/style.main.css">
+    <link rel="stylesheet" type="text/css" href="../style/style.tran.css">
     
-    <title>Hello scOmics!</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../script/script.main.js"></script>
+    
+    <title>Hello&nbsp;scOmics!</title>
   </head>
 
   <body>
     <div class="heaRegi">
-      <div class="titFram"><h1>Hello&nbsp;scOmics!</h1></div> <!--标题栏-->
-
-      <div class="sidFram">
+      <div class="titFram">
+        <a href=""><span id="about"><h1>Hello&nbsp;scOmics!</h1></span></a>
+      </div>
+      
+      <div class="navSeaFram">
         <div class="navFram">
-          <div class="navWidget"><h3>SAMPLE</h3></div>  <!--导航栏1-->
-          <div class="navWidget"><h3>DATA</h3></div>    <!--导航栏2-->
-          <div class="navWidget"><h3>PLOT</h3></div>    <!--导航栏3-->
+          <div class="navWidget">
+            <h2>{</h2>
+              &nbsp;<a href="../index.html"><h3>HOME</h3></a>&nbsp;
+            <h2>}</h2>
+          </div>
+          
+          <div class="navWidget">
+            <h2>{</h2>
+              &nbsp;<a href="./data.html"><h3>DATA</h3></a>&nbsp;
+            <h2>}</h2>
+          </div>
+          
+          <div class="navWidget">
+            <h2>{</h2>
+              &nbsp;<a href="./plot.html"><h3>PLOT</h3></a>&nbsp;
+            <h2>}</h2>
+          </div>
         </div>
         
+        <hr class="splLinC" />
+        
         <div class="seaFram">
-          <input type="text" class="seaInpWidget" placeholder="Input keyword" />
-          <input type="button" class="seaButWidget" value="SEARCH" />
+          <h2>[</h2>
+            &nbsp;<input type="text" class="seaInpWidget" placeholder="Search..." />&nbsp;
+          <h2>]</h2>
+          <input type="submit" class="seaButWidget" value="SEARCH" />
         </div>
       </div>
     </div>
     
-    <hr class="splLinC" />
+    <hr class="splLinR" />
     
     <div class="maiRegi">
-      <div class="lefFram"><h1>record</h1></div>
-      <hr class="splLinR" />
-      <div class="midFram"><h1>news</h1></div>
-      <hr class="splLinR" />
-      <div class="rigFram"><h1>info</h1></div>
+      <div class="maiBloc"><h1>Plot</h1></div>
     </div>
+    <hr class="splLinR" />
     
-    <hr class="splLinC" />
-    
-    <div class="botRegi"><h1>bottom context</h1></div>
+    <div class="botRegi">
+      <h4>Copyright&nbsp;for&nbsp;scOmics&nbsp;group&nbsp;of&nbsp;BGI&nbsp;in&nbsp;<span id="year"></span></h4>
+    </div>
   </body>
-
-  <script src="./script/script.main.js"></script>
 </html>

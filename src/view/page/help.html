@@ -4,13 +4,14 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
   <link rel="stylesheet" type="text/css" href="../style/style.main.css">
   <link rel="stylesheet" type="text/css" href="../style/style.tran.css">
 
   <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="../script/script.main.js"></script>
+  <script src="../script/script.d3.js"></script>
 
   <title>Hello&nbsp;scOmics!</title>
 </head>
@@ -64,17 +65,16 @@
   <hr class="splLinR" />
 
   <div class="maiRegi">
-    <div class="maiBloc" style="width:50%;">
-      <h1>Sample info</h1>
+    <div class="maiBloc" style="width:70%;">
+      <svg class="maiPlot" id="d3_test"></svg>
     </div>
 
     <hr class="splLinC" />
 
-    <div class="maiBloc" style="width:50%;">
-      <h1>Data info</h1>
+    <div class="maiBloc" style="width:30%;">
+      <h1>Control Panel</h1>
     </div>
   </div>
-
   <hr class="splLinR" />
 
   <div class="botRegi">

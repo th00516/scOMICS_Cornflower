@@ -2,7 +2,7 @@
 
 // create dummy data
 var data1 = [12, 19, 11, 13, 12, 22, 13, 4, 15, 16, 18, 19, 20, 12, 11, 9],
-data2 = [21, 19, 31, 23, 12, 42, 33, 24, 5, 36, 10, 11, 43, 2, 15, 19]
+    data2 = [21, 19, 31, 23, 12, 42, 33, 24, 5, 36, 10, 11, 43, 2, 15, 19]
 
 // Compute summary statistics used for the box 1
 var data1_sorted = data1.sort(d3.ascending)

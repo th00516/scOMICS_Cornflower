@@ -96,8 +96,9 @@ $(document).ready(function() {
 
     // show median, min and max horizontal lines
     svg
-        .select("xx")
+        .selectAll("xx")
         .data([min_1, median_1, max_1])
+        .enter()
         .append("line")
         .attr("x1", x(1) - box_width / 2)
         .attr("x2", x(1) + box_width / 2)
@@ -107,8 +108,9 @@ $(document).ready(function() {
         .attr("stroke-width", "2px")
 
     svg
-        .select("xx")
+        .selectAll("xx")
         .data([min_2, median_2, max_2])
+        .enter()
         .append("line")
         .attr("x1", x(2) - box_width / 2)
         .attr("x2", x(2) + box_width / 2)

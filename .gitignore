@@ -1,2 +1,4 @@
 .DS_Store
 .idea
+src/view/script/d3.min.js
+src/view/script/jquery.min.js

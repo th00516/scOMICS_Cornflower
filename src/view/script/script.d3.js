@@ -1,11 +1,33 @@
 /*boxplot*/
 
-$(document).ready(function() {
+// create dummy data
+var data1 = [12, 19, 11, 13, 12, 22, 13, 4, 15, 16, 18, 19, 20, 12, 11, 9],
+data2 = [21, 19, 31, 23, 12, 42, 33, 24, 5, 36, 10, 11, 43, 2, 15, 19]
 
-    // set the dimensions and margins of the graph
-    var margin = {top: 40, right: 40, bottom: 40, left: 40},
-        width = 600 - margin.left - margin.right,
-        height = 600 - margin.top - margin.bottom
+// Compute summary statistics used for the box 1
+var data1_sorted = data1.sort(d3.ascending)
+var q1_1 = d3.quantile(data1_sorted, 0.25)
+var median_1 = d3.quantile(data1_sorted, 0.5)
+var q3_1 = d3.quantile(data1_sorted, 0.75)
+var interQTR_1 = q3_1 - q1_1
+var min_1 = q1_1 - 1.5 * interQTR_1 > 0 ? q1_1 - 1.5 * interQTR_1 : 0
+var max_1 = q1_1 + 1.5 * interQTR_1 < 50 ? q1_1 + 1.5 * interQTR_1 : 50
+
+// Compute summary statistics used for the box 2
+var data2_sorted = data2.sort(d3.ascending)
+var q1_2 = d3.quantile(data2_sorted, 0.25)
+var median_2 = d3.quantile(data2_sorted, 0.5)
+var q3_2 = d3.quantile(data2_sorted, 0.75)
+var interQTR_2 = q3_2 - q1_2
+var min_2 = q1_2 - 1.5 * interQTR_2 > 0 ? q1_2 - 1.5 * interQTR_2 : 0
+var max_2 = q1_2 + 1.5 * interQTR_2 < 50 ? q1_2 + 1.5 * interQTR_2 : 50 
+
+// set the dimensions and margins of the graph
+var margin = {top: 40, right: 40, bottom: 40, left: 40},
+width = 600 - margin.left - margin.right,
+height = 600 - margin.top - margin.bottom
+
+$(document).ready(function() {
 
     // append the svg object to the body of the page
     var svg = d3.select("#d3PlotRegi")
@@ -14,28 +36,6 @@ $(document).ready(function() {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-
-    // create dummy data
-    var data1 = [12, 19, 11, 13, 12, 22, 13, 4, 15, 16, 18, 19, 20, 12, 11, 9],
-        data2 = [21, 19, 31, 23, 12, 42, 33, 24, 5, 36, 10, 11, 43, 2, 15, 19]
-
-    // Compute summary statistics used for the box 1
-    var data1_sorted = data1.sort(d3.ascending)
-    var q1_1 = d3.quantile(data1_sorted, 0.25)
-    var median_1 = d3.quantile(data1_sorted, 0.5)
-    var q3_1 = d3.quantile(data1_sorted, 0.75)
-    var interQTR_1 = q3_1 - q1_1
-    var min_1 = q1_1 - 1.5 * interQTR_1 > 0 ? q1_1 - 1.5 * interQTR_1 : 0
-    var max_1 = q1_1 + 1.5 * interQTR_1 < 50 ? q1_1 + 1.5 * interQTR_1 : 50
-
-    // Compute summary statistics used for the box 2
-    var data2_sorted = data2.sort(d3.ascending)
-    var q1_2 = d3.quantile(data2_sorted, 0.25)
-    var median_2 = d3.quantile(data2_sorted, 0.5)
-    var q3_2 = d3.quantile(data2_sorted, 0.75)
-    var interQTR_2 = q3_2 - q1_2
-    var min_2 = q1_2 - 1.5 * interQTR_2 > 0 ? q1_2 - 1.5 * interQTR_2 : 0
-    var max_2 = q1_2 + 1.5 * interQTR_2 < 50 ? q1_2 + 1.5 * interQTR_2 : 50 
 
     // Show the X & Y scale
     var x = d3.scaleLinear()

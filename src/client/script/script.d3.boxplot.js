@@ -133,7 +133,7 @@ d3.select("#Boxplot").on("click", function() {
                 if (d3.select(this).style("opacity") != 0.5) {
                     d3.select(this).style("opacity", 0.5)
                 } else {
-                    d3.select(this).style("opacity", 0)
+                    d3.select(this).style("opacity", 0.3)
                 }
             })
     }

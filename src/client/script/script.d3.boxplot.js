@@ -16,7 +16,7 @@ d3.select("#Boxplot").on("click", function() {
 
     // Set the dimensions， margins and scales of the graph
     var margin = {top: 40, right: 40, bottom: 40, left: 40},
-        width = 650 - margin.left - margin.right,
+        width = 600 - margin.left - margin.right,
         height = 550 - margin.top - margin.bottom
 
     var scale_x = d3

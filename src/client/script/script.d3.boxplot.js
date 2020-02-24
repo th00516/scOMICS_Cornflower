@@ -149,7 +149,6 @@ d3.select("#Boxplot").on("click", function() {
                 }
             })
     }
-
 })
 
 })

@@ -129,6 +129,18 @@ d3.select("#Boxplot").on("click", function() {
             .style("fill","grey")
             .style("opacity", 0)
 
+            .on("mouseover", function() {
+                if (d3.select(this).style("opacity") == 0) {
+                    d3.select(this).style("opacity", 0.3)
+                }
+            })
+
+            .on("mouseout", function() {
+                if (d3.select(this).style("opacity") == 0.3) {
+                    d3.select(this).style("opacity", 0)
+                }
+            })
+
             .on("click", function() {
                 if (d3.select(this).style("opacity") != 0.5) {
                     d3.select(this).style("opacity", 0.5)
@@ -138,17 +150,6 @@ d3.select("#Boxplot").on("click", function() {
             })
     }
 
-    d3.selectAll("#opt").on("mouseover", function() {
-        if (d3.select(this).style("opacity") == 0) {
-            d3.select(this).style("opacity", 0.3)
-        }
-    })
-
-    d3.selectAll("#opt").on("mouseout", function() {
-        if (d3.select(this).style("opacity") == 0.3) {
-            d3.select(this).style("opacity", 0)
-        }
-    })
 })
 
 })

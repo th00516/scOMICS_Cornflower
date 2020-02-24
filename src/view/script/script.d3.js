@@ -2,10 +2,14 @@
 
 $(document).ready(function() {
 
+$("#Boxplot").click(function() {
+    // Clean svg
+    d3.select("#d3PlotRegi").select("#Boxplot").remove()
+
     // Create dummy data
     var raw_data = new Array([12, 19, 11, 13, 12, 22, 13, 4, 15, 16, 18, 19, 20, 12, 11, 9],
-                             [21, 19, 31, 23, 12, 42, 33, 24, 5, 36, 10, 11, 43, 2, 15, 19],
-                             [33, 12, 42, 33, 24, 5, 36, 10, 11, 13, 12, 22, 13, 4, 15, 16])
+                                [21, 19, 31, 23, 12, 42, 33, 24, 5, 36, 10, 11, 43, 2, 15, 19],
+                                [33, 12, 42, 33, 24, 5, 36, 10, 11, 13, 12, 22, 13, 4, 15, 16])
 
     // Set a few features for the data
     var box_num = raw_data.length
@@ -13,7 +17,7 @@ $(document).ready(function() {
     // Set the dimensions， margins and scales of the graph
     var margin = {top: 40, right: 40, bottom: 40, left: 40},
         width = 600 - margin.left - margin.right,
-        height = 600 - margin.top - margin.bottom
+        height = 550 - margin.top - margin.bottom
 
     var scale_x = d3
         .scaleLinear()
@@ -33,6 +37,7 @@ $(document).ready(function() {
     var svg = d3
         .select("#d3PlotRegi")
         .append("svg")
+        .attr("id", "Boxplot")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
 
@@ -105,5 +110,6 @@ $(document).ready(function() {
             .attr("stroke", col_list[i])
             .attr("stroke-width", "2px")
     }
+})
 
 })

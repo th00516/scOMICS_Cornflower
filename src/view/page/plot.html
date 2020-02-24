@@ -19,6 +19,8 @@
 </head>
 
 <body>
+<div class="maiFram">
+
   <div class="heaRegi">
     <div class="titFram">
       &nbsp;<a href="../index.html">
@@ -67,30 +69,48 @@
   <hr class="splLinR" />
 
   <div class="maiRegi">
-    <div class="maiBlocR" id="d3PlotRegi" style="width:75%;"></div>
-
-    <hr class="splLinC" />
-
     <div class="maiBlocR" style="width:25%;">
       <div class="maiBlocC">
         <div class="maiBlocR" style="height:35%;">
-          <h1>Control</h1>
+          <div class="maiBlocC">
+            <h2>Content</h2>
+          </div>
         </div>
 
         <hr class="splLine" />
 
         <div class="maiBlocR" style="height:65%;">
-          <h1>Sample</h1>
+          <div class="maiBlocC">
+            <h1>Sample</h1>
+          </div>
         </div>
       </div>
     </div>
+
+    <hr class="splLinC" />
+
+    <div class="maiBlocR" style="width:75%;">
+      <div class="maiBlocC">
+        <div class="maiBlocR" style="height:5%; justify-content:flex-start;">
+          <input type="submit" id="Scatterplot" value="Scatterplot" style="font-weight:bold;" />
+          <hr class="splLinC" />
+          <input type="submit" id="Barplot" value="Barplot" style="font-weight:bold;" />
+          <hr class="splLinC" />
+          <input type="submit" id="Boxplot" value="Boxplot" style="font-weight:bold;" />
+        </div>
+
+        <div class="maiBlocR" id="d3PlotRegi" style="height:95%;"></div>
+      </div>
+    </div>
   </div>
-  </div>
+  
   <hr class="splLinR" />
 
   <div class="botRegi">
     <h4>Copyright&nbsp;for&nbsp;scOmics&nbsp;group&nbsp;of&nbsp;BGI&nbsp;in&nbsp;<span id="year"></span></h4>
   </div>
+
+</div>
 </body>
 
 </html>

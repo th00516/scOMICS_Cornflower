@@ -16,7 +16,7 @@ d3.select("#Boxplot").on("click", function() {
 
     // Set the dimensions， margins and scales of the graph
     var margin = {top: 40, right: 40, bottom: 40, left: 40},
-        width = 650 - margin.left - margin.right,
+        width = 600 - margin.left - margin.right,
         height = 550 - margin.top - margin.bottom
 
     var scale_x = d3
@@ -129,26 +129,26 @@ d3.select("#Boxplot").on("click", function() {
             .style("fill","grey")
             .style("opacity", 0)
 
+            .on("mouseover", function() {
+                if (d3.select(this).style("opacity") == 0) {
+                    d3.select(this).style("opacity", 0.3)
+                }
+            })
+
+            .on("mouseout", function() {
+                if (d3.select(this).style("opacity") == 0.3) {
+                    d3.select(this).style("opacity", 0)
+                }
+            })
+
             .on("click", function() {
                 if (d3.select(this).style("opacity") != 0.5) {
                     d3.select(this).style("opacity", 0.5)
                 } else {
-                    d3.select(this).style("opacity", 0)
+                    d3.select(this).style("opacity", 0.3)
                 }
             })
     }
-
-    d3.selectAll("#opt").on("mouseover", function() {
-        if (d3.select(this).style("opacity") == 0) {
-            d3.select(this).style("opacity", 0.3)
-        }
-    })
-
-    d3.selectAll("#opt").on("mouseout", function() {
-        if (d3.select(this).style("opacity") == 0.3) {
-            d3.select(this).style("opacity", 0)
-        }
-    })
 })
 
 })

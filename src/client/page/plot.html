@@ -12,7 +12,8 @@
   <script src="../script/jquery.min.js"></script>
   <script src="../script/script.main.js"></script>
 
-  <script src="../script/d3.min.js"></script>
+  <script src="../script/d3.v5.min.js"></script>
+  <script src="../script/plot.d3.scatterplot.js"></script>
   <script src="../script/plot.d3.boxplot.js"></script>
 
   <title>Hello&nbsp;scOmics!</title>
@@ -94,12 +95,10 @@
         <div class="maiBlocR" style="height:5%; justify-content:flex-start;">
           <input type="submit" id="Scatterplot" value="Scatterplot" style="font-weight:bold;" />
           <hr class="splLinC" />
-          <input type="submit" id="Barplot" value="Barplot" style="font-weight:bold;" />
-          <hr class="splLinC" />
           <input type="submit" id="Boxplot" value="Boxplot" style="font-weight:bold;" />
         </div>
 
-        <div class="maiBlocR" id="d3PlotRegi" style="height:95%;"></div>
+        <div class="maiBlocR" id="plotRegi" style="height:95%;"></div>
       </div>
     </div>
   </div>

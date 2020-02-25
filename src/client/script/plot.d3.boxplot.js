@@ -2,9 +2,15 @@
 
 $(document).ready(function() {
 
+    // Set the dimensions, margins and scales of the graph
+    var margin = {top: 40, right: 40, bottom: 40, left: 40},
+         width = 600 - margin.left - margin.right,
+        height = 550 - margin.top - margin.bottom
+
 d3.select("#Boxplot").on("click", function() {
     // Clean svg
-    d3.select("#d3PlotRegi").select("#Boxplot").remove()
+    d3.select("#plotRegi").select("#Scatter").remove()
+    d3.select("#plotRegi").select("#Box").remove()
 
     // Create dummy data
     var raw_data = new Array([12, 19, 11, 13, 12, 22, 13, 4, 15, 16, 18, 19, 20, 12, 11, 9],
@@ -14,11 +20,7 @@ d3.select("#Boxplot").on("click", function() {
     // Set a few features for the data
     var box_num = raw_data.length
 
-    // Set the dimensions， margins and scales of the graph
-    var margin = {top: 40, right: 40, bottom: 40, left: 40},
-        width = 600 - margin.left - margin.right,
-        height = 550 - margin.top - margin.bottom
-
+    // Set the scales of the graph
     var scale_x = d3
         .scaleLinear()
         .domain([0, box_num + 1])
@@ -30,14 +32,13 @@ d3.select("#Boxplot").on("click", function() {
         .range([height, 0])
 
     // Set a few features for the graph
-    var col_list = ["red", "blue", "green"]
     var box_width = 50
     
     // Append the svg object to the body of the page
     var svg = d3
-        .select("#d3PlotRegi")
+        .select("#plotRegi")
         .append("svg")
-        .attr("id", "Boxplot")
+        .attr("id", "Box")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
 
@@ -61,19 +62,23 @@ d3.select("#Boxplot").on("click", function() {
         .attr("id", "AxisY")
         .call(d3.axisLeft(scale_y).ticks(10))
 
+    // Set colors
+    var col_list = ["red", "blue", "green"]
+
+    // Drawing
     var data = new Array()
 
     for (i = 0; i < box_num; i++) {
         // Compute summary statistics used for the box
         data[i] = new Object()
 
-        data[i].Data = raw_data[i].sort(d3.ascending)
-        data[i].Q1 = d3.quantile(data[i].Data, 0.25)
-        data[i].Median = d3.quantile(data[i].Data, 0.5)
-        data[i].Q3 = d3.quantile(data[i].Data, 0.75)
+        data[i].Data     = raw_data[i].sort(d3.ascending)
+        data[i].Q1       = d3.quantile(data[i].Data, 0.25)
+        data[i].Median   = d3.quantile(data[i].Data, 0.5)
+        data[i].Q3       = d3.quantile(data[i].Data, 0.75)
         data[i].InterQTR = data[i].Q3 - data[i].Q1
-        data[i].Min = data[i].Q1 - 1.5 * data[i].InterQTR > 0  ? data[i].Q1 - 1.5 * data[i].InterQTR : 0
-        data[i].Max = data[i].Q3 + 1.5 * data[i].InterQTR < 50 ? data[i].Q3 + 1.5 * data[i].InterQTR : 50
+        data[i].Min      = data[i].Q1 - 1.5 * data[i].InterQTR > 0  ? data[i].Q1 - 1.5 * data[i].InterQTR : 0
+        data[i].Max      = data[i].Q3 + 1.5 * data[i].InterQTR < 50 ? data[i].Q3 + 1.5 * data[i].InterQTR : 50
 
         svg
             .select("#Canvas")

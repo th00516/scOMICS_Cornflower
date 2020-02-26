@@ -68,30 +68,45 @@ d3.select("#Scatterplot").on("click", function() {
             .attr("id", "AxisY")
             .call(d3.axisLeft(scale_y).ticks(10))
 
-        var color_list = get_random_color(21)
+        var color_list = get_random_color(30)
 
         // Drawing
         svg
             .select("#Canvas")
             .append("g")
-            .attr("id", "scatter_1")
+            .attr("id", "scatter")
 
         for (var i = 0; i <= 20; i++) {
             svg
-                .select("#scatter_1")
+                .select("#scatter")
                 .selectAll("NONE")
-                .data(dat)
+                .data(dat, d => d)
                 .enter()
                 .filter(d => d.seurat_clusters == i)
+                .append("g")
+                .attr("id", "scatter_" + (i + 1))
                 .append("circle")
                 .attr("cx", d => scale_x(d.TSNE_1))
                 .attr("cy", d => scale_y(d.TSNE_2))
                 .attr("r", 2)
-                .style("fill", "none")
-                .style("stroke", "rgb(" + [color_list[0][i], color_list[1][i], color_list[2][i]] + ")")
-                .style("opacity", 0.1)
+                .style("fill", "white")
+                .style("fill-opacity", 0)
+                .style("stroke", "rgb(" + [color_list[0][i], 
+                                           color_list[1][i], 
+                                           color_list[2][i]] + ")")
                 .style("stroke-width", "1px")
+                .style("stroke-opacity", 0.1)
         }
+
+        d3
+            .select("scatter_1")
+            .on("mouseover", function() {
+                d3.select(this).style("stroke", "red")
+            })
+
+            .on("mouseout", function() {
+                d3.select(this).style("opacity", 0)
+            })
     }
 })
 

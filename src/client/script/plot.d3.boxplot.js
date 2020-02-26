@@ -112,7 +112,7 @@ d3.select("#Boxplot").on("click", function() {
         svg
             .select("#box_" + (i + 1))
             .selectAll("NONE")
-            .data([data[i].Min, data[i].Median, data[i].Max])
+            .data([data[i].Min, data[i].Median, data[i].Max], d => d)
             .enter()
             .append("line")
             .attr("x1", scale_x(i + 1) - box_width / 2)

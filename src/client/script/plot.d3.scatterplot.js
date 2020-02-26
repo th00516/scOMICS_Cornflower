@@ -15,9 +15,31 @@ $(document).ready(function () {
         return [Array.from(R), Array.from(G), Array.from(B)]
     }
 
+    // Set a container for recoding selected clusters
+    function selected_clusters() {
+        this.selected = new Set()
+
+        this.add = function(_cluster) {this.selected.add(_cluster)}
+        this.del = function(_cluster) {this.selected.delete(_cluster)}
+    }
+
+    // Set a tooltip
+    var tooltip = d3
+        .select("#plotRegi")
+        .append("div")
+        .attr("id", "tooltip")
+        .style("display", "none")
+        .style("position", "absolute")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px")
+        .style("padding", "10px")
+        .style("background-color", "white")
+
     // Draw scatter plot
     function scatterPlot(dat) {
-        var margin = { top: 40, right: 40, bottom: 40, left: 40 },
+        // Set the width & height of the graph
+        var margin = {top: 40, right: 40, bottom: 40, left: 40},
             width = 650 - margin.left - margin.right,
             height = 650 - margin.top - margin.bottom
 
@@ -32,7 +54,7 @@ $(document).ready(function () {
             .domain([-50, 50])
             .range([height, 0])
 
-        // Append the svg object to the body of the page
+        // Append the svg object and a canvas for the following drawing
         var svg = d3
             .select("#plotRegi")
             .append("svg")
@@ -40,7 +62,6 @@ $(document).ready(function () {
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
 
-        // Append a canvas for the following drawing
         svg
             .append("g")
             .attr("id", "Canvas")
@@ -66,42 +87,62 @@ $(document).ready(function () {
         svg
             .select("#Canvas")
             .append("g")
-            .attr("id", "scatter")
+            .attr("id", "scatterplot")
+
+        var choosed = new selected_clusters()
 
         svg
-            .select("#scatter")
+            .select("#scatterplot")
             .selectAll("NONE")
-            .data(dat.slice(0, 10000), d => d)
+            .data(dat.slice(0, 30000), d => d)
             .enter()
             .append("circle")
             .attr("class", d => "cluster_" + d.seurat_clusters)
             .attr("cx", d => scale_x(d.TSNE_1))
             .attr("cy", d => scale_y(d.TSNE_2))
-            .attr("r", 4)
+            .attr("r", 2)
             .style("fill", d => "rgb(" + [color_list[0][d.seurat_clusters],
                                           color_list[1][d.seurat_clusters],
                                           color_list[2][d.seurat_clusters]] + ")")
-            .style("opacity", 0.05)
+            .style("opacity", 0.1)
+
+            .on("mouseover", function() {
+                tooltip
+                    .style("display", "inline")
+                    .style("left", (d3.mouse(this)[0] + d3.select("body").style("width") * 0.2 + width) + "px")
+                    .style("top", (d3.mouse(this)[1] + d3.select("body").style("height") + height) + "px")
+                    .text(d3.select(this).attr("class"))
+            })
+
+            .on("mouseout", function() {
+                tooltip
+                    .style("display", "none")
+            })
 
             .on("click", function() {
-                if (d3.select(this).style("opacity") == 0.05) {
+                if (d3.select(this).style("opacity") == 0.1) {
                     d3
                         .selectAll("." + (d3.select(this).attr("class")))
                         .transition()
-                        .duration(300)
-                        .style("opacity", 0.5)
+                        .duration(400)
+                        .style("opacity", d3.select(this).style("opacity") * 10)
+
+                    choosed.add(d3.select(this).attr("class"))
                 } else {
                     d3
                         .selectAll("." + (d3.select(this).attr("class")))
                         .transition()
-                        .duration(300)
-                        .style("opacity", 0.05)
+                        .duration(400)
+                        .style("opacity", d3.select(this).style("opacity") / 10)
+
+                    choosed.del(d3.select(this).attr("class"))
                 }
             })
     }
 
+
     // Main
-    d3.select("#Scatterplot").on("click", function() {
+    d3.select("#Scatterplot_triger").on("click", function() {
         // Clean svg
         d3.select("#plotRegi").select("#Scatter").remove()
         d3.select("#plotRegi").select("#Box").remove()

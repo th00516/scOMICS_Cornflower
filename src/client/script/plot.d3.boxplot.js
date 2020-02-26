@@ -7,7 +7,7 @@ $(document).ready(function() {
          width = 650 - margin.left - margin.right,
         height = 650 - margin.top - margin.bottom
 
-d3.select("#Boxplot").on("click", function() {
+d3.select("#Boxplot_triger").on("click", function() {
     // Clean svg
     d3.select("#plotRegi").select("#Scatter").remove()
     d3.select("#plotRegi").select("#Box").remove()

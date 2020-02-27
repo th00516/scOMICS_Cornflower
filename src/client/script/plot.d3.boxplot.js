@@ -1,21 +1,19 @@
 /*d3*/
 
-$(document).ready(function() {
+// Set the dimensions, margins and scales of the graph
+var margin = { top: 40, right: 40, bottom: 40, left: 40 },
+    width = 710 - margin.left - margin.right,
+    height = 660 - margin.top - margin.bottom
 
-    // Set the dimensions, margins and scales of the graph
-    var margin = {top: 40, right: 40, bottom: 40, left: 40},
-         width = 710 - margin.left - margin.right,
-        height = 660 - margin.top - margin.bottom
-
-d3.select("#Boxplot_triger").on("click", function() {
+d3.select("#toolbox").select("#exp").on("click", function () {
     // Clean svg
     d3.select("#plotRegi").select("#Scatter").remove()
     d3.select("#plotRegi").select("#Box").remove()
 
     // Create dummy data
     var raw_data = new Array([12, 19, 11, 13, 12, 22, 13, 4, 15, 16, 18, 19, 20, 12, 11, 9],
-                             [21, 19, 31, 23, 12, 42, 33, 24, 5, 36, 10, 11, 43, 2, 15, 19],
-                             [33, 12, 42, 33, 24, 5, 36, 10, 11, 13, 12, 22, 13, 4, 15, 16])
+        [21, 19, 31, 23, 12, 42, 33, 24, 5, 36, 10, 11, 43, 2, 15, 19],
+        [33, 12, 42, 33, 24, 5, 36, 10, 11, 13, 12, 22, 13, 4, 15, 16])
 
     // Set a few features for the data
     var box_num = raw_data.length
@@ -33,7 +31,7 @@ d3.select("#Boxplot_triger").on("click", function() {
 
     // Set a few features for the graph
     var box_width = 50
-    
+
     // Append the svg object to the body of the page
     var svg = d3
         .select("#plotRegi")
@@ -72,13 +70,13 @@ d3.select("#Boxplot_triger").on("click", function() {
         // Compute summary statistics used for the box
         data[i] = new Object()
 
-        data[i].Data     = raw_data[i].sort(d3.ascending)
-        data[i].Q1       = d3.quantile(data[i].Data, 0.25)
-        data[i].Median   = d3.quantile(data[i].Data, 0.5)
-        data[i].Q3       = d3.quantile(data[i].Data, 0.75)
+        data[i].Data = raw_data[i].sort(d3.ascending)
+        data[i].Q1 = d3.quantile(data[i].Data, 0.25)
+        data[i].Median = d3.quantile(data[i].Data, 0.5)
+        data[i].Q3 = d3.quantile(data[i].Data, 0.75)
         data[i].InterQTR = data[i].Q3 - data[i].Q1
-        data[i].Min      = data[i].Q1 - 1.5 * data[i].InterQTR > 0  ? data[i].Q1 - 1.5 * data[i].InterQTR : 0
-        data[i].Max      = data[i].Q3 + 1.5 * data[i].InterQTR < 50 ? data[i].Q3 + 1.5 * data[i].InterQTR : 50
+        data[i].Min = data[i].Q1 - 1.5 * data[i].InterQTR > 0 ? data[i].Q1 - 1.5 * data[i].InterQTR : 0
+        data[i].Max = data[i].Q3 + 1.5 * data[i].InterQTR < 50 ? data[i].Q3 + 1.5 * data[i].InterQTR : 50
 
         svg
             .select("#Canvas")
@@ -131,22 +129,22 @@ d3.select("#Boxplot_triger").on("click", function() {
             .attr("y", scale_y(data[i].Max) - 10)
             .attr("width", box_width + 20)
             .attr("height", (scale_y(data[i].Min) - scale_y(data[i].Max)) + 20)
-            .style("fill","grey")
+            .style("fill", "grey")
             .style("opacity", 0)
 
-            .on("mouseover", function() {
+            .on("mouseover", function () {
                 if (d3.select(this).style("opacity") == 0) {
                     d3.select(this).style("opacity", 0.3)
                 }
             })
 
-            .on("mouseout", function() {
+            .on("mouseout", function () {
                 if (d3.select(this).style("opacity") == 0.3) {
                     d3.select(this).style("opacity", 0)
                 }
             })
 
-            .on("click", function() {
+            .on("click", function () {
                 if (d3.select(this).style("opacity") != 0.5) {
                     d3.select(this).style("opacity", 0.5)
                 } else {
@@ -154,6 +152,4 @@ d3.select("#Boxplot_triger").on("click", function() {
                 }
             })
     }
-})
-
 })

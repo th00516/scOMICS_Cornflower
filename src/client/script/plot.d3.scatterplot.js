@@ -60,17 +60,15 @@ $(document).ready(function () {
             .select("#plotRegi")
             .append("div")
             .attr("id", "toolbox")
-            .style("display", "block")
+            .style("display", "none")
             .style("position", "absolute")
-            .style("left", "940px")
-            .style("top", "110px")
             .style("width", "90px")
             .style("padding", "5px")
             .style("border-style", "solid")
             .style("border-width", "1px")
             .style("background-color", "lightblue")
             .style("font-weight", "bold")
-            .style("opacity", 0.1)
+            .style("opacity", 0)
             
         toolbox
             .append("table")
@@ -87,20 +85,20 @@ $(document).ready(function () {
         toolbox
             .append("table")
             .append("button")
-            .attr("id", "exp")
-            .style("width", "85px")
-            .style("height", "30px")
-            .style("font-weight", "bold")
-            .text("Exp.")
-
-        toolbox
-            .append("table")
-            .append("button")
             .attr("id", "hide_show")
             .style("width", "85px")
             .style("height", "30px")
             .style("font-weight", "bold")
             .text("H / S")
+
+        toolbox
+            .append("table")
+            .append("button")
+            .attr("id", "exp")
+            .style("width", "85px")
+            .style("height", "30px")
+            .style("font-weight", "bold")
+            .text("Exp.")
 
         // Set the width & height of the graph
         var margin = { top: 40, right: 40, bottom: 40, left: 40 },
@@ -221,6 +219,9 @@ $(document).ready(function () {
                         .text(d => d)
 
                     toolbox
+                        .style("display", "block")
+                        .style("left", "85%")
+                        .style("top", "150px")
                         .transition()
                         .duration(700)
                         .style("opacity", 0.9)
@@ -232,8 +233,8 @@ $(document).ready(function () {
                                 d3.selectAll(".cluster_selected").attr("class", "cluster_unselected")
                                 d3.selectAll(".cluster_unselected").transition().duration(1400).style("opacity", 0.9)
 
-                                selected_list.style("opacity", 0.1).text("")
-                                toolbox.transition().duration(700).style("opacity", 0.1)
+                                selected_list.style("opacity", 0).text("")
+                                toolbox.transition().duration(700).style("opacity", 0)
 
                                 for (var x of choosed.selected) {choosed.del(x)}
                             }
@@ -253,12 +254,19 @@ $(document).ready(function () {
                                 d3.selectAll(".cluster_unselected").transition().duration(200).style("opacity", 0.1)
                             }
                         })
+
+                    toolbox
+                        .select("#exp")
+                        .on("click", function () {
+                            d3.select("body").append("script").attr("src", "../script/plot.d3.boxplot.js")
+                            // location.reload(true) 
+                        })
                 } else {
                     d3.selectAll(".cluster_selected").attr("class", "cluster_unselected")
                     d3.selectAll(".cluster_unselected").transition().duration(1400).style("opacity", 0.9)
 
                     selected_list.style("display", "none").text("")
-                    toolbox.transition().duration(700).style("opacity", 0.1)
+                    toolbox.transition().duration(700).style("opacity", 0)
                 }
             })
     }

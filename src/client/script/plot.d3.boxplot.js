@@ -4,8 +4,8 @@ $(document).ready(function() {
 
     // Set the dimensions, margins and scales of the graph
     var margin = {top: 40, right: 40, bottom: 40, left: 40},
-         width = 650 - margin.left - margin.right,
-        height = 650 - margin.top - margin.bottom
+         width = 710 - margin.left - margin.right,
+        height = 660 - margin.top - margin.bottom
 
 d3.select("#Boxplot_triger").on("click", function() {
     // Clean svg

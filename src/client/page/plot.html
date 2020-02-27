@@ -62,7 +62,7 @@
         <h2>[</h2>
         &nbsp;<input type="text" class="seaInpWidget" placeholder="Search..." />&nbsp;
         <h2>]</h2>
-        <input type="submit" class="seaButWidget" value="SEARCH" />
+        <button class="seaButWidget">SEARCH</button>
       </div>
     </div>
   </div>
@@ -70,35 +70,25 @@
   <hr class="splLinR" />
 
   <div class="maiRegi">
-    <div class="maiBlocR" style="width:20%;">
+    <div class="maiBlocR" style="width:15%;">
       <div class="maiBlocC">
-        <div class="maiBlocR" style="height:35%;">
-          <div class="maiBlocC">
-            <h2>Content</h2>
-          </div>
-        </div>
-
-        <hr class="splLine" />
-
-        <div class="maiBlocR" style="height:65%;">
-          <div class="maiBlocC">
-            <h1>Sample</h1>
-          </div>
+        <div class="maiBlocR">
+          <h1>Sample</h1>
         </div>
       </div>
     </div>
 
     <hr class="splLinC" />
 
-    <div class="maiBlocR" style="width:80%;">
+    <div class="maiBlocR" style="width:85%;">
       <div class="maiBlocC">
-        <div class="maiBlocR" style="height:5%; justify-content:flex-start;">
-          <input type="submit" id="Scatterplot_triger" value="Scatterplot" style="font-weight:bold;" />
+        <div class="maiBlocR" style="height:35px; justify-content:flex-start;">
+          <button type="submit" id="Scatterplot_triger" style="height:30px; font-weight:bold;">Scatter</button>
           <hr class="splLinC" />
-          <input type="submit" id="Boxplot_triger" value="Boxplot" style="font-weight:bold;" />
+          <button type="submit" id="Boxplot_triger" style="height:30px; font-weight:bold;">Box</button>
         </div>
 
-        <div class="maiBlocR" id="plotRegi" style="height:95%;"></div>
+        <div class="maiBlocR" id="plotRegi"></div>
       </div>
     </div>
   </div>

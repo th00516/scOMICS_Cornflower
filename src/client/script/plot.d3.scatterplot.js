@@ -24,18 +24,29 @@ $(document).ready(function () {
         this.del = function(_cluster) {this.selected.delete(_cluster)}
     }
 
-    // Set a tooltip
+    // Set a tooltip & selected_list
     var tooltip = d3
         .select("#plotRegi")
         .append("div")
         .attr("id", "tooltip")
         .style("display", "none")
         .style("position", "absolute")
-        .style("border", "solid")
-        .style("border-width", "1px")
-        .style("border-radius", "5px")
         .style("padding", "10px")
-        .style("background-color", "white")
+        .style("border-width", "1px")
+        .style("background-color", "lightyellow")
+        .style("font-weight", "bold")
+        .style("opacity", 0.9)
+
+    var selected_list = d3
+        .select("#plotRegi")
+        .append("div")
+        .attr("id", "selected_list")
+        .style("display", "none")
+        .style("position", "absolute")
+        .style("padding", "10px")
+        .style("background-color", "lightblue")
+        .style("font-weight", "bold")
+        .style("opacity", 0.9)
 
     // Draw scatter plot
     function scatterPlot(dat) {
@@ -95,7 +106,7 @@ $(document).ready(function () {
         svg
             .select("#scatterplot")
             .selectAll("NONE")
-            .data(dat.slice(0, 30000), d => d)
+            .data(dat.slice(0, 10000), d => d)
             .enter()
             .append("circle")
             .attr("class", "cluster_unselected")
@@ -110,14 +121,24 @@ $(document).ready(function () {
 
             .on("mouseover", function() {
                 tooltip
-                    .style("display", "inline")
+                    .style("display", "block")
                     .style("left", (d3.event.pageX + 20) + "px")
                     .style("top", (d3.event.pageY + 20) + "px")
                     .text(d3.select(this).attr("id"))
+
+                if (choosed.selected.size > 0) {
+                    selected_list
+                        .style("display", "block")
+                        .style("left", (d3.event.pageX + 20) + "px")
+                        .style("top", (d3.event.pageY + 65) + "px")
+                }
             })
 
             .on("mouseout", function() {
                 tooltip
+                    .style("display", "none")
+
+                selected_list
                     .style("display", "none")
             })
 
@@ -125,6 +146,9 @@ $(document).ready(function () {
                 if (choosed.has(d3.select(this).attr("id"))) {
                     choosed.del(d3.select(this).attr("id"))
                     d3.selectAll("#" + d3.select(this).attr("id")).attr("class", "cluster_unselected")
+
+                    selected_list
+                        .text(d3.select(this).attr("id"))
                 } else {
                     choosed.add(d3.select(this).attr("id"))
                     d3.selectAll("#" + d3.select(this).attr("id")).attr("class", "cluster_selected")
@@ -137,7 +161,24 @@ $(document).ready(function () {
                     d3.selectAll(".cluster_selected").attr("class", "cluster_unselected")
                     d3.selectAll(".cluster_unselected").transition().duration(2000).style("opacity", 1)
                 }
-            })
+
+                
+                if (choosed.selected.size > 0) {
+                    selected_list
+                        .text("")
+
+                    selected_list
+                        .selectAll("NONE")
+                        .data(Array.from(choosed.selected))
+                        .enter()
+                        .append("table")
+                        .text(d => d)
+                } else {
+                    selected_list
+                        .style("display", "none")
+                }
+                console.log(Array.from(choosed.selected))
+            }) 
     }
 
 

@@ -130,12 +130,12 @@ $(document).ready(function () {
                     d3.selectAll("#" + d3.select(this).attr("id")).attr("class", "cluster_selected")
                 }
                 
-                d3.selectAll(".cluster_selected").transition().duration(1000).style("opacity", 1)
-                d3.selectAll(".cluster_unselected").transition().duration(1000).style("opacity", 0.1)
+                d3.selectAll(".cluster_selected").transition().duration(2000).style("opacity", 1)
+                d3.selectAll(".cluster_unselected").transition().duration(2000).style("opacity", 0.1)
                 
                 if (choosed.selected.size == 0) {
                     d3.selectAll(".cluster_selected").attr("class", "cluster_unselected")
-                    d3.selectAll(".cluster_unselected").transition().duration(1000).style("opacity", 1)
+                    d3.selectAll(".cluster_unselected").transition().duration(2000).style("opacity", 1)
                 }
             })
     }

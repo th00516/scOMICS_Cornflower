@@ -19,6 +19,7 @@ $(document).ready(function () {
     function selected_clusters() {
         this.selected = new Set()
 
+        this.has = _cluster => this.selected.has(_cluster)
         this.add = function(_cluster) {this.selected.add(_cluster)}
         this.del = function(_cluster) {this.selected.delete(_cluster)}
     }
@@ -97,21 +98,22 @@ $(document).ready(function () {
             .data(dat.slice(0, 30000), d => d)
             .enter()
             .append("circle")
-            .attr("class", d => "cluster_" + d.seurat_clusters)
+            .attr("class", "cluster_unselected")
+            .attr("id", d => "cluster_" + d.seurat_clusters)
             .attr("cx", d => scale_x(d.TSNE_1))
             .attr("cy", d => scale_y(d.TSNE_2))
             .attr("r", 2)
             .style("fill", d => "rgb(" + [color_list[0][d.seurat_clusters],
                                           color_list[1][d.seurat_clusters],
                                           color_list[2][d.seurat_clusters]] + ")")
-            .style("opacity", 0.1)
+            .style("opacity", 1)
 
             .on("mouseover", function() {
                 tooltip
                     .style("display", "inline")
-                    .style("left", (d3.mouse(this)[0] + d3.select("body").style("width") * 0.2 + width) + "px")
-                    .style("top", (d3.mouse(this)[1] + d3.select("body").style("height") + height) + "px")
-                    .text(d3.select(this).attr("class"))
+                    .style("left", (d3.event.pageX + 20) + "px")
+                    .style("top", (d3.event.pageY + 20) + "px")
+                    .text(d3.select(this).attr("id"))
             })
 
             .on("mouseout", function() {
@@ -120,22 +122,20 @@ $(document).ready(function () {
             })
 
             .on("click", function() {
-                if (d3.select(this).style("opacity") == 0.1) {
-                    d3
-                        .selectAll("." + (d3.select(this).attr("class")))
-                        .transition()
-                        .duration(400)
-                        .style("opacity", d3.select(this).style("opacity") * 10)
-
-                    choosed.add(d3.select(this).attr("class"))
+                if (choosed.has(d3.select(this).attr("id"))) {
+                    choosed.del(d3.select(this).attr("id"))
+                    d3.selectAll("#" + d3.select(this).attr("id")).attr("class", "cluster_unselected")
                 } else {
-                    d3
-                        .selectAll("." + (d3.select(this).attr("class")))
-                        .transition()
-                        .duration(400)
-                        .style("opacity", d3.select(this).style("opacity") / 10)
-
-                    choosed.del(d3.select(this).attr("class"))
+                    choosed.add(d3.select(this).attr("id"))
+                    d3.selectAll("#" + d3.select(this).attr("id")).attr("class", "cluster_selected")
+                }
+                
+                d3.selectAll(".cluster_selected").transition().duration(1000).style("opacity", 1)
+                d3.selectAll(".cluster_unselected").transition().duration(1000).style("opacity", 0.1)
+                
+                if (choosed.selected.size == 0) {
+                    d3.selectAll(".cluster_selected").attr("class", "cluster_unselected")
+                    d3.selectAll(".cluster_unselected").transition().duration(1000).style("opacity", 1)
                 }
             })
     }

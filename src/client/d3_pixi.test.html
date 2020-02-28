@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+
+    <title>WebGL&nbsp;Test</title>
+</head>
+
+<script src="./script/d3.v5.min.js"></script>
+<script src="./script/pixi.v4.min.js"></script>
+
+<body>
+    <script>
+        var width = document.body.clientWidth;
+        var height = document.body.clientHeight;
+
+        var stage = new PIXI.Container();
+
+        var renderer = new PIXI.WebGLRenderer(width, height, { resolution: 2 });
+        document.body.appendChild(renderer.view);
+
+        var canvas = d3.select(renderer.view);
+        canvas.style("width", width).style("height", height);
+
+        var centerY = height * .5;
+        var centerX = width * .5;
+        var particleSize = 64;
+        var data = d3.range(0, 2000);
+        var yScale = d3.scaleLinear().domain(d3.extent(data)).range([height * .2, height * .8]);
+
+        data = data.map(function (i) {
+
+            return {
+                r: 5,
+                x: centerX,
+                y: yScale(i)
+            }
+        });
+
+        var extent = d3.extent(data, function (d, i) { return i });
+        var colourScale = d3.scaleSequential(d3.interpolateRainbow).domain(extent);
+
+        var circles = d3
+            .selectAll("NONE")
+            .data(data)
+            .enter()
+            .append("custom")
+            .attr("class", "circle")
+            .attr("scale", 1)
+            .each(function (d, i) {
+                d.sprite = new PIXI.Graphics();
+                d.color = "black"
+                d.sprite.beginFill(d.color);
+                d.sprite.drawCircle(0, 0, d.r * 2);
+                d.pivot = { x: .5, y: .5 };
+                stage.addChild(d.sprite);
+            });
+
+        canvas.on("mousedown", function() {
+            data.pop();
+            circles
+                .data(data)
+                .exit()
+                .transition()
+                .attr("scale", 0)
+                .on("end", function (d) {
+                    stage.removeChild(d.sprite);
+                    d3.select(this).remove();
+                })
+        })
+
+        timer = d3.timer(function() {
+            circles
+                .each(function (d, i) {
+                    var scale = d3.select(this).attr("scale");
+                    d.sprite.position.x = d.x;
+                    d.sprite.position.y = d.y;
+                    d.sprite.scale.x = scale;
+                    d.sprite.scale.y = scale;
+                });
+
+            renderer.render(stage);
+        });
+
+    </script>
+</body>
+
+</html>

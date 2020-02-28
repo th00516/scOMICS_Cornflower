@@ -69,7 +69,7 @@ $(document).ready(function () {
             .style("background-color", "lightblue")
             .style("font-weight", "bold")
             .style("opacity", 0)
-            
+
         toolbox
             .append("table")
             .append("button")
@@ -116,6 +116,9 @@ $(document).ready(function () {
             .domain([-50, 50])
             .range([height, 0])
 
+        // Initializing
+        d3.select("#plotRegi").select("#init").remove()
+
         // Append the svg object and a canvas for the following drawing
         var svg = d3
             .select("#plotRegi")
@@ -156,7 +159,7 @@ $(document).ready(function () {
         svg
             .select("#scatterplot")
             .selectAll("NONE")
-            .data(dat.slice(0, 10000), d => d)
+            .data(dat.slice(0, 20000), d => d)
             .enter()
             .append("circle")
             .attr("class", "cluster_unselected")
@@ -165,8 +168,8 @@ $(document).ready(function () {
             .attr("cy", d => scale_y(d.TSNE_2))
             .attr("r", 2)
             .style("fill", d => "rgb(" + [color_list[0][d.seurat_clusters],
-                                          color_list[1][d.seurat_clusters],
-                                          color_list[2][d.seurat_clusters]] + ")")
+            color_list[1][d.seurat_clusters],
+            color_list[2][d.seurat_clusters]] + ")")
             .style("opacity", 0.9)
 
             .on("mouseover", function () {
@@ -236,7 +239,7 @@ $(document).ready(function () {
                                 selected_list.style("opacity", 0).text("")
                                 toolbox.transition().duration(700).style("opacity", 0)
 
-                                for (var x of choosed.selected) {choosed.del(x)}
+                                for (var x of choosed.selected) { choosed.del(x) }
                             }
                         })
 
@@ -277,6 +280,9 @@ $(document).ready(function () {
         // Clean svg
         d3.select("#plotRegi").select("#Scatter").remove()
         d3.select("#plotRegi").select("#Box").remove()
+
+        // Initializing
+        d3.select("#plotRegi").append("h4").attr("id", "init").text("Initializing...")
 
         // Create dummy data
         d3.tsv("../demo_data/pbmc.tsv").then(d => scatterPlot(d))

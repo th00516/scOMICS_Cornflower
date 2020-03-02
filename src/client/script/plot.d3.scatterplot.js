@@ -1,18 +1,89 @@
 /* d3 */
 
 
-/* Main */
-// Clean svg
+/* Preparing */
+// Cleanup
 d3.select("#plotRegi").select("#Scatter").remove()
 d3.select("#plotRegi").select("#Box").remove()
 
-d3.select("#plotRegi").select("#toolbox").style("display", "none")
+d3.select("#plotRegi").select("#selected_list").remove()
+d3.select("#plotRegi").select("#toolbox").remove()
 
+
+/* Running */
 // Initializing
 d3.select("#plotRegi").append("h4").attr("id", "init").text("Initializing...")
 
-// Create dummy data
+// Import data
 d3.tsv("../demo_data/pbmc.tsv").then(d => scatterPlot(d))
+
+
+
+
+/* Member */
+// Set a tip, selected_list
+var tip = d3
+    .select("#plotRegi")
+    .append("div")
+    .attr("id", "tip")
+    .style("display", "none")
+    .style("position", "absolute")
+    .style("padding", "5px")
+    .style("border-style", "dotted")
+    .style("border-width", "1px")
+    .style("background-color", "lightyellow")
+    .style("font-weight", "bold")
+    .style("font-style", "italic")
+    .style("opacity", 0.9)
+
+var selected_list = d3
+    .select("#plotRegi")
+    .append("div")
+    .attr("id", "selected_list")
+    .style("display", "none")
+    .style("position", "absolute")
+    .style("padding", "5px")
+    .style("border-style", "dotted")
+    .style("border-width", "1px")
+    .style("background-color", "lightblue")
+    .style("font-weight", "bold")
+    .style("opacity", 0.9)
+
+// Set a scatter toolbox
+var toolbox = d3
+    .select("#plotRegi")
+    .append("div")
+    .attr("id", "toolbox")
+    .style("display", "none")
+    .style("position", "absolute")
+    .style("width", "90px")
+    .style("padding", "5px")
+    .style("border-style", "solid")
+    .style("border-width", "1px")
+    .style("background-color", "lightblue")
+    .style("font-weight", "bold")
+    .style("opacity", 0)
+
+toolbox
+    .append("table")
+    .append("button")
+    .attr("id", "clear")
+    .style("width", "85px")
+    .style("height", "30px")
+    .style("font-weight", "bold")
+    .text("Clear")
+
+toolbox
+    .append("hr")
+
+toolbox
+    .append("table")
+    .append("button")
+    .attr("id", "exp")
+    .style("width", "85px")
+    .style("height", "30px")
+    .style("font-weight", "bold")
+    .text("Exp.")
 
 
 /* Function */
@@ -38,72 +109,10 @@ function selected_clusters() {
     this.del = function (_cluster) { this.selected.delete(_cluster) }
 }
 
+choosed = new selected_clusters()
+
 // Draw scatter plot
 function scatterPlot(dat) {
-    // Set a tip, selected_list
-    var tip = d3
-        .select("#plotRegi")
-        .append("div")
-        .attr("id", "tip")
-        .style("display", "none")
-        .style("position", "absolute")
-        .style("padding", "5px")
-        .style("border-style", "dotted")
-        .style("border-width", "1px")
-        .style("background-color", "lightyellow")
-        .style("font-weight", "bold")
-        .style("font-style", "italic")
-        .style("opacity", 0.9)
-
-    var selected_list = d3
-        .select("#plotRegi")
-        .append("div")
-        .attr("id", "selected_list")
-        .style("display", "none")
-        .style("position", "absolute")
-        .style("padding", "5px")
-        .style("border-style", "dotted")
-        .style("border-width", "1px")
-        .style("background-color", "lightblue")
-        .style("font-weight", "bold")
-        .style("opacity", 0.9)
-
-    // Set a scatter toolbox
-    var toolbox = d3
-        .select("#plotRegi")
-        .append("div")
-        .attr("id", "toolbox")
-        .style("display", "none")
-        .style("position", "absolute")
-        .style("width", "90px")
-        .style("padding", "5px")
-        .style("border-style", "solid")
-        .style("border-width", "1px")
-        .style("background-color", "lightblue")
-        .style("font-weight", "bold")
-        .style("opacity", 0)
-
-    toolbox
-        .append("table")
-        .append("button")
-        .attr("id", "clear")
-        .style("width", "85px")
-        .style("height", "30px")
-        .style("font-weight", "bold")
-        .text("Clear")
-
-    toolbox
-        .append("hr")
-
-    toolbox
-        .append("table")
-        .append("button")
-        .attr("id", "exp")
-        .style("width", "85px")
-        .style("height", "30px")
-        .style("font-weight", "bold")
-        .text("Exp.")
-
     // Set the width & height of the graph
     var margin = { top: 40, right: 40, bottom: 40, left: 40 },
         width = 850 - margin.left - margin.right,
@@ -157,8 +166,6 @@ function scatterPlot(dat) {
         .select("#Canvas")
         .append("g")
         .attr("id", "scatterplot")
-
-    var choosed = new selected_clusters()
 
     svg
         .select("#scatterplot")
@@ -252,7 +259,8 @@ function scatterPlot(dat) {
                 toolbox
                     .select("#exp")
                     .on("click", function () {
-                        $.getScript("../script/plot.d3.boxplot.js")
+                        $.getScript("../script/control.js")
+                        draw_boxplot()
                     })
             } else {
                 selected_list.style("display", "none")

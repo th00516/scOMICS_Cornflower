@@ -8,70 +8,68 @@
 </head>
 
 <script src="./script/d3.v5.min.js"></script>
-<script src="./script/pixi.v4.min.js"></script>
+<script src="./script/pixi.v5.min.js"></script>
 
 <body>
+
+    <div id="plotRegi"></div>
+
     <script>
-        var width = 300
-        var height = 300
+        d3.tsv("../demo_data/pbmc.tsv").then(function (data) {
+            var width = 600
+            var height = 600
 
-        var renderer = new PIXI.WebGLRenderer(width, height, { resolution: 1 });
-        document.body.appendChild(renderer.view);
+            var scale_x = d3
+                .scaleLinear()
+                .domain([-50, 50])
+                .range([0, width])
 
-        var centerY = height * .5;
-        var centerX = width * .5;
-        var particleSize = 64;
-        var yScale = d3.scaleLinear().domain(d3.extent(data)).range([height * .2, height * .8]);
+            var scale_y = d3
+                .scaleLinear()
+                .domain([-50, 50])
+                .range([height, 0])
 
-        // var extent = d3.extent(data, function (d, i) { return i });
+            function get_random_color(n) {
+                R = new Set()
+                G = new Set()
+                B = new Set()
 
-        var data = d3.range(0, 2000)
-        data = data.map(i => { r = 5, x = centerX, y = yScale(i) })
+                while (R.size < n) { R.add(Math.ceil(Math.random() * 255).toString(16)) }
+                while (G.size < n) { G.add(Math.ceil(Math.random() * 255).toString(16)) }
+                while (B.size < n) { B.add(Math.ceil(Math.random() * 255).toString(16)) }
 
-        var canvas = d3
-            .select(renderer.view)
-            .selectAll("custom.circle")
-            .data(data)
-            .enter()
-            .append("custom")
-            .attr("class", "circle")
-            .attr("scale", 1)
-            .each(d => {
-                d.sprite = new PIXI.Graphics()
-                d.sprite.beginFill("white")
-                d.sprite.drawCircle(10, 10, d.r * 2)
-                d.pivot = { x: .5, y: .5 }
+                return [Array.from(R), Array.from(G), Array.from(B)]
+            }
 
-                stage.addChild(d.sprite)
-            });
+            var color_list = get_random_color(100)
 
-        // canvas.on("mousedown", function() {
-        //     data.pop();
-        //     circles
-        //         .data(data)
-        //         .exit()
-        //         .transition()
-        //         .attr("scale", 0)
-        //         .on("end", function (d) {
-        //             stage.removeChild(d.sprite);
-        //             d3.select(this).remove();
-        //         })
-        // })
+            var app = new PIXI.Application({ width, height, transparent: 1, resolution: 1 });
+            document.body.appendChild(app.view);
 
-        // timer = d3.timer(function() {
-        //     circles
-        //         .each(function (d, i) {
-        //             var scale = d3.select(this).attr("scale");
-        //             d.sprite.position.x = d.x;
-        //             d.sprite.position.y = d.y;
-        //             d.sprite.scale.x = scale;
-        //             d.sprite.scale.y = scale;
-        //         });
-        // });
+            // circle = new PIXI.Graphics()
 
-        var stage = new PIXI.Container()
-        renderer.render(stage)
+            d3
+                .select(app.view)
+                .selectAll("NONE")
+                .data(data, d => d)
+                .enter()
+                .each(d => {
+                    circle = new PIXI.Graphics()
+                    circle.beginFill(
+                        "0x" +
+                        color_list[0][d.seurat_clusters] +
+                        color_list[1][d.seurat_clusters] +
+                        color_list[2][d.seurat_clusters]
+                    )
+
+                    circle.drawCircle(scale_x(d.TSNE_1), scale_y(d.TSNE_2), 1)
+                    circle.endFill()
+
+                    app.stage.addChild(circle)
+                })
+        })
     </script>
+
 </body>
 
 </html>

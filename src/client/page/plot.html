@@ -13,75 +13,63 @@
   <script src="../script/script.main.js"></script>
 
   <script src="../script/d3.v5.min.js"></script>
-  <script src="../script/pixi.min.js"></script>
+  <script src="../script/pixi.v5.min.js"></script>
   <script src="../script/plot.d3.scatterplot.js"></script>
-  <!-- <script src="../script/plot.d3.boxplot.js"></script> -->
 
   <title>Hello&nbsp;scOmics!</title>
 </head>
 
 <body>
-<div class="allFram">
+  <div class="allFram">
 
-  <div class="heaRegi">
-    <div class="titFram">
-      &nbsp;<a href="../index.html">
-        <h2>Hello&nbsp;scOmics!</h2>
-      </a>&nbsp;
-    </div>
-
-    <div class="navSeaFram">
-      <div class="navFram">
-        <div class="navWidget">
-          <h2>{</h2>
-          &nbsp;<a href="./plot.html">
-            <h3>PLOT</h3>
-          </a>&nbsp;
-          <h2>}</h2>
-        </div>
-
-        <div class="navWidget">
-          <h2>{</h2>
-          &nbsp;<a href="./data.html">
-            <h3>DATA</h3>
-          </a>&nbsp;
-          <h2>}</h2>
-        </div>
-
-        <div class="navWidget">
-          <h2>{</h2>
-          &nbsp;<a href="./help.html">
-            <h3>HELP</h3>
-          </a>&nbsp;
-          <h2>}</h2>
-        </div>
+    <div class="heaRegi">
+      <div class="titFram">
+        &nbsp;<a href="../index.html">
+          <h2>Hello&nbsp;scOmics!</h2>
+        </a>&nbsp;
       </div>
 
-      <hr class="splLinC" />
+      <div class="navSeaFram">
+        <div class="navFram">
+          <div class="navWidget">
+            <h2>{</h2>
+            &nbsp;<a href="./plot.html">
+              <h3>PLOT</h3>
+            </a>&nbsp;
+            <h2>}</h2>
+          </div>
 
-      <div class="seaFram">
-        <h2>[</h2>
-        &nbsp;<input type="text" class="seaInpWidget" placeholder="Search..." />&nbsp;
-        <h2>]</h2>
-        <button class="seaButWidget">SEARCH</button>
-      </div>
-    </div>
-  </div>
+          <div class="navWidget">
+            <h2>{</h2>
+            &nbsp;<a href="./data.html">
+              <h3>DATA</h3>
+            </a>&nbsp;
+            <h2>}</h2>
+          </div>
 
-  <hr class="splLinR" />
+          <div class="navWidget">
+            <h2>{</h2>
+            &nbsp;<a href="./help.html">
+              <h3>HELP</h3>
+            </a>&nbsp;
+            <h2>}</h2>
+          </div>
+        </div>
 
-  <div class="maiRegi">
-    <div class="maiBlocR" style="width:15%;">
-      <div class="maiBlocC">
-        <div class="maiBlocR">
-          <h1>Sample</h1>
+        <hr class="splLinC" />
+
+        <div class="seaFram">
+          <h2>[</h2>
+          &nbsp;<input type="text" class="seaInpWidget" placeholder="Search..." />&nbsp;
+          <h2>]</h2>
+          <button class="seaButWidget">SEARCH</button>
         </div>
       </div>
     </div>
 
-    <hr class="splLinC" />
+    <hr class="splLinR" />
 
-    <div class="maiBlocR" style="width:85%;">
+    <div class="maiRegi">
       <div class="maiBlocC">
         <div class="maiBlocR" style="height:35px; justify-content:flex-start;">
           <button type="submit" id="Scatterplot_triger" style="height:30px; font-weight:bold;">Cluster plot</button>
@@ -90,15 +78,14 @@
         <div class="maiBlocR" id="plotRegi"></div>
       </div>
     </div>
-  </div>
-  
-  <hr class="splLinR" />
 
-  <div class="botRegi">
-    <h4>Copyright&nbsp;for&nbsp;scOmics&nbsp;group&nbsp;of&nbsp;BGI&nbsp;in&nbsp;<span id="year"></span></h4>
-  </div>
+    <hr class="splLinR" />
 
-</div>
+    <div class="botRegi">
+      <h4>Copyright&nbsp;for&nbsp;scOmics&nbsp;group&nbsp;of&nbsp;BGI&nbsp;in&nbsp;<span id="year"></span></h4>
+    </div>
+
+  </div>
 </body>
 
 </html>

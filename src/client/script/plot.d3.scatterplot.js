@@ -85,15 +85,6 @@ $(document).ready(function () {
         toolbox
             .append("table")
             .append("button")
-            .attr("id", "hide_show")
-            .style("width", "85px")
-            .style("height", "30px")
-            .style("font-weight", "bold")
-            .text("H / S")
-
-        toolbox
-            .append("table")
-            .append("button")
             .attr("id", "exp")
             .style("width", "85px")
             .style("height", "30px")
@@ -102,8 +93,8 @@ $(document).ready(function () {
 
         // Set the width & height of the graph
         var margin = { top: 40, right: 40, bottom: 40, left: 40 },
-            width = 710 - margin.left - margin.right,
-            height = 660 - margin.top - margin.bottom
+            width = 850 - margin.left - margin.right,
+            height = 700 - margin.top - margin.bottom
 
         // Set the scales of the graph
         var scale_x = d3
@@ -159,7 +150,7 @@ $(document).ready(function () {
         svg
             .select("#scatterplot")
             .selectAll("NONE")
-            .data(dat.slice(0, 20000), d => d)
+            .data(dat.slice(0,10000), d => d)
             .enter()
             .append("circle")
             .attr("class", "cluster_unselected")
@@ -170,7 +161,7 @@ $(document).ready(function () {
             .style("fill", d => "rgb(" + [color_list[0][d.seurat_clusters],
             color_list[1][d.seurat_clusters],
             color_list[2][d.seurat_clusters]] + ")")
-            .style("opacity", 0.9)
+            .style("opacity", 0.1)
 
             .on("mouseover", function () {
                 tip
@@ -234,42 +225,25 @@ $(document).ready(function () {
                         .on("click", function () {
                             if (choosed.selected.size > 0) {
                                 d3.selectAll(".cluster_selected").attr("class", "cluster_unselected")
-                                d3.selectAll(".cluster_unselected").transition().duration(1400).style("opacity", 0.9)
+                                d3.selectAll(".cluster_unselected").transition().duration(1400).style("opacity", 0.1)
 
-                                selected_list.style("opacity", 0).text("")
-                                toolbox.transition().duration(700).style("opacity", 0)
+                                selected_list.text("")
+                                selected_list.style("display", "none")
+
+                                toolbox.style("display", "none")
 
                                 for (var x of choosed.selected) { choosed.del(x) }
                             }
                         })
 
                     toolbox
-                        .select("#hide_show")
-                        .on("mousedown", function () {
-                            if (choosed.selected.size > 0) {
-                                d3.selectAll(".cluster_selected").transition().duration(300).style("opacity", 0.1)
-                                d3.selectAll(".cluster_unselected").transition().duration(300).style("opacity", 0.9)
-                            }
-                        })
-                        .on("mouseup", function () {
-                            if (choosed.selected.size > 0) {
-                                d3.selectAll(".cluster_selected").transition().duration(200).style("opacity", 0.9)
-                                d3.selectAll(".cluster_unselected").transition().duration(200).style("opacity", 0.1)
-                            }
-                        })
-
-                    toolbox
                         .select("#exp")
                         .on("click", function () {
-                            d3.select("body").append("script").attr("src", "../script/plot.d3.boxplot.js")
-                            // location.reload(true) 
+                            $.getScript("../script/plot.d3.boxplot.js")
                         })
                 } else {
-                    d3.selectAll(".cluster_selected").attr("class", "cluster_unselected")
-                    d3.selectAll(".cluster_unselected").transition().duration(1400).style("opacity", 0.9)
-
-                    selected_list.style("display", "none").text("")
-                    toolbox.transition().duration(700).style("opacity", 0)
+                    selected_list.style("display", "none")
+                    toolbox.style("display", "none")
                 }
             })
     }
@@ -280,6 +254,8 @@ $(document).ready(function () {
         // Clean svg
         d3.select("#plotRegi").select("#Scatter").remove()
         d3.select("#plotRegi").select("#Box").remove()
+
+        d3.select("#plotRegi").select("#toolbox").style("display", "none")
 
         // Initializing
         d3.select("#plotRegi").append("h4").attr("id", "init").text("Initializing...")

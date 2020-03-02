@@ -6,12 +6,14 @@
 d3.select("#plotRegi").select("#Scatter").remove()
 d3.select("#plotRegi").select("#Box").remove()
 
+d3.select("#plotRegi").select("#tip").remove()
 d3.select("#plotRegi").select("#selected_list").remove()
 d3.select("#plotRegi").select("#toolbox").remove()
 
 
 /* Running */
 // Initializing
+d3.select("#plotRegi").select("#init").remove()
 d3.select("#plotRegi").append("h4").attr("id", "init").text("Initializing...")
 
 // Import data
@@ -100,6 +102,8 @@ function get_random_color(n) {
     return [Array.from(R), Array.from(G), Array.from(B)]
 }
 
+color_list = get_random_color(30)
+
 // Set a container for recoding selected clusters
 function selected_clusters() {
     this.selected = new Set()
@@ -129,7 +133,7 @@ function scatterPlot(dat) {
         .domain([-50, 50])
         .range([height, 0])
 
-    // Initializing
+    // Initializing ending
     d3.select("#plotRegi").select("#init").remove()
 
     // Append the svg object and a canvas for the following drawing
@@ -159,8 +163,6 @@ function scatterPlot(dat) {
         .attr("id", "AxisY")
         .call(d3.axisLeft(scale_y).ticks(10))
 
-    var color_list = get_random_color(30)
-
     // Drawing
     svg
         .select("#Canvas")
@@ -175,12 +177,14 @@ function scatterPlot(dat) {
         .append("circle")
         .attr("class", "cluster_unselected")
         .attr("id", d => "cluster_" + d.seurat_clusters)
-        .attr("cx", d => scale_x(d.TSNE_1))
-        .attr("cy", d => scale_y(d.TSNE_2))
+        .attr("cx", d => scale_x(d.TSNE_1) + "px")
+        .attr("cy", d => scale_y(d.TSNE_2) + "px")
         .attr("r", 2)
-        .style("fill", d => "rgb(" + [color_list[0][d.seurat_clusters],
-        color_list[1][d.seurat_clusters],
-        color_list[2][d.seurat_clusters]] + ")")
+        .style("fill", d => "rgb(" + [
+            color_list[0][d.seurat_clusters],
+            color_list[1][d.seurat_clusters],
+            color_list[2][d.seurat_clusters]
+        ] + ")")
         .style("opacity", 0.1)
 
         .on("mouseover", function () {

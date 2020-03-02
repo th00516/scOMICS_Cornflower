@@ -1,4 +1,4 @@
-/*d3*/
+/* d3 */
 
 // Set the dimensions, margins and scales of the graph
 var margin = { top: 40, right: 40, bottom: 40, left: 40 },
@@ -10,9 +10,6 @@ d3.select("#plotRegi").select("#Scatter").remove()
 d3.select("#plotRegi").select("#Box").remove()
 
 // Create dummy data
-var raw_data = new Array([12, 19, 11, 13, 12, 22, 13, 4, 15, 16, 18, 19, 20, 12, 11, 9],
-    [21, 19, 31, 23, 12, 42, 33, 24, 5, 36, 10, 11, 43, 2, 15, 19],
-    [33, 12, 42, 33, 24, 5, 36, 10, 11, 13, 12, 22, 13, 4, 15, 16])
 
 // Set a few features for the data
 var box_num = raw_data.length

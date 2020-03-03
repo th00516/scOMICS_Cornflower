@@ -42,7 +42,6 @@ function boxPlot(dat) {
     var data = new Object()
 
     // Compute summary statistics used for the box
-    let n = 1
     for (let i = 0; i < dat.length; i++) {
         let K = "cluster_" + dat[i].seurat_clusters
 
@@ -50,11 +49,8 @@ function boxPlot(dat) {
             if (!data.hasOwnProperty(K)) {
                 data[K] = new Object()
 
-                data[K].ID = n
                 data[K].Cluster = dat[i].seurat_clusters
                 data[K].Data = new Array()
-
-                n++
             }
 
             data["cluster_" + dat[i].seurat_clusters].Data.push(dat[i].nCount_RNA / dat[i].nFeature_RNA)
@@ -68,11 +64,25 @@ function boxPlot(dat) {
         width = 850 - margin.left - margin.right,
         height = 700 - margin.top - margin.bottom
 
+    // Set discrete X-axis
+    function gen_xAxis() {
+        let A = new Array()
+
+        let block_num = choosed.selected.size + 1
+        winWidth = width / block_num
+
+        for (let n = 1; n < block_num; n++) {
+            A.push(winWidth * n)
+        }
+
+        return A
+    }
+
     // Set the scales of the graph
     var scale_x = d3
-        .scaleLinear()
-        .domain([0, choosed.selected.size + 1])
-        .range([0, width])
+        .scaleOrdinal()
+        .domain(Array.from(choosed.selected))
+        .range(gen_xAxis())
 
     var scale_y = d3
         .scaleLinear()
@@ -80,7 +90,7 @@ function boxPlot(dat) {
         .range([height, 0])
 
     // Set a few features for the graph
-    var box_width = width / choosed.selected.size - 40
+    var box_width = ((width - 100) - (40 * (choosed.selected.size - 1))) / (choosed.selected.size + 2)
 
     // Initializing ending
     d3.select("#plotRegi").select("#init").remove()
@@ -103,7 +113,7 @@ function boxPlot(dat) {
         .select("#Canvas")
         .append("g")
         .attr("id", "AxisX")
-        .call(d3.axisBottom(scale_x).ticks(choosed.selected.size + 1))
+        .call(d3.axisBottom(scale_x))
         .attr("transform", "translate(0," + height + ")")
 
     svg
@@ -125,9 +135,9 @@ function boxPlot(dat) {
         .data(data, d => box_stat(d))
         .enter()
         .append("line")
-        .attr("x1", d => scale_x(d.ID) + "px")
+        .attr("x1", d => scale_x("cluster_" + d.Cluster) + "px")
         .attr("y1", d => scale_y(d.Max) + "px")
-        .attr("x2", d => scale_x(d.ID) + "px")
+        .attr("x2", d => scale_x("cluster_" + d.Cluster) + "px")
         .attr("y2", d => scale_y(d.Min) + "px")
         .style("stroke", d => "rgb(" + [
             color_list[0][d.Cluster],
@@ -143,7 +153,7 @@ function boxPlot(dat) {
         .data(data, d => box_stat(d))
         .enter()
         .append("rect")
-        .attr("x", d => scale_x(d.ID) - box_width / 2 + "px")
+        .attr("x", d => scale_x("cluster_" + d.Cluster) - box_width / 2 + "px")
         .attr("y", d => scale_y(d.Q3) + "px")
         .attr("width", box_width + "px")
         .attr("height", d => (scale_y(d.Q1) - scale_y(d.Q3)) + "px")
@@ -162,9 +172,9 @@ function boxPlot(dat) {
         .data(data, d => box_stat(d))
         .enter()
         .append("line")
-        .attr("x1", d => scale_x(d.ID) - box_width / 2)
+        .attr("x1", d => scale_x("cluster_" + d.Cluster) - box_width / 2)
         .attr("y1", d => scale_y(d.Min))
-        .attr("x2", d => scale_x(d.ID) + box_width / 2)
+        .attr("x2", d => scale_x("cluster_" + d.Cluster) + box_width / 2)
         .attr("y2", d => scale_y(d.Min))
         .style("stroke", d => "rgb(" + [
             color_list[0][d.Cluster],
@@ -179,9 +189,9 @@ function boxPlot(dat) {
         .data(data, d => box_stat(d))
         .enter()
         .append("line")
-        .attr("x1", d => scale_x(d.ID) - box_width / 2)
+        .attr("x1", d => scale_x("cluster_" + d.Cluster) - box_width / 2)
         .attr("y1", d => scale_y(d.Max))
-        .attr("x2", d => scale_x(d.ID) + box_width / 2)
+        .attr("x2", d => scale_x("cluster_" + d.Cluster) + box_width / 2)
         .attr("y2", d => scale_y(d.Max))
         .style("stroke", d => "rgb(" + [
             color_list[0][d.Cluster],
@@ -196,9 +206,9 @@ function boxPlot(dat) {
         .data(data, d => box_stat(d))
         .enter()
         .append("line")
-        .attr("x1", d => scale_x(d.ID) - box_width / 2)
+        .attr("x1", d => scale_x("cluster_" + d.Cluster) - box_width / 2)
         .attr("y1", d => scale_y(d.Median))
-        .attr("x2", d => scale_x(d.ID) + box_width / 2)
+        .attr("x2", d => scale_x("cluster_" + d.Cluster) + box_width / 2)
         .attr("y2", d => scale_y(d.Median))
         .style("stroke", d => "rgb(" + [
             color_list[0][d.Cluster],

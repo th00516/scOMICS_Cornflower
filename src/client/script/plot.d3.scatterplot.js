@@ -172,7 +172,7 @@ function scatterPlot(dat) {
     svg
         .select("#scatterplot")
         .selectAll("NONE")
-        .data(dat.slice(0, 10000), d => d)
+        .data(dat, d => d)
         .enter()
         .append("circle")
         .attr("class", "cluster_unselected")

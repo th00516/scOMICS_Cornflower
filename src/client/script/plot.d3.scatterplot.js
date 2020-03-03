@@ -88,6 +88,8 @@ toolbox
     .text("Exp.")
 
 
+
+
 /* Function */
 // Set random colors
 function get_random_color(n) {
@@ -115,20 +117,21 @@ function selected_clusters() {
 
 choosed = new selected_clusters()
 
+
 // Draw scatter plot
 function scatterPlot(dat) {
     // Set the width & height of the graph
-    var margin = { top: 40, right: 40, bottom: 40, left: 40 },
+    let margin = { top: 40, right: 40, bottom: 40, left: 40 },
         width = 850 - margin.left - margin.right,
         height = 700 - margin.top - margin.bottom
 
     // Set the scales of the graph
-    var scale_x = d3
+    let scale_x = d3
         .scaleLinear()
         .domain([-50, 50])
         .range([0, width])
 
-    var scale_y = d3
+        let scale_y = d3
         .scaleLinear()
         .domain([-50, 50])
         .range([height, 0])
@@ -137,7 +140,7 @@ function scatterPlot(dat) {
     d3.select("#plotRegi").select("#init").remove()
 
     // Append the svg object and a canvas for the following drawing
-    var svg = d3
+    let svg = d3
         .select("#plotRegi")
         .append("svg")
         .attr("id", "Scatter")

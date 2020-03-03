@@ -199,10 +199,10 @@ function scatterPlot(dat) {
 
                 if (choosed.has("cluster_" + d.seurat_clusters)) {
                     choosed.del("cluster_" + d.seurat_clusters)
-                    circle.alpha = 0.1
+                    circle.getChildByName("cluster_" + d.seurat_clusters).alpha = 0.1
                 } else {
                     choosed.add("cluster_" + d.seurat_clusters)
-                    circle.alpha = 0.9
+                    circle.getChildByName("cluster_" + d.seurat_clusters).alpha = 0.9
 
                     selected_list
                         .selectAll("NONE")

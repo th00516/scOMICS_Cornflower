@@ -127,6 +127,12 @@ function boxPlot(dat) {
         .select("#Canvas")
         .append("g")
         .attr("id", "boxplot")
+        .append("rect")
+        .attr("x", margin.left / 2)
+        .attr("y", 0)
+        .attr("width", width - margin.left / 2)
+        .attr("height", height)
+        .style("fill", "lightgrey")
 
     // Append the main vertical line
     svg
@@ -139,11 +145,10 @@ function boxPlot(dat) {
         .attr("y1", d => scale_y(d.Max) + "px")
         .attr("x2", d => scale_x("cluster_" + d.Cluster) + "px")
         .attr("y2", d => scale_y(d.Min) + "px")
-        .style("stroke", d => "rgb(" + [
-            color_list[0][d.Cluster],
-            color_list[1][d.Cluster],
-            color_list[2][d.Cluster]
-        ] + ")")
+        .style("stroke", d => "#" +
+            color_list[0][d.Cluster] +
+            color_list[1][d.Cluster] +
+            color_list[2][d.Cluster])
         .style("stroke-width", "2px")
 
     // Append the box
@@ -158,11 +163,10 @@ function boxPlot(dat) {
         .attr("width", box_width + "px")
         .attr("height", d => (scale_y(d.Q1) - scale_y(d.Q3)) + "px")
         .style("fill", "white")
-        .style("stroke", d => "rgb(" + [
-            color_list[0][d.Cluster],
-            color_list[1][d.Cluster],
-            color_list[2][d.Cluster]
-        ] + ")")
+        .style("stroke", d => "#" +
+            color_list[0][d.Cluster] +
+            color_list[1][d.Cluster] +
+            color_list[2][d.Cluster])
         .style("stroke-width", "2px")
 
     // Append median, min and max horizontal lines
@@ -176,11 +180,10 @@ function boxPlot(dat) {
         .attr("y1", d => scale_y(d.Min))
         .attr("x2", d => scale_x("cluster_" + d.Cluster) + box_width / 2)
         .attr("y2", d => scale_y(d.Min))
-        .style("stroke", d => "rgb(" + [
-            color_list[0][d.Cluster],
-            color_list[1][d.Cluster],
-            color_list[2][d.Cluster]
-        ] + ")")
+        .style("stroke", d => "#" +
+            color_list[0][d.Cluster] +
+            color_list[1][d.Cluster] +
+            color_list[2][d.Cluster])
         .style("stroke-width", "2px")
 
     svg
@@ -193,11 +196,10 @@ function boxPlot(dat) {
         .attr("y1", d => scale_y(d.Max))
         .attr("x2", d => scale_x("cluster_" + d.Cluster) + box_width / 2)
         .attr("y2", d => scale_y(d.Max))
-        .style("stroke", d => "rgb(" + [
-            color_list[0][d.Cluster],
-            color_list[1][d.Cluster],
-            color_list[2][d.Cluster]
-        ] + ")")
+        .style("stroke", d => "#" +
+            color_list[0][d.Cluster] +
+            color_list[1][d.Cluster] +
+            color_list[2][d.Cluster])
         .style("stroke-width", "2px")
 
     svg
@@ -210,13 +212,11 @@ function boxPlot(dat) {
         .attr("y1", d => scale_y(d.Median))
         .attr("x2", d => scale_x("cluster_" + d.Cluster) + box_width / 2)
         .attr("y2", d => scale_y(d.Median))
-        .style("stroke", d => "rgb(" + [
-            color_list[0][d.Cluster],
-            color_list[1][d.Cluster],
-            color_list[2][d.Cluster]
-        ] + ")")
+        .style("stroke", d => "#" +
+            color_list[0][d.Cluster] +
+            color_list[1][d.Cluster] +
+            color_list[2][d.Cluster])
         .style("stroke-width", "2px")
-
 
     //     // Append the option box
     //     svg

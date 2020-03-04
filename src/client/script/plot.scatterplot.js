@@ -92,19 +92,19 @@ toolbox
 
 /* Function */
 // Set random colors
-function get_random_color(n) {
+function get_random_color() {
     R = new Set()
     G = new Set()
     B = new Set()
 
-    while (R.size < n) { R.add(Math.ceil(Math.random() * 255)) }
-    while (G.size < n) { G.add(Math.ceil(Math.random() * 255)) }
-    while (B.size < n) { B.add(Math.ceil(Math.random() * 255)) }
+    while (R.size < 100) { R.add(Math.ceil(Math.random() * 150 + 50).toString(16)) }
+    while (G.size < 100) { G.add(Math.ceil(Math.random() * 150 + 50).toString(16)) }
+    while (B.size < 100) { B.add(Math.ceil(Math.random() * 150 + 50).toString(16)) }
 
     return [Array.from(R), Array.from(G), Array.from(B)]
 }
 
-color_list = get_random_color(30)
+color_list = get_random_color()
 
 // Set a container for recoding selected clusters
 function selected_clusters() {
@@ -183,25 +183,24 @@ function scatterPlot(dat) {
         .attr("cx", d => scale_x(d.TSNE_1) + "px")
         .attr("cy", d => scale_y(d.TSNE_2) + "px")
         .attr("r", 2)
-        .style("fill", d => "rgb(" + [
-            color_list[0][d.seurat_clusters],
-            color_list[1][d.seurat_clusters],
-            color_list[2][d.seurat_clusters]
-        ] + ")")
+        .style("fill", d => "#" +
+            color_list[0][d.seurat_clusters] +
+            color_list[1][d.seurat_clusters] +
+            color_list[2][d.seurat_clusters])
         .style("opacity", 0.1)
 
         .on("mouseover", function () {
             tip
                 .style("display", "block")
-                .style("left", (d3.event.pageX + 20) + "px")
-                .style("top", (d3.event.pageY + 20) + "px")
+                .style("left", (event.pageX + 20) + "px")
+                .style("top", (event.pageY + 20) + "px")
                 .text(d3.select(this).attr("id"))
 
             if (choosed.selected.size > 0) {
                 selected_list
                     .style("display", "block")
-                    .style("left", (d3.event.pageX + 35) + "px")
-                    .style("top", (d3.event.pageY + 55) + "px")
+                    .style("left", (event.pageX + 35) + "px")
+                    .style("top", (event.pageY + 55) + "px")
             }
         })
 
@@ -216,8 +215,8 @@ function scatterPlot(dat) {
         .on("click", function () {
             selected_list
                 .style("display", "block")
-                .style("left", (d3.event.pageX + 35) + "px")
-                .style("top", (d3.event.pageY + 55) + "px")
+                .style("left", (event.pageX + 35) + "px")
+                .style("top", (event.pageY + 55) + "px")
                 .text("")
 
             if (choosed.has(d3.select(this).attr("id"))) {

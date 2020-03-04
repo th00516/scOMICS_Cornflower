@@ -92,19 +92,19 @@ toolbox
 
 /* Function */
 // Set random colors
-function get_random_color(n) {
+function get_random_color() {
     R = new Set()
     G = new Set()
     B = new Set()
 
-    while (R.size < n) { R.add(Math.ceil(Math.random() * 255).toString(16)) }
-    while (G.size < n) { G.add(Math.ceil(Math.random() * 255).toString(16)) }
-    while (B.size < n) { B.add(Math.ceil(Math.random() * 255).toString(16)) }
+    while (R.size < 100) { R.add(Math.ceil(Math.random() * 150 + 50).toString(16)) }
+    while (G.size < 100) { G.add(Math.ceil(Math.random() * 150 + 50).toString(16)) }
+    while (B.size < 100) { B.add(Math.ceil(Math.random() * 150 + 50).toString(16)) }
 
     return [Array.from(R), Array.from(G), Array.from(B)]
 }
 
-color_list = get_random_color(100)
+color_list = get_random_color()
 
 // Set a container for recoding selected clusters
 function selected_clusters() {
@@ -139,7 +139,13 @@ function scatterPlot(dat) {
     // Initializing ending
     d3.select("#plotRegi").select("#init").remove()
 
-    let app = new PIXI.Application({ width: width, height: height, antialias: true, transparent: true, resolution: 1 })
+    let app = new PIXI.Application({
+        width: width,
+        height: height,
+        antialias: true,
+        resolution: 1,
+        backgroundColor: 0x000000
+    })
 
     app.renderer.view.id = "Scatter"
 
@@ -174,22 +180,22 @@ function scatterPlot(dat) {
 
             circle.name = cluster
 
-            circle.on("pointerover", e => {
+            circle.on("pointerover", function () {
                 tip
                     .style("display", "block")
-                    .style("left", (e.data.global.x + 20) + "px")
-                    .style("top", (e.data.global.y + 20) + "px")
+                    .style("left", (event.pageX + 20) + "px")
+                    .style("top", (event.pageY + 20) + "px")
                     .text(cluster)
 
                 if (choosed.selected.size > 0) {
                     selected_list
                         .style("display", "block")
-                        .style("left", (e.data.global.x + 35) + "px")
-                        .style("top", (e.data.global.y + 55) + "px")
+                        .style("left", (event.pageX + 35) + "px")
+                        .style("top", (event.pageY + 55) + "px")
                 }
             })
 
-            circle.on("pointerout", e => {
+            circle.on("pointerout", function () {
                 tip
                     .style("display", "none")
 
@@ -197,37 +203,71 @@ function scatterPlot(dat) {
                     .style("display", "none")
             })
 
-            circle.on("click", e => {
-                selected_list
-                    .style("display", "block")
-                    .style("left", (e.data.global.x + 35) + "px")
-                    .style("top", (e.data.global.y + 55) + "px")
-                    .text("")
-
+            circle.on("click", function () {
                 if (choosed.has(cluster)) {
                     choosed.del(cluster)
                 } else {
                     choosed.add(cluster)
                 }
 
-                for (let k of Object.keys(spriteGroup).sort()) {
-                    if (choosed.has(k)) {
-                        spriteGroup[k].alpha = 0.9
-
-                        selected_list
-                            .append("table")
-                            .text(k)
-                    } else {
-                        spriteGroup[k].alpha = 0.1
-                    }
-                }
-
-                if (choosed.selected.size == 0) {
+                if (choosed.selected.size > 0) {
                     selected_list
+                        .style("display", "block")
+                        .style("left", (event.pageX + 35) + "px")
+                        .style("top", (event.pageY + 55) + "px")
                         .text("")
-                }
 
-                console.log(choosed.selected)
+                    toolbox
+                        .style("display", "block")
+                        .style("left", "85%")
+                        .style("top", "150px")
+                        .transition()
+                        .duration(700)
+                        .style("opacity", 0.9)
+
+                    toolbox
+                        .select("#clear")
+                        .on("click", function () {
+                            if (choosed.selected.size > 0) {
+                                selected_list.text("")
+                                selected_list.style("display", "none")
+
+                                toolbox.style("display", "none")
+
+                                for (let k of Object.keys(spriteGroup).sort()) {
+                                    spriteGroup[k].alpha = 0.9
+                                }
+
+                                for (var x of choosed.selected) { choosed.del(x) }
+                            }
+                        })
+
+                    toolbox
+                        .select("#exp")
+                        .on("click", function () {
+                            $.getScript("../script/control.js")
+                            draw_boxplot()
+                        })
+
+                    for (let k of Object.keys(spriteGroup).sort()) {
+                        if (choosed.has(k)) {
+                            spriteGroup[k].alpha = 0.9
+
+                            selected_list
+                                .append("table")
+                                .text(k)
+                        } else {
+                            spriteGroup[k].alpha = 0.1
+                        }
+                    }
+                } else {
+                    for (let k of Object.keys(spriteGroup).sort()) {
+                        spriteGroup[k].alpha = 0.9
+                    }
+
+                    selected_list.text("")
+                    selected_list.style("display", "none")
+                }
             })
 
             spriteGroup[cluster].addChild(circle)

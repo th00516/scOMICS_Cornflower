@@ -139,21 +139,27 @@ function scatterPlot(dat) {
     // Initializing ending
     d3.select("#plotRegi").select("#init").remove()
 
-    let app = new PIXI.Application({ width, height, antialias: true, transparent: true, resolution: 1 })
+    let app = new PIXI.Application({ width: width, height: height, antialias: true, transparent: true, resolution: 1 })
 
-    app.view.id = "Scatter"
+    app.renderer.view.id = "Scatter"
 
-    document.getElementById("plotRegi").appendChild(app.view)
+    document.getElementById("plotRegi").appendChild(app.renderer.view)
+
+    let spriteGroup = new Object()
 
     d3
-        .select(app.view)
+        .select(app.renderer.view)
         .selectAll("NONE")
         .data(dat, d => d)
         .enter()
         .each(d => {
-            const circle = new PIXI.Graphics()
+            let cluster = "cluster_" + d.seurat_clusters
 
-            circle.name = "cluster_" + d.seurat_clusters
+            if (!spriteGroup.hasOwnProperty(cluster)) {
+                spriteGroup[cluster] = new PIXI.Container()
+            }
+
+            const circle = new PIXI.Graphics()
 
             circle.interactive = true
             circle.buttonMode = true
@@ -163,58 +169,70 @@ function scatterPlot(dat) {
                 color_list[1][d.seurat_clusters] +
                 color_list[2][d.seurat_clusters]
             )
-            circle.alpha = 0.1
             circle.drawCircle(scale_x(d.TSNE_1), scale_y(d.TSNE_2), 2)
             circle.endFill()
+
+            circle.name = cluster
 
             circle.on("pointerover", e => {
                 tip
                     .style("display", "block")
-                    .style("left", e.data.global.x + "px")
-                    .style("top", e.data.global.y + "px")
-                    .text("cluster_" + d.seurat_clusters)
+                    .style("left", (e.data.global.x + 20) + "px")
+                    .style("top", (e.data.global.y + 20) + "px")
+                    .text(cluster)
 
                 if (choosed.selected.size > 0) {
                     selected_list
                         .style("display", "block")
                         .style("left", (e.data.global.x + 35) + "px")
-                        .style("top", (e.data.global.y + 35) + "px")
+                        .style("top", (e.data.global.y + 55) + "px")
                 }
             })
 
             circle.on("pointerout", e => {
                 tip
                     .style("display", "none")
-    
+
                 selected_list
                     .style("display", "none")
-            })    
+            })
 
             circle.on("click", e => {
                 selected_list
                     .style("display", "block")
                     .style("left", (e.data.global.x + 35) + "px")
-                    .style("top", (e.data.global.y + 35) + "px")
+                    .style("top", (e.data.global.y + 55) + "px")
                     .text("")
 
-                if (choosed.has("cluster_" + d.seurat_clusters)) {
-                    choosed.del("cluster_" + d.seurat_clusters)
-                    circle.getChildByName("cluster_" + d.seurat_clusters).alpha = 0.1
+                if (choosed.has(cluster)) {
+                    choosed.del(cluster)
                 } else {
-                    choosed.add("cluster_" + d.seurat_clusters)
-                    circle.getChildByName("cluster_" + d.seurat_clusters).alpha = 0.9
-
-                    selected_list
-                        .selectAll("NONE")
-                        .data(Array.from(choosed.selected))
-                        .enter()
-                        .append("table")
-                        .text(d => d.seurat_clusters)
+                    choosed.add(cluster)
                 }
+
+                for (let k of Object.keys(spriteGroup).sort()) {
+                    if (choosed.has(k)) {
+                        spriteGroup[k].alpha = 0.9
+
+                        selected_list
+                            .append("table")
+                            .text(k)
+                    } else {
+                        spriteGroup[k].alpha = 0.1
+                    }
+                }
+
+                if (choosed.selected.size == 0) {
+                    selected_list
+                        .text("")
+                }
+
+                console.log(choosed.selected)
             })
 
-            app.stage.addChild(circle)
+            spriteGroup[cluster].addChild(circle)
+            app.stage.addChild(spriteGroup[cluster])
         })
 
-    app.renderer.render(app.stage)
+    app.render(app.stage)
 }

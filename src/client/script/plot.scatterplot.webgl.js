@@ -178,8 +178,6 @@ function scatterPlot(dat) {
             circle.drawCircle(scale_x(d.TSNE_1), scale_y(d.TSNE_2), 2)
             circle.endFill()
 
-            circle.name = cluster
-
             circle.on("pointerover", function () {
                 tip
                     .style("display", "block")
@@ -235,7 +233,7 @@ function scatterPlot(dat) {
                                 toolbox.style("display", "none")
 
                                 for (let k of Object.keys(spriteGroup).sort()) {
-                                    spriteGroup[k].alpha = 0.9
+                                    spriteGroup[k].alpha = 0.5
                                 }
 
                                 for (var x of choosed.selected) { choosed.del(x) }
@@ -262,15 +260,20 @@ function scatterPlot(dat) {
                     }
                 } else {
                     for (let k of Object.keys(spriteGroup).sort()) {
-                        spriteGroup[k].alpha = 0.9
+                        spriteGroup[k].alpha = 0.5
                     }
 
                     selected_list.text("")
                     selected_list.style("display", "none")
+
+                    toolbox.style("display", "none")
                 }
             })
 
             spriteGroup[cluster].addChild(circle)
+
+            spriteGroup[cluster].alpha = 0.5
+
             app.stage.addChild(spriteGroup[cluster])
         })
 

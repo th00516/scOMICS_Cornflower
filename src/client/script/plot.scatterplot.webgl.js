@@ -201,7 +201,7 @@ function scatterPlot(dat) {
                     .style("display", "none")
             })
 
-            circle.on("click", function () {
+            circle.on("pointertap", function () {
                 if (choosed.has(cluster)) {
                     choosed.del(cluster)
                 } else {

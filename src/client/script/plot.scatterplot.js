@@ -72,11 +72,11 @@ function scatterPlot(dat) {
                 spriteNumber[cluster] = 1
 
             }
-            
+
             const circle = new PIXI.Graphics()
-            
+
             spriteNumber[cluster] += 1
-            
+
             circle.interactive = true
             circle.buttonMode = true
             circle.beginFill(
@@ -88,7 +88,7 @@ function scatterPlot(dat) {
             circle.drawCircle(scale_x(d.TSNE_1), scale_y(d.TSNE_2), 3)
             circle.endFill()
 
-            circle.on("pointerover", () => {
+            circle.on("mouseover", function () {
                 tip
                     .style("display", "block")
                     .style("left", (event.pageX + 15) + "px")
@@ -162,7 +162,7 @@ function scatterPlot(dat) {
 
                             selectedList
                                 .append("table")
-                                .text(k + " | " + spriteNumber[k])
+                                .text(k + "|" + spriteNumber[k])
                         } else {
                             spriteGroup[k].alpha = 0.1
                         }

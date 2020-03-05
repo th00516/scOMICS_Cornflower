@@ -5,7 +5,7 @@
 var selectedList = d3
     .select("#plotRegi")
     .append("div")
-    .attr("id", "selected_list")
+    .attr("id", "selectedList")
     .style("display", "none")
     .style("position", "absolute")
     .style("left", "83%")

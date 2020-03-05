@@ -1,17 +1,14 @@
-/* Selected list */
+/* Sample set list*/
 
 
-// Set a selected list
-var selectedList = d3
+// Set a sample set list
+var sampleSetList = d3
     .select("#plotRegi")
     .append("div")
-    .attr("id", "selected_list")
+    .attr("id", "toolbox")
     .style("display", "none")
     .style("position", "absolute")
-    .style("left", "83%")
-    .style("top", "513px")
-    .style("max-height", "307px")
-    .style("overflow-y", "scroll")
+    .style("width", "90px")
     .style("padding", "5px")
     .style("border-style", "solid")
     .style("border-width", "2px")

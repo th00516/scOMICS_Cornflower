@@ -12,8 +12,8 @@ $("#Scatter").ready(function () {
 
 
 /* Running */
-// Read data
-d3.tsv("../demo_data/pbmc.tsv").then(d => scatterPlot(d))
+sample = $("#sampleSelection option:selected")
+d3.tsv("../demo_data/" + sample.val() + ".tsv").then(d => scatterPlot(d))
 
 
 /* Element initialization */
@@ -21,6 +21,7 @@ choosed = new selectedClusters()
 colorList = generateRandomColor()
 
 
+/* Drawing */
 // Draw scatter plot
 function scatterPlot(dat) {
     // Set the width & height of the graph
@@ -39,7 +40,7 @@ function scatterPlot(dat) {
         .domain([-50, 50])
         .range([height, 0])
 
-    // Initializing ending
+    // Generate canvas
     d3.select("#plotRegi").select("#init").remove()
 
     let app = new PIXI.Application({
@@ -54,7 +55,9 @@ function scatterPlot(dat) {
 
     document.getElementById("plotRegi").appendChild(app.renderer.view)
 
+    // Append sprite
     let spriteGroup = new Object()
+    let spriteNumber = new Object()
 
     d3
         .select(app.renderer.view)
@@ -66,10 +69,14 @@ function scatterPlot(dat) {
 
             if (!spriteGroup.hasOwnProperty(cluster)) {
                 spriteGroup[cluster] = new PIXI.Container()
+                spriteNumber[cluster] = 1
+
             }
-
+            
             const circle = new PIXI.Graphics()
-
+            
+            spriteNumber[cluster] += 1
+            
             circle.interactive = true
             circle.buttonMode = true
             circle.beginFill(
@@ -103,8 +110,6 @@ function scatterPlot(dat) {
                 if (choosed.selected.size > 0) {
                     selectedList
                         .style("display", "block")
-                        .style("left", "83%")
-                        .style("top", "213px")
 
                     selectedList
                         .text("SELECTED")
@@ -116,8 +121,6 @@ function scatterPlot(dat) {
                     // Set up toolbox
                     toolbox
                         .style("display", "block")
-                        .style("left", "7%")
-                        .style("top", "213px")
 
                     toolbox
                         .select("#clear")
@@ -159,7 +162,7 @@ function scatterPlot(dat) {
 
                             selectedList
                                 .append("table")
-                                .text(k)
+                                .text(k + " | " + spriteNumber[k])
                         } else {
                             spriteGroup[k].alpha = 0.1
                         }

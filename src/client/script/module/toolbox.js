@@ -8,6 +8,8 @@ var toolbox = d3
     .attr("id", "toolbox")
     .style("display", "none")
     .style("position", "absolute")
+    .style("left", "83%")
+    .style("top", "213px")
     .style("width", "90px")
     .style("padding", "5px")
     .style("border-style", "solid")

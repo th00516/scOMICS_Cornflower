@@ -9,7 +9,7 @@ var tip = d3
     .style("display", "none")
     .style("position", "absolute")
     .style("padding", "5px")
-    .style("border-style", "dotted")
+    .style("border-style", "solid")
     .style("border-width", "2px")
     .style("background-color", "lightyellow")
     .style("font-weight", "bold")

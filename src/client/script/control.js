@@ -2,11 +2,7 @@
 
 
 function draw_scatterplot(t) {
-    if (t === "gl") {
-        $.getScript("../script/plot.scatterplot.webgl.js")
-    } else {
         $.getScript("../script/plot.scatterplot.js")
-    }
 }
 
 function draw_boxplot() {

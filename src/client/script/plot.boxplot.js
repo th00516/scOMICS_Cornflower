@@ -1,4 +1,4 @@
-/* d3 */
+/* Boxplot */
 
 
 /* Preparing */
@@ -149,7 +149,7 @@ function boxPlot(dat) {
             color_list[0][d.Cluster] +
             color_list[1][d.Cluster] +
             color_list[2][d.Cluster])
-        .style("stroke-width", "2px")
+        .style("stroke-width", "3px")
 
     // Append the box
     svg
@@ -167,7 +167,7 @@ function boxPlot(dat) {
             color_list[0][d.Cluster] +
             color_list[1][d.Cluster] +
             color_list[2][d.Cluster])
-        .style("stroke-width", "2px")
+        .style("stroke-width", "3px")
 
     // Append median, min and max horizontal lines
     svg
@@ -184,7 +184,7 @@ function boxPlot(dat) {
             color_list[0][d.Cluster] +
             color_list[1][d.Cluster] +
             color_list[2][d.Cluster])
-        .style("stroke-width", "2px")
+        .style("stroke-width", "3px")
 
     svg
         .select("#boxplot")
@@ -200,7 +200,7 @@ function boxPlot(dat) {
             color_list[0][d.Cluster] +
             color_list[1][d.Cluster] +
             color_list[2][d.Cluster])
-        .style("stroke-width", "2px")
+        .style("stroke-width", "3px")
 
     svg
         .select("#boxplot")
@@ -216,7 +216,7 @@ function boxPlot(dat) {
             color_list[0][d.Cluster] +
             color_list[1][d.Cluster] +
             color_list[2][d.Cluster])
-        .style("stroke-width", "2px")
+        .style("stroke-width", "3px")
 
     //     // Append the option box
     //     svg

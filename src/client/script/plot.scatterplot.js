@@ -1,4 +1,4 @@
-/* d3 */
+/* Scatterplot */
 
 
 /* Preparing */
@@ -7,7 +7,7 @@ d3.select("#plotRegi").select("#Scatter").remove()
 d3.select("#plotRegi").select("#Box").remove()
 
 d3.select("#plotRegi").select("#tip").remove()
-d3.select("#plotRegi").select("#selected_list").remove()
+d3.select("#plotRegi").select("#selectedList").remove()
 d3.select("#plotRegi").select("#toolbox").remove()
 
 
@@ -20,74 +20,12 @@ d3.select("#plotRegi").append("h4").attr("id", "init").text("Initializing...")
 d3.tsv("../demo_data/pbmc.tsv").then(d => scatterPlot(d))
 
 
-
-
 /* Member */
-// Set a tip, selected_list
-var tip = d3
-    .select("#plotRegi")
-    .append("div")
-    .attr("id", "tip")
-    .style("display", "none")
-    .style("position", "absolute")
-    .style("padding", "5px")
-    .style("border-style", "dotted")
-    .style("border-width", "1px")
-    .style("background-color", "lightyellow")
-    .style("font-weight", "bold")
-    .style("font-style", "italic")
-    .style("opacity", 0.9)
-
-var selected_list = d3
-    .select("#plotRegi")
-    .append("div")
-    .attr("id", "selected_list")
-    .style("display", "none")
-    .style("position", "absolute")
-    .style("padding", "5px")
-    .style("border-style", "dotted")
-    .style("border-width", "1px")
-    .style("background-color", "lightblue")
-    .style("font-weight", "bold")
-    .style("opacity", 0.9)
-
-// Set a scatter toolbox
-var toolbox = d3
-    .select("#plotRegi")
-    .append("div")
-    .attr("id", "toolbox")
-    .style("display", "none")
-    .style("position", "absolute")
-    .style("width", "90px")
-    .style("padding", "5px")
-    .style("border-style", "solid")
-    .style("border-width", "1px")
-    .style("background-color", "lightblue")
-    .style("font-weight", "bold")
-    .style("opacity", 0)
-
-toolbox
-    .append("table")
-    .append("button")
-    .attr("id", "clear")
-    .style("width", "85px")
-    .style("height", "30px")
-    .style("font-weight", "bold")
-    .text("Clear")
-
-toolbox
-    .append("hr")
-
-toolbox
-    .append("table")
-    .append("button")
-    .attr("id", "exp")
-    .style("width", "85px")
-    .style("height", "30px")
-    .style("font-weight", "bold")
-    .text("Exp.")
-
-
+$("#Scatter").ready(function () {
+    $.getScript("../script/module/tip.js")
+    $.getScript("../script/module/selectedList.js")
+    $.getScript("../script/module/toolbox.js")
+})
 
 
 /* Function */
@@ -131,7 +69,7 @@ function scatterPlot(dat) {
         .domain([-50, 50])
         .range([0, width])
 
-        let scale_y = d3
+    let scale_y = d3
         .scaleLinear()
         .domain([-50, 50])
         .range([height, 0])
@@ -139,138 +77,147 @@ function scatterPlot(dat) {
     // Initializing ending
     d3.select("#plotRegi").select("#init").remove()
 
-    // Append the svg object and a canvas for the following drawing
-    let svg = d3
-        .select("#plotRegi")
-        .append("svg")
-        .attr("id", "Scatter")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+    let app = new PIXI.Application({
+        width: width,
+        height: height,
+        antialias: true,
+        resolution: 1,
+        backgroundColor: 0x000000
+    })
 
-    svg
-        .append("g")
-        .attr("id", "Canvas")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    app.renderer.view.id = "Scatter"
 
-    // Append the X & Y Axis
-    svg
-        .select("#Canvas")
-        .append("g")
-        .attr("id", "AxisX")
-        .call(d3.axisBottom(scale_x).ticks(10))
-        .attr("transform", "translate(0," + height + ")")
+    document.getElementById("plotRegi").appendChild(app.renderer.view)
 
-    svg
-        .select("#Canvas")
-        .append("g")
-        .attr("id", "AxisY")
-        .call(d3.axisLeft(scale_y).ticks(10))
+    let spriteGroup = new Object()
 
-    // Drawing
-    svg
-        .select("#Canvas")
-        .append("g")
-        .attr("id", "scatterplot")
-
-    svg
-        .select("#scatterplot")
+    d3
+        .select(app.renderer.view)
         .selectAll("NONE")
         .data(dat, d => d)
         .enter()
-        .append("circle")
-        .attr("class", "cluster_unselected")
-        .attr("id", d => "cluster_" + d.seurat_clusters)
-        .attr("cx", d => scale_x(d.TSNE_1) + "px")
-        .attr("cy", d => scale_y(d.TSNE_2) + "px")
-        .attr("r", 2)
-        .style("fill", d => "#" +
-            color_list[0][d.seurat_clusters] +
-            color_list[1][d.seurat_clusters] +
-            color_list[2][d.seurat_clusters])
-        .style("opacity", 0.1)
+        .each(d => {
+            let cluster = "cluster_" + d.seurat_clusters
 
-        .on("mouseover", function () {
-            tip
-                .style("display", "block")
-                .style("left", (event.pageX + 20) + "px")
-                .style("top", (event.pageY + 20) + "px")
-                .text(d3.select(this).attr("id"))
-
-            if (choosed.selected.size > 0) {
-                selected_list
-                    .style("display", "block")
-                    .style("left", (event.pageX + 35) + "px")
-                    .style("top", (event.pageY + 55) + "px")
-            }
-        })
-
-        .on("mouseout", function () {
-            tip
-                .style("display", "none")
-
-            selected_list
-                .style("display", "none")
-        })
-
-        .on("click", function () {
-            selected_list
-                .style("display", "block")
-                .style("left", (event.pageX + 35) + "px")
-                .style("top", (event.pageY + 55) + "px")
-                .text("")
-
-            if (choosed.has(d3.select(this).attr("id"))) {
-                choosed.del(d3.select(this).attr("id"))
-                d3.selectAll("#" + d3.select(this).attr("id")).attr("class", "cluster_unselected")
-            } else {
-                choosed.add(d3.select(this).attr("id"))
-                d3.selectAll("#" + d3.select(this).attr("id")).attr("class", "cluster_selected")
+            if (!spriteGroup.hasOwnProperty(cluster)) {
+                spriteGroup[cluster] = new PIXI.Container()
             }
 
-            d3.selectAll(".cluster_selected").transition().duration(1400).style("opacity", 0.9)
-            d3.selectAll(".cluster_unselected").transition().duration(1400).style("opacity", 0.1)
+            const circle = new PIXI.Graphics()
 
-            if (choosed.selected.size > 0) {
-                selected_list
-                    .selectAll("NONE")
-                    .data(Array.from(choosed.selected))
-                    .enter()
-                    .append("table")
-                    .text(d => d)
+            circle.interactive = true
+            circle.buttonMode = true
+            circle.beginFill(
+                "0x" +
+                color_list[0][d.seurat_clusters] +
+                color_list[1][d.seurat_clusters] +
+                color_list[2][d.seurat_clusters]
+            )
+            circle.drawCircle(scale_x(d.TSNE_1), scale_y(d.TSNE_2), 3)
+            circle.endFill()
 
-                toolbox
+            circle.on("pointerover", function () {
+                tip
                     .style("display", "block")
-                    .style("left", "85%")
-                    .style("top", "150px")
-                    .transition()
-                    .duration(700)
-                    .style("opacity", 0.9)
+                    .style("left", (event.pageX + 15) + "px")
+                    .style("top", (event.pageY + 15) + "px")
+                    .text(cluster)
+            })
 
-                toolbox
-                    .select("#clear")
-                    .on("click", function () {
-                        if (choosed.selected.size > 0) {
-                            d3.selectAll(".cluster_selected").attr("class", "cluster_unselected")
-                            d3.selectAll(".cluster_unselected").transition().duration(1400).style("opacity", 0.1)
+            circle.on("pointerout", function () {
+                tip.style("display", "none")
+            })
 
-                            selected_list.text("")
-                            selected_list.style("display", "none")
+            circle.on("pointertap", function () {
+                if (choosed.has(cluster)) {
+                    choosed.del(cluster)
+                } else {
+                    choosed.add(cluster)
+                }
 
-                            toolbox.style("display", "none")
+                if (choosed.selected.size > 0) {
+                    selectedList
+                        .style("display", "block")
+                        .style("left", "83%")
+                        .style("top", "213px")
 
-                            for (var x of choosed.selected) { choosed.del(x) }
+                    selectedList
+                        .text("SELECTED")
+                        .append("hr")
+
+
+
+
+                    // Set up toolbox
+                    toolbox
+                        .style("display", "block")
+                        .style("left", "7%")
+                        .style("top", "213px")
+
+                    toolbox
+                        .select("#clear")
+                        .on("click", function () {
+                            if (choosed.selected.size > 0) {
+                                selectedList.text("")
+                                selectedList.style("display", "none")
+
+                                toolbox.style("display", "none")
+
+                                for (let k of Object.keys(spriteGroup).sort()) {
+                                    spriteGroup[k].alpha = 0.5
+                                }
+
+                                for (var x of choosed.selected) { choosed.del(x) }
+                            }
+                        })
+
+                    toolbox
+                        .select("#exp")
+                        .on("click", function () {
+                            $.getScript("../script/control.js")
+                            draw_boxplot()
+                        })
+
+                    toolbox
+                        .select("#focus")
+                        .on("click", function () {
+                            $.getScript("../script/control.js")
+                            draw_focal_scatterplot()
+                        })
+                    //
+
+
+
+
+                    for (let k of Object.keys(spriteGroup).sort()) {
+                        if (choosed.has(k)) {
+                            spriteGroup[k].alpha = 0.9
+
+                            selectedList
+                                .append("table")
+                                .text(k)
+                        } else {
+                            spriteGroup[k].alpha = 0.1
                         }
-                    })
+                    }
+                } else {
+                    for (let k of Object.keys(spriteGroup).sort()) {
+                        spriteGroup[k].alpha = 0.5
+                    }
 
-                toolbox
-                    .select("#exp")
-                    .on("click", function () {
-                        $.getScript("../script/control.js")
-                        draw_boxplot()
-                    })
-            } else {
-                selected_list.style("display", "none")
-                toolbox.style("display", "none")
-            }
+                    selectedList.text("")
+                    selectedList.style("display", "none")
+
+                    toolbox.style("display", "none")
+                }
+            })
+
+            spriteGroup[cluster].addChild(circle)
+
+            spriteGroup[cluster].alpha = 0.5
+
+            app.stage.addChild(spriteGroup[cluster])
         })
+
+    app.render(app.stage)
 }

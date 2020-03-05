@@ -10,9 +10,6 @@ body {
   flex-flow:row nowrap;
   justify-content:center;
   align-items:center;
-  
-  font-family:"Georgia";
-  text-shadow: 2px 2px 2px grey;
 }
 
 .allFram {
@@ -26,7 +23,7 @@ body {
   justify-content:space-between;
   align-items:center;
   
-  font-family:"Serif";
+  font-family:"Georgia";
   text-shadow: 2px 2px 2px grey;
 }
 

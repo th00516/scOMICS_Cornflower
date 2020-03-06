@@ -26,8 +26,9 @@ colorList = generateRandomColor()
 function scatterPlot(dat) {
     // Set the width & height of the graph
     let margin = { top: 40, right: 40, bottom: 40, left: 40 },
-        width = 850 - margin.left - margin.right,
-        height = 700 - margin.top - margin.bottom
+        width = 800 - margin.left - margin.right,
+        height = 800 - margin.top - margin.bottom
+
 
     // Set the scales of the graph
     let scale_x = d3
@@ -39,6 +40,7 @@ function scatterPlot(dat) {
         .scaleLinear()
         .domain([-50, 50])
         .range([height, 0])
+
 
     // Generate canvas
     d3.select("#plotRegi").select("#init").remove()
@@ -54,6 +56,7 @@ function scatterPlot(dat) {
     app.renderer.view.id = "Scatter"
 
     document.getElementById("plotRegi").appendChild(app.renderer.view)
+
 
     // Append sprite
     let spriteGroup = new Object()
@@ -88,11 +91,11 @@ function scatterPlot(dat) {
             circle.drawCircle(scale_x(d.TSNE_1), scale_y(d.TSNE_2), 3)
             circle.endFill()
 
-            circle.on("mouseover", function () {
+            circle.on("pointerover", function () {
                 tip
                     .style("display", "block")
-                    .style("left", (event.pageX + 15) + "px")
-                    .style("top", (event.pageY + 15) + "px")
+                    .style("left", (window.event.pageX + 15) + "px")
+                    .style("top", (window.event.pageY + 15) + "px")
                     .text(cluster)
             })
 
@@ -107,12 +110,12 @@ function scatterPlot(dat) {
                     choosed.add(cluster)
                 }
 
+
+                selectedList.text("SELECTED")
+
+
                 if (choosed.selected.size > 0) {
                     selectedList
-                        .style("display", "block")
-
-                    selectedList
-                        .text("SELECTED")
                         .append("hr")
 
 
@@ -120,16 +123,10 @@ function scatterPlot(dat) {
 
                     // Set up toolbox
                     toolbox
-                        .style("display", "block")
-
-                    toolbox
                         .select("#clear")
                         .on("click", function () {
                             if (choosed.selected.size > 0) {
                                 selectedList.text("")
-                                selectedList.style("display", "none")
-
-                                toolbox.style("display", "none")
 
                                 for (let k of Object.keys(spriteGroup).sort()) {
                                     spriteGroup[k].alpha = 0.5
@@ -157,6 +154,7 @@ function scatterPlot(dat) {
 
 
                     for (let k of Object.keys(spriteGroup).sort()) {
+
                         if (choosed.has(k)) {
                             spriteGroup[k].alpha = 0.9
 
@@ -172,10 +170,7 @@ function scatterPlot(dat) {
                         spriteGroup[k].alpha = 0.5
                     }
 
-                    selectedList.text("")
                     selectedList.style("display", "none")
-
-                    toolbox.style("display", "none")
                 }
             })
 

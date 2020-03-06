@@ -1,5 +1,5 @@
 .navWidget:hover {
-  height:50px;
+  border-bottom-width:10px;
 }
 
 .seaInpWidget:hover {

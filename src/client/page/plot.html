@@ -9,19 +9,19 @@
   <link rel="stylesheet" type="text/css" href="../style/style.main.css" />
   <link rel="stylesheet" type="text/css" href="../style/style.tran.css" />
 
-  <script src="../script/lib/jquery.min.js"></script>
-  <script src="../script/script.main.js"></script>
-
-  <script src="../script/lib/d3.v5.min.js"></script>
-  <script src="../script/lib/pixi.v5.min.js"></script>
-
-  <script src="../script/control.js"></script>
-
-  <script src="../script/module/usedDataStructure.js"></script>
-  <script src="../script/module/elementGenerator.js"></script>
-
   <title>Hello&nbsp;scOmics!</title>
 </head>
+
+<script src="../script/lib/jquery.min.js"></script>
+<script src="../script/script.main.js"></script>
+
+<script src="../script/lib/d3.v5.min.js"></script>
+<script src="../script/lib/pixi.v5.min.js"></script>
+
+<script src="../script/control.js"></script>
+
+<script src="../script/module/usedDataStructure.js"></script>
+<script src="../script/module/elementGenerator.js"></script>
 
 <body>
   <div class="allFram">
@@ -74,14 +74,19 @@
     <hr class="splLinR" />
 
     <div class="maiRegi">
+      <div class="maiBlocR" style="width:300px;">
+      </div>
+
+      <hr class="splLinC" />
+
       <div class="maiBlocC">
         <div class="maiBlocR" style="height:35px; justify-content:flex-start;">
           <button type="submit" style="height:30px; font-weight:bold;" onclick="drawScatterplot()">Cluster plot</button>
           <hr class="splLinC" />
           <select id="sampleSelection" style="width: 300px; height:30px; font-weight:bold;">
-            <option >AAAA</option>
+            <option>AAAA</option>
             <option value="pbmc">PBMC</option>
-            <option >CCCC</option>
+            <option>CCCC</option>
           </select>
         </div>
 

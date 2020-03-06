@@ -2,12 +2,15 @@
 
 
 /* Preparing */
-$.getScript("../script/module/prepareCanvas.js")
+prepareCanvas("cleanupAll")
+
 
 $("#Scatter").ready(function () {
+
     $.getScript("../script/module/toolbox.js")
     $.getScript("../script/module/selectedList.js")
     $.getScript("../script/module/tip.js")
+    
 })
 
 
@@ -17,8 +20,8 @@ d3.tsv("../demo_data/" + sample.val() + ".tsv").then(d => scatterPlot(d))
 
 
 /* Element initialization */
-choosed = new selectedClusters()
-colorList = generateRandomColor()
+var choosed = new selectedClusters()
+var colorList = generateRandomColor()
 
 
 /* Drawing */
@@ -46,11 +49,13 @@ function scatterPlot(dat) {
     d3.select("#plotRegi").select("#init").remove()
 
     let app = new PIXI.Application({
+
         width: width,
         height: height,
         antialias: true,
         resolution: 1,
         backgroundColor: 0x000000
+
     })
 
     app.renderer.view.id = "Scatter"
@@ -68,9 +73,11 @@ function scatterPlot(dat) {
         .data(dat, d => d)
         .enter()
         .each(d => {
+
             let cluster = "cluster_" + d.seurat_clusters
 
             if (!spriteGroup.hasOwnProperty(cluster)) {
+
                 spriteGroup[cluster] = new PIXI.Container()
                 spriteNumber[cluster] = 1
 
@@ -91,19 +98,28 @@ function scatterPlot(dat) {
             circle.drawCircle(scale_x(d.TSNE_1), scale_y(d.TSNE_2), 3)
             circle.endFill()
 
-            circle.on("pointerover", function () {
-                tip
-                    .style("display", "block")
-                    .style("left", (window.event.pageX + 15) + "px")
-                    .style("top", (window.event.pageY + 15) + "px")
-                    .text(cluster)
+
+            circle.on("mouseover", function () {
+
+                if (event) {
+
+                    tip
+                        .style("left", (event.pageX + 15) + "px")
+                        .style("top", (event.pageY + 15) + "px")
+                        .text(cluster)
+
+                    tip
+                        .style("opacity", 1)
+                }
+
             })
 
-            circle.on("pointerout", function () {
-                tip.style("display", "none")
-            })
+
+            circle.on("pointerout", function () { tip.style("opacity", 0) })
+
 
             circle.on("pointertap", function () {
+
                 if (choosed.has(cluster)) {
                     choosed.del(cluster)
                 } else {
@@ -111,29 +127,30 @@ function scatterPlot(dat) {
                 }
 
 
+
+
                 selectedList.text("SELECTED")
 
-
                 if (choosed.selected.size > 0) {
-                    selectedList
-                        .append("hr")
 
-
+                    selectedList.append("hr")
 
 
                     // Set up toolbox
                     toolbox
                         .select("#clear")
                         .on("click", function () {
-                            if (choosed.selected.size > 0) {
-                                selectedList.text("")
 
-                                for (let k of Object.keys(spriteGroup).sort()) {
-                                    spriteGroup[k].alpha = 0.5
-                                }
+                            if (choosed.selected.size > 0) {
+
+                                selectedList.text("SELECTED")
+
+                                for (let k of Object.keys(spriteGroup).sort()) { spriteGroup[k].alpha = 0.4 }
 
                                 for (var x of choosed.selected) { choosed.del(x) }
+
                             }
+
                         })
 
                     toolbox
@@ -151,27 +168,30 @@ function scatterPlot(dat) {
                     //
 
 
-
-
                     for (let k of Object.keys(spriteGroup).sort()) {
 
                         if (choosed.has(k)) {
-                            spriteGroup[k].alpha = 0.9
+
+                            spriteGroup[k].alpha = 1
 
                             selectedList
                                 .append("table")
                                 .text(k + "|" + spriteNumber[k])
+
                         } else {
+
                             spriteGroup[k].alpha = 0.1
                         }
-                    }
-                } else {
-                    for (let k of Object.keys(spriteGroup).sort()) {
-                        spriteGroup[k].alpha = 0.5
+
                     }
 
-                    selectedList.style("display", "none")
+
+                } else {
+
+                    for (let k of Object.keys(spriteGroup).sort()) { spriteGroup[k].alpha = 0.5 }
+
                 }
+
             })
 
             spriteGroup[cluster].addChild(circle)
@@ -179,6 +199,7 @@ function scatterPlot(dat) {
             spriteGroup[cluster].alpha = 0.5
 
             app.stage.addChild(spriteGroup[cluster])
+
         })
 
     app.render(app.stage)

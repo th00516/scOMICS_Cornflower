@@ -1,4 +1,4 @@
-/* Element generator */
+/* Element generator and function*/
 
 
 // Generate random colors

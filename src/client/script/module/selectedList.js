@@ -17,5 +17,4 @@ var selectedList = d3
     .style("border-width", "2px")
     .style("background-color", "lightblue")
     .style("font-weight", "bold")
-    .style("opacity", 0.9)
     .text("SELECTED")

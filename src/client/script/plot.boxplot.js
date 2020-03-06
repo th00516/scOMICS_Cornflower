@@ -2,17 +2,13 @@
 
 
 /* Preparing */
-$.getScript("../script/module/prepareCanvas.js")
-
-$("#Scatter").ready(function () {
-    $.getScript("../script/module/toolbox.js")
-    $.getScript("../script/module/selectedList.js")
-})
+prepareCanvas()
 
 
 /* Running */
 sample = $("#sampleSelection option:selected")
 d3.tsv("../demo_data/" + sample.val() + ".tsv").then(d => boxPlot(d))
+
 
 
 
@@ -23,18 +19,24 @@ function boxPlot(dat) {
 
     // Compute summary statistics used for the box
     for (let i = 0; i < dat.length; i++) {
+
         let K = "cluster_" + dat[i].seurat_clusters
 
         if (choosed.selected.has(K)) {
+
             if (!data.hasOwnProperty(K)) {
+
                 data[K] = new Object()
 
                 data[K].Cluster = dat[i].seurat_clusters
                 data[K].Data = new Array()
+
             }
 
             data["cluster_" + dat[i].seurat_clusters].Data.push(dat[i].nCount_RNA / dat[i].nFeature_RNA)
+
         }
+
     }
 
     data = Object.values(data)
@@ -53,9 +55,7 @@ function boxPlot(dat) {
         let block_num = choosed.selected.size + 1
         winWidth = width / block_num
 
-        for (let n = 1; n < block_num; n++) {
-            A.push(winWidth * n)
-        }
+        for (let n = 1; n < block_num; n++) { A.push(winWidth * n) }
 
         return A
     }
@@ -69,7 +69,7 @@ function boxPlot(dat) {
 
     var scale_y = d3
         .scaleLinear()
-        .domain([0, 50])
+        .domain([0, 20])
         .range([height, 0])
 
 

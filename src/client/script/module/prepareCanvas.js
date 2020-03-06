@@ -1,14 +1,27 @@
 /* Prepare Canvas */
 
 
-// Cleanup
-d3.select("#plotRegi").select("#Scatter").remove()
-d3.select("#plotRegi").select("#Box").remove()
+function prepareCanvas(k) {
 
-d3.select("#plotRegi").select("#tip").remove()
-d3.select("#plotRegi").select("#selectedList").remove()
-d3.select("#plotRegi").select("#toolbox").remove()
+    // Cleanup
+    if (k == "cleanupAll") {
 
-// Initializing
-d3.select("#plotRegi").select("#init").remove()
-d3.select("#plotRegi").append("h4").attr("id", "init").text("Initializing...")
+        d3.select("#plotRegi").select("#Scatter").remove()
+        d3.select("#plotRegi").select("#Box").remove()
+
+        d3.select("#plotRegi").select("#tip").remove()
+        d3.select("#plotRegi").select("#selectedList").remove()
+        d3.select("#plotRegi").select("#toolbox").remove()
+
+    } else {
+
+        d3.select("#plotRegi").select("#Scatter").remove()
+        d3.select("#plotRegi").select("#Box").remove()
+
+    }
+
+    // Initializing
+    d3.select("#plotRegi").select("#init").remove()
+    d3.select("#plotRegi").append("h4").attr("id", "init").text("Initializing...")
+    
+}

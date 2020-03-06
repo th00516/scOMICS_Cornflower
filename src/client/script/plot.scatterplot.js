@@ -29,6 +29,7 @@ var colorList = generateRandomColor()
 function scatterPlot(dat) {
     // Set the width & height of the graph
     let margin = { top: 40, right: 40, bottom: 40, left: 40 },
+    
         width = 800 - margin.left - margin.right,
         height = 800 - margin.top - margin.bottom
 

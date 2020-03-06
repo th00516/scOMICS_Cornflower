@@ -44,12 +44,14 @@ function boxPlot(dat) {
 
     // Set the width & height of the graph
     var margin = { top: 40, right: 40, bottom: 40, left: 40 },
+
         width = 800 - margin.left - margin.right,
         height = 800 - margin.top - margin.bottom
 
 
     // Set discrete X-axis
     function gen_xAxis() {
+
         let A = new Array()
 
         let block_num = choosed.selected.size + 1
@@ -58,6 +60,7 @@ function boxPlot(dat) {
         for (let n = 1; n < block_num; n++) { A.push(winWidth * n) }
 
         return A
+        
     }
 
 

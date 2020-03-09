@@ -15,4 +15,4 @@ var selectedClusterList = d3
     .style("margin-bottom", "20px")
     .style("background-color", "lightblue")
     .style("font-weight", "bold")
-    .text("SELECTED CLUSTERS")
+    .text("SELECTED")

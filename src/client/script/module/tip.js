@@ -6,7 +6,7 @@ var tip = d3
     .select("#plotRegi")
     .append("div")
     .attr("id", "tip")
-    .style("opacity", 0)
+    .style("display", "none")
     .style("position", "absolute")
     .style("left", "0px")
     .style("top", "0px")

@@ -110,7 +110,7 @@ function scatterPlot(dat) {
 
             if (choosed.selected.size > 0) {
 
-                selectedClusterList.text("SELECTED CLUSTERS")
+                selectedClusterList.text("SELECTED")
 
                 for (let k of Object.keys(spriteGroup)) { spriteGroup[k].alpha = 0.4 }
 
@@ -146,9 +146,9 @@ function scatterPlot(dat) {
             if (event) {
 
                 tip
-                    .style("opacity", 1)
-                    .style("left", (event.pageX + 15) + "px")
-                    .style("top", (event.pageY + 15) + "px")
+                    .style("display", "block")
+                    .style("left", (event.pageX + 20) + "px")
+                    .style("top", (event.pageY + 20) + "px")
                     .text(k)
 
             }
@@ -156,7 +156,7 @@ function scatterPlot(dat) {
         })
 
 
-        spriteGroup[k].on("pointerout", function () { tip.style("opacity", 0) })
+        spriteGroup[k].on("pointerout", function () { tip.style("display", "none") })
 
 
         spriteGroup[k].on("pointertap", function () {

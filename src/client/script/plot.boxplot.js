@@ -59,7 +59,7 @@ function boxPlot(dat) {
         let A = new Array()
 
         let block_num = choosed.selected.size + 1,
-        winWidth = width / block_num
+            winWidth = width / block_num
 
         for (let n = 1; n < block_num; n++) { A.push(winWidth * n) }
 
@@ -102,6 +102,20 @@ function boxPlot(dat) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
 
+
+    // Drawing background
+    svg
+        .select("#Canvas")
+        .append("g")
+        .attr("id", "boxplot")
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", width - margin.left / 2)
+        .attr("height", height)
+        .style("fill", "lightgrey")
+
+
     // Append the X & Y Axis
     svg
         .select("#Canvas")
@@ -109,27 +123,14 @@ function boxPlot(dat) {
         .attr("id", "AxisX")
         .call(d3.axisBottom(scale_x))
         .attr("transform", "translate(0," + height + ")")
+        .style("stroke-width", "3px")
 
     svg
         .select("#Canvas")
         .append("g")
         .attr("id", "AxisY")
         .call(d3.axisLeft(scale_y).ticks(10))
-
-
-    // Drawing
-    svg
-        .select("#Canvas")
-        .append("g")
-        .attr("id", "boxplot")
-        .append("rect")
-        .attr("x", margin.left / 2)
-        .attr("y", 0)
-        .attr("width", width - margin.left / 2)
-        .attr("height", height)
-        .style("fill", "lightgrey")
-
-
+        .style("stroke-width", "3px")
 
 
     // Append the main vertical line

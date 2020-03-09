@@ -194,6 +194,7 @@ function scatterPlot(dat) {
                     } else {
 
                         spriteGroup[k].alpha = 0.1
+                        
                     }
 
                 }
@@ -211,8 +212,6 @@ function scatterPlot(dat) {
         app.stage.addChild(spriteGroup[k])
 
     }
-
-    app.render(app.stage)
 
     document.getElementById("plotRegi").appendChild(app.renderer.view)
 }

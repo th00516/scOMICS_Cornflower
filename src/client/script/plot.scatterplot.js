@@ -10,7 +10,7 @@ $("#Scatter").ready(function () {
     $.getScript("../script/module/toolbox.js")
     $.getScript("../script/module/selectedList.js")
     $.getScript("../script/module/tip.js")
-    
+
 })
 
 
@@ -29,7 +29,7 @@ var colorList = generateRandomColor()
 function scatterPlot(dat) {
     // Set the width & height of the graph
     let margin = { top: 40, right: 40, bottom: 40, left: 40 },
-    
+
         width = 820 - margin.left - margin.right,
         height = 800 - margin.top - margin.bottom
 
@@ -60,8 +60,6 @@ function scatterPlot(dat) {
     })
 
     app.renderer.view.id = "Scatter"
-
-    document.getElementById("plotRegi").appendChild(app.renderer.view)
 
 
     // Append sprite
@@ -204,4 +202,6 @@ function scatterPlot(dat) {
         })
 
     app.render(app.stage)
+
+    document.getElementById("plotRegi").appendChild(app.renderer.view)
 }

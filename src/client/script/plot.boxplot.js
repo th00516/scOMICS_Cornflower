@@ -18,7 +18,8 @@ function boxPlot(dat) {
     var data = new Object()
 
     // Compute summary statistics used for the box
-    for (let i = 0; i < dat.length; i++) {
+    let l = dat.length
+    for (let i = 0; i < l; i++) {
 
         let K = "cluster_" + dat[i].seurat_clusters
 

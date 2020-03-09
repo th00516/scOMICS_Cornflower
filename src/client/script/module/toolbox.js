@@ -34,12 +34,3 @@ toolbox
     .style("height", "30px")
     .style("font-weight", "bold")
     .text("Exp.")
-
-toolbox
-    .append("table")
-    .append("button")
-    .attr("id", "focus")
-    .style("width", "85px")
-    .style("height", "30px")
-    .style("font-weight", "bold")
-    .text("Focus")

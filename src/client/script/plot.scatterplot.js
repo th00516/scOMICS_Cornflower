@@ -30,7 +30,7 @@ function scatterPlot(dat) {
     // Set the width & height of the graph
     let margin = { top: 40, right: 40, bottom: 40, left: 40 },
     
-        width = 800 - margin.left - margin.right,
+        width = 820 - margin.left - margin.right,
         height = 800 - margin.top - margin.bottom
 
 
@@ -130,11 +130,11 @@ function scatterPlot(dat) {
 
 
 
-                selectedList.text("SELECTED")
+                selectedClusterList.text("SELECTED CLUSTERS")
 
                 if (choosed.selected.size > 0) {
 
-                    selectedList.append("hr")
+                    selectedClusterList.append("hr")
 
 
                     // Set up toolbox
@@ -144,7 +144,7 @@ function scatterPlot(dat) {
 
                             if (choosed.selected.size > 0) {
 
-                                selectedList.text("SELECTED")
+                                selectedClusterList.text("SELECTED CLUSTERS")
 
                                 for (let k of Object.keys(spriteGroup).sort()) { spriteGroup[k].alpha = 0.4 }
 
@@ -175,7 +175,7 @@ function scatterPlot(dat) {
 
                             spriteGroup[k].alpha = 1
 
-                            selectedList
+                            selectedClusterList
                                 .append("table")
                                 .text(k + "|" + spriteNumber[k])
 

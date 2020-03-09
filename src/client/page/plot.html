@@ -78,23 +78,27 @@
     <hr class="splLinR" />
 
     <div class="maiRegi">
-      <div class="maiBlocR" style="width:300px;">
-      </div>
-
-      <hr class="splLinC" />
-
-      <div class="maiBlocC">
-        <div class="maiBlocR" style="height:35px; justify-content:flex-start;">
-          <button type="submit" style="height:30px; font-weight:bold;" onclick="drawScatterplot()">Cluster plot</button>
-          <hr class="splLinC" />
-          <select id="sampleSelection" style="width: 300px; height:30px; font-weight:bold;">
-            <option>AAAA</option>
-            <option value="pbmc">PBMC</option>
-            <option>CCCC</option>
-          </select>
+      <div class="maiBlocR">
+        <div class="maiBlocR" style="width:300px;">
+          <div class="maiBlocC" id="controlPanel" style="justify-content:flex-start;"></div>
         </div>
 
-        <div class="maiBlocR" id="plotRegi"></div>
+        <hr class="splLinC" />
+
+        <div class="maiBlocC">
+          <div class="maiBlocR" style="height:35px; justify-content:flex-start;">
+            <button type="submit" style="height:30px; font-weight:bold;" onclick="drawScatterplot()">Cluster
+              plot</button>
+            <hr class="splLinC" />
+            <select id="sampleSelection" style="width: 300px; height:30px; font-weight:bold;">
+              <option>AAAA</option>
+              <option value="pbmc">PBMC</option>
+              <option>CCCC</option>
+            </select>
+          </div>
+
+          <div class="maiBlocR" id="plotRegi"></div>
+        </div>
       </div>
     </div>
 

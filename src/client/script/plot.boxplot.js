@@ -45,7 +45,7 @@ function boxPlot(dat) {
     // Set the width & height of the graph
     var margin = { top: 40, right: 40, bottom: 40, left: 40 },
 
-        width = 800 - margin.left - margin.right,
+        width = 820 - margin.left - margin.right,
         height = 800 - margin.top - margin.bottom
 
 
@@ -54,13 +54,13 @@ function boxPlot(dat) {
 
         let A = new Array()
 
-        let block_num = choosed.selected.size + 1
+        let block_num = choosed.selected.size + 1,
         winWidth = width / block_num
 
         for (let n = 1; n < block_num; n++) { A.push(winWidth * n) }
 
         return A
-        
+
     }
 
 

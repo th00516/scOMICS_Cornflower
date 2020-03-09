@@ -3,16 +3,14 @@
 
 // Set a toolbox
 var toolbox = d3
-    .select("#plotRegi")
+    .select("#controlPanel")
     .append("div")
     .attr("id", "toolbox")
-    .style("position", "absolute")
-    .style("left", "90px")
-    .style("top", "110px")
-    .style("width", "170px")
+    .style("width", "200px")
     .style("padding", "5px")
     .style("border-style", "solid")
     .style("border-width", "2px")
+    .style("margin-bottom", "20px")
     .style("background-color", "lightblue")
     .style("font-weight", "bold")
 

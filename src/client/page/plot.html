@@ -41,29 +41,17 @@
 
       <div class="navSeaFram">
         <div class="navFram">
-          <div class="navWidget">
-            <h2>{</h2>
-            &nbsp;<a href="./plot.html">
+          <div class="navWidget"><a href="./plot.html">
               <h3>PLOT</h3>
-            </a>&nbsp;
-            <h2>}</h2>
-          </div>
+            </a></div>
 
-          <div class="navWidget">
-            <h2>{</h2>
-            &nbsp;<a href="./data.html">
+          <div class="navWidget"><a href="./data.html">
               <h3>DATA</h3>
-            </a>&nbsp;
-            <h2>}</h2>
-          </div>
+            </a></div>
 
-          <div class="navWidget">
-            <h2>{</h2>
-            &nbsp;<a href="./help.html">
+          <div class="navWidget"><a href="./help.html">
               <h3>HELP</h3>
-            </a>&nbsp;
-            <h2>}</h2>
-          </div>
+            </a></div>
         </div>
 
         <hr class="splLinC" />
@@ -89,10 +77,8 @@
 
         <div class="maiBlocC">
           <div class="maiBlocR" style="height:35px; justify-content:flex-start;">
-            <button type="submit" style="height:30px; font-weight:bold;"
-              onclick="drawScatterplot('rna')">RNA&nbsp;Seq.</button>
-            <button type="submit" style="height:30px; font-weight:bold;"
-              onclick="drawScatterplot('atac')">A-TAC&nbsp;Seq.</button>
+            <button type="submit" style="height:30px; font-weight:bold;" onclick="drawScatterplot()"
+              value="rna">Show&nbsp;Plot</button>
 
             <hr class="splLinC" />
 
@@ -100,6 +86,20 @@
               <option>AAAA</option>
               <option value="pbmc">PBMC</option>
               <option>CCCC</option>
+            </select>
+
+            <hr class="splLinC" />
+
+            <select id="seqTypeSelection" style="width: 150px; height:30px; font-weight:bold;">
+              <option value="rna">RNA&nbsp;Seq.</option>
+              <option value="atac">A-TAC&nbsp;Seq.</option>
+            </select>
+
+            <hr class="splLinC" />
+
+            <select id="clusterTypeSelection" style="width: 150px; height:30px; font-weight:bold;">
+              <option value="UMAP">UMAP&nbsp;Cluster</option>
+              <option value="TSNE">tSNE&nbsp;Cluster</option>
             </select>
           </div>
 

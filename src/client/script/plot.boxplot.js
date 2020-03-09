@@ -7,7 +7,10 @@ prepareCanvas()
 
 /* Running */
 sample = $("#sampleSelection option:selected")
-d3.tsv("../demo_data/" + sample.val() + ".tsv").then(d => boxPlot(d))
+seqType = $("#seqTypeSelection option:selected")
+clusterType = $("#clusterTypeSelection option:selected")
+
+d3.tsv("../demo_data/" + sample.val() + "." + seqType.val() + ".tsv").then(d => boxPlot(d))
 
 
 

@@ -70,14 +70,14 @@ html {
   height:40px;
   margin:8px;
   border-bottom-style:solid;
-  border-bottom-width:2px;
+  border-bottom-width:4px;
   
   display:flex;
   flex-flow:row nowrap;
   justify-content:center;
   align-items:center;
   
-  transition:border-bottom-width 0.3s;
+  transition:height 0.3s;
 }
 
 .seaFram {

@@ -16,7 +16,10 @@ $("#Scatter").ready(function () {
 
 /* Running */
 sample = $("#sampleSelection option:selected")
-d3.tsv("../demo_data/" + sample.val() + ".tsv").then(d => scatterPlot(d))
+seqType = $("#seqTypeSelection option:selected")
+clusterType = $("#clusterTypeSelection option:selected")
+
+d3.tsv("../demo_data/" + sample.val() + "." + seqType.val() + ".tsv").then(d => scatterPlot(d))
 
 
 /* Element initialization */
@@ -94,9 +97,8 @@ function scatterPlot(dat) {
                 colorList[1][d.seurat_clusters] +
                 colorList[2][d.seurat_clusters]
             )
-            circle.drawCircle(scale_x(d.TSNE_1), scale_y(d.TSNE_2), 3)
+            circle.drawCircle(scale_x(d[clusterType.val() + "_1"]), scale_y(d[clusterType.val() + "_2"]), 3)
             circle.endFill()
-
 
             circle.on("mouseover", function () {
 

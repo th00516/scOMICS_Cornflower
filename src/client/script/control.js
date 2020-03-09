@@ -1,17 +1,9 @@
 /* jquery */
 
 
-function drawScatterplot(seqMethod) {
+function drawScatterplot() {
 
-    switch (seqMethod) {
-
-        case "rna":
-            $.getScript("../script/plot.scatterplot.js"); break
-
-        case "atac":
-            $.getScript("../script/plot.scatterplot.js"); break
-
-    }
+    $.getScript("../script/plot.scatterplot.js")
 
 }
 

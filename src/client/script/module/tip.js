@@ -9,7 +9,7 @@ var tip = d3
     .style("position", "absolute")
     .style("left", "0px")
     .style("top", "0px")
-    .style("width", "70px")
+    .style("width", "100px")
     .style("padding", "5px")
     .style("border-style", "solid")
     .style("border-width", "2px")

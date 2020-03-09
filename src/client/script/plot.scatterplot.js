@@ -112,7 +112,8 @@ function scatterPlot(dat) {
 
                 selectedClusterList.text("SELECTED")
 
-                for (let k of Object.keys(spriteGroup)) { spriteGroup[k].alpha = 0.4 }
+                let keys_list = Object.keys(spriteGroup)
+                for (let k of keys_list) { spriteGroup[k].alpha = 0.4 }
 
                 for (let k of choosed.selected) { choosed.del(k) }
 
@@ -135,7 +136,8 @@ function scatterPlot(dat) {
 
 
     // Append activity
-    for (let k of Object.keys(spriteGroup)) {
+    let keys_list = Object.keys(spriteGroup)
+    for (let k of keys_list) {
 
         spriteGroup[k].alpha = 0.4
 
@@ -172,14 +174,14 @@ function scatterPlot(dat) {
             }
 
 
-            selectedClusterList.text("SELECTED CLUSTERS")
+            selectedClusterList.text("SELECTED")
 
             if (choosed.selected.size > 0) {
 
                 selectedClusterList.append("hr")
 
-
-                for (let k of Object.keys(spriteGroup).sort()) {
+                let keys_list = Object.keys(spriteGroup).sort()
+                for (let k of keys_list) {
 
                     if (choosed.has(k)) {
 
@@ -199,7 +201,8 @@ function scatterPlot(dat) {
 
             } else {
 
-                for (let k of Object.keys(spriteGroup).sort()) { spriteGroup[k].alpha = 0.5 }
+                let keys_list = Object.keys(spriteGroup).sort()
+                for (let k of keys_list) { spriteGroup[k].alpha = 0.5 }
 
             }
 

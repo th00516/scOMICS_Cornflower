@@ -57,7 +57,7 @@ function scatterPlot(dat) {
         width: width,
         height: height,
         antialias: true,
-        resolution: 1,
+        resolution: window.devicePixelRatio || 1,
         backgroundColor: 0x000000
 
     })
@@ -89,8 +89,6 @@ function scatterPlot(dat) {
 
             spriteNumber[cluster] += 1
 
-            circle.interactive = true
-            circle.buttonMode = true
             circle.beginFill(
                 "0x" +
                 colorList[0][d.seurat_clusters] +
@@ -100,108 +98,116 @@ function scatterPlot(dat) {
             circle.drawCircle(scale_x(d[clusterType.val() + "_1"]), scale_y(d[clusterType.val() + "_2"]), 3)
             circle.endFill()
 
-            circle.on("mouseover", function () {
+            spriteGroup[cluster].addChild(circle)
 
-                if (event) {
-
-                    tip
-                        .style("left", (event.pageX + 15) + "px")
-                        .style("top", (event.pageY + 15) + "px")
-                        .text(cluster)
-
-                    tip
-                        .style("opacity", 1)
-                }
-
-            })
+        })
 
 
-            circle.on("pointerout", function () { tip.style("opacity", 0) })
+    // Set up toolbox
+    toolbox
+        .select("#clear")
+        .on("click", function () {
 
-
-            circle.on("pointertap", function () {
-
-                if (choosed.has(cluster)) {
-                    choosed.del(cluster)
-                } else {
-                    choosed.add(cluster)
-                }
-
-
-
+            if (choosed.selected.size > 0) {
 
                 selectedClusterList.text("SELECTED CLUSTERS")
 
-                if (choosed.selected.size > 0) {
+                for (let k of Object.keys(spriteGroup)) { spriteGroup[k].alpha = 0.4 }
 
-                    selectedClusterList.append("hr")
+                for (let k of choosed.selected) { choosed.del(k) }
 
+            }
 
-                    // Set up toolbox
-                    toolbox
-                        .select("#clear")
-                        .on("click", function () {
+        })
 
-                            if (choosed.selected.size > 0) {
+    toolbox
+        .select("#exp")
+        .on("click", function () {
+            $.getScript("../script/control.js")
+            drawBoxplot()
+        })
 
-                                selectedClusterList.text("SELECTED CLUSTERS")
-
-                                for (let k of Object.keys(spriteGroup).sort()) { spriteGroup[k].alpha = 0.4 }
-
-                                for (var x of choosed.selected) { choosed.del(x) }
-
-                            }
-
-                        })
-
-                    toolbox
-                        .select("#exp")
-                        .on("click", function () {
-                            $.getScript("../script/control.js")
-                            drawBoxplot()
-                        })
-
-                    toolbox
-                        .select("#focus")
-                        .on("click", function () {
-                            $.getScript("../script/control.js")
-                        })
-                    //
+    toolbox
+        .select("#focus")
+        .on("click", function () {
+            $.getScript("../script/control.js")
+        })
 
 
-                    for (let k of Object.keys(spriteGroup).sort()) {
+    // Append activity
+    for (let k of Object.keys(spriteGroup)) {
 
-                        if (choosed.has(k)) {
+        spriteGroup[k].alpha = 0.4
 
-                            spriteGroup[k].alpha = 1
+        spriteGroup[k].interactive = true
 
-                            selectedClusterList
-                                .append("table")
-                                .text(k + "|" + spriteNumber[k])
+        spriteGroup[k].on("mouseover", function () {
 
-                        } else {
+            if (event) {
 
-                            spriteGroup[k].alpha = 0.1
-                        }
+                tip
+                    .style("opacity", 1)
+                    .style("left", (event.pageX + 15) + "px")
+                    .style("top", (event.pageY + 15) + "px")
+                    .text(k)
 
+            }
+
+        })
+
+
+        spriteGroup[k].on("pointerout", function () { tip.style("opacity", 0) })
+
+
+        spriteGroup[k].on("pointertap", function () {
+
+            if (choosed.has(k)) {
+
+                choosed.del(k)
+
+            } else {
+
+                choosed.add(k)
+
+            }
+
+
+            selectedClusterList.text("SELECTED CLUSTERS")
+
+            if (choosed.selected.size > 0) {
+
+                selectedClusterList.append("hr")
+
+
+                for (let k of Object.keys(spriteGroup).sort()) {
+
+                    if (choosed.has(k)) {
+
+                        spriteGroup[k].alpha = 1
+
+                        selectedClusterList
+                            .append("table")
+                            .text(k + "|" + spriteNumber[k])
+
+                    } else {
+
+                        spriteGroup[k].alpha = 0.1
                     }
-
-
-                } else {
-
-                    for (let k of Object.keys(spriteGroup).sort()) { spriteGroup[k].alpha = 0.5 }
 
                 }
 
-            })
 
-            spriteGroup[cluster].addChild(circle)
+            } else {
 
-            spriteGroup[cluster].alpha = 0.5
+                for (let k of Object.keys(spriteGroup).sort()) { spriteGroup[k].alpha = 0.5 }
 
-            app.stage.addChild(spriteGroup[cluster])
+            }
 
         })
+
+        app.stage.addChild(spriteGroup[k])
+
+    }
 
     app.render(app.stage)
 

@@ -1,7 +1,7 @@
 /* Scatterplot */
 
 
-$("#showScatterplot").bind("click", function () {
+$("#showScatterplot").bind("click", function drawScatterplot() {
 
     /* Preparing */
     prepareCanvas("cleanupAll")
@@ -59,11 +59,11 @@ $("#showScatterplot").bind("click", function () {
             height: height,
             antialias: true,
             resolution: 1,
-            backgroundColor: 0x000000
+            backgroundColor: 0xFFFFFF
 
         })
 
-        app.renderer.view.id = "Scatter"
+        app.renderer.view.id = "canvasPanel"
 
 
         // Append sprite
@@ -104,36 +104,11 @@ $("#showScatterplot").bind("click", function () {
             })
 
 
-        // Set up toolbox
-        toolbox
-            .select("#clear")
-            .on("click", function () {
-
-                if (choosed.selected.size > 0) {
-
-                    selectedClusterList.text("SELECTED")
-
-                    let keys_list = Object.keys(spriteGroup)
-                    for (let k of keys_list) { spriteGroup[k].alpha = 0.4 }
-
-                    for (let k of choosed.selected) { choosed.del(k) }
-
-                }
-
-            })
-
-        toolbox
-            .select("#exp")
-            .on("click", function () {
-                drawBoxplot()
-            })
-
-
         // Append activity
         let keys_list = Object.keys(spriteGroup)
         for (let k of keys_list) {
 
-            spriteGroup[k].alpha = 0.4
+            spriteGroup[k].alpha = 0.5
 
             spriteGroup[k].interactive = true
 
@@ -172,32 +147,32 @@ $("#showScatterplot").bind("click", function () {
 
                 if (choosed.selected.size > 0) {
 
+                    let keys_list = Object.keys(spriteGroup).sort()
+                    for (let k of keys_list) { spriteGroup[k].alpha = 0.1 }
+
                     selectedClusterList.append("hr")
 
-                    let keys_list = Object.keys(spriteGroup).sort()
-                    for (let k of keys_list) {
+                    let selected_keys_list = Array.from(choosed.selected)
+                    for (let k of selected_keys_list) {
 
-                        if (choosed.has(k)) {
+                        spriteGroup[k].alpha = 1
 
-                            spriteGroup[k].alpha = 1
-
-                            selectedClusterList
-                                .append("table")
-                                .text(k + "|" + spriteNumber[k])
-
-                        } else {
-
-                            spriteGroup[k].alpha = 0.1
-
-                        }
+                        selectedClusterList
+                            .append("table")
+                            .text(k + "|" + spriteNumber[k])
 
                     }
-
 
                 } else {
 
                     let keys_list = Object.keys(spriteGroup).sort()
                     for (let k of keys_list) { spriteGroup[k].alpha = 0.5 }
+
+                    selectedClusterList.append("hr")
+
+                    selectedClusterList
+                        .append("table")
+                        .text("(ALL)")
 
                 }
 
@@ -208,6 +183,50 @@ $("#showScatterplot").bind("click", function () {
         }
 
         document.getElementById("plotRegi").appendChild(app.renderer.view)
+
+
+        // Set up toolbox
+        toolbox
+            .select("#clear")
+            .on("click", function () {
+
+                if (choosed.selected.size > 0) {
+
+                    selectedClusterList.text("SELECTED")
+
+                    selectedClusterList.append("hr")
+
+                    selectedClusterList
+                        .append("table")
+                        .text("(ALL)")
+
+                    let keys_list = Object.keys(spriteGroup)
+                    for (let k of keys_list) { spriteGroup[k].alpha = 0.5 }
+
+                    for (let k of choosed.selected) { choosed.del(k) }
+
+                }
+
+            })
+
+        toolbox
+            .select("#exp")
+            .on("click", function () {
+
+                if (choosed.selected.size > 0) {
+
+                    drawBoxplot()
+
+                } else {
+
+                    let keys_list = Object.keys(spriteGroup)
+                    for (let k of keys_list) { choosed.selected.add(k) }
+
+                    drawBoxplot()
+
+                }
+
+            })
 
     }
 

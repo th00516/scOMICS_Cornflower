@@ -11,7 +11,7 @@ function prepareCanvas(k) {
 
     }
 
-    d3.select("#plotRegi").select("#Scatter").remove()
+    d3.select("#plotRegi").select("#canvasPanel").remove()
     d3.select("#plotRegi").select("#Box").remove()
     d3.select("#plotRegi").select("#tip").remove()
     d3.select("#plotRegi").select("#init").remove()

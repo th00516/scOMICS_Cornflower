@@ -99,7 +99,7 @@ function drawBoxplot() {
         var svg = d3
             .select("#plotRegi")
             .append("svg")
-            .attr("id", "Scatter")
+            .attr("id", "canvasPanel")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
 
@@ -109,18 +109,11 @@ function drawBoxplot() {
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
 
-
         // Drawing background
         svg
             .select("#Canvas")
             .append("g")
             .attr("id", "boxplot")
-            .append("rect")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", width - margin.left / 2)
-            .attr("height", height)
-            .style("fill", "lightgrey")
 
 
         // Append the X & Y Axis
@@ -262,6 +255,16 @@ function drawBoxplot() {
         //             }
         //         })
         // }
+
+
+        // Set up toolbox
+        toolbox
+            .select("#clear")
+            .attr("disabled", "disabled")
+
+        toolbox
+            .select("#exp")
+            .attr("disabled", "disabled")
 
     }
 

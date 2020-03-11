@@ -16,3 +16,10 @@ var selectedClusterList = d3
     .style("background-color", "lightblue")
     .style("font-weight", "bold")
     .text("SELECTED")
+
+selectedClusterList
+    .append("hr")
+
+selectedClusterList
+    .append("table")
+    .text("(ALL)")

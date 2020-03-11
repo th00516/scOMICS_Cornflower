@@ -3,6 +3,7 @@
 <html>
 
 <head>
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
 
@@ -16,20 +17,14 @@
   <script src="../script/lib/d3.v5.min.js"></script>
   <script src="../script/lib/pixi.v5.min.js"></script>
 
-  <script src="../script/control.js"></script>
-
-  <script src="../script/module/usedDataStructure.js"></script>
-  <script src="../script/module/elementGeneratorAndFunction.js"></script>
-
 
   <title>Hello&nbsp;scOmics!</title>
+
 </head>
 
 
-<script src="../script/module/prepareCanvas.js"></script>
-
-
 <body>
+
   <div class="allFram">
 
     <div class="heaRegi">
@@ -77,8 +72,7 @@
 
         <div class="maiBlocC">
           <div class="maiBlocR" style="height:35px; justify-content:flex-start;">
-            <button type="submit" style="height:30px; font-weight:bold;" onclick="drawScatterplot()"
-              value="rna">Show&nbsp;Plot</button>
+            <button id="showScatterplot" style="height:30px; font-weight:bold;">Show&nbsp;Scatterplot</button>
 
             <hr class="splLinC" />
 
@@ -111,10 +105,23 @@
     <hr class="splLinR" />
 
     <div class="botRegi">
+
       <h4>Copyright&nbsp;for&nbsp;scOmics&nbsp;group&nbsp;of&nbsp;BGI&nbsp;in&nbsp;<span id="year"></span></h4>
+
     </div>
 
   </div>
+
 </body>
 
 </html>
+
+
+<!-- Scripts -->
+<script src="../script/module/prepareCanvas.js"></script>
+
+<script src="../script/module/usedDataStructure.js"></script>
+<script src="../script/module/elementGeneratorAndFunction.js"></script>
+
+<script src="../script/plot.scatterplot.js"></script>
+<script src="../script/plot.boxplot.js"></script>

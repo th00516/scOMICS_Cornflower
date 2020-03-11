@@ -16,7 +16,4 @@ function prepareCanvas(k) {
     d3.select("#plotRegi").select("#tip").remove()
     d3.select("#plotRegi").select("#init").remove()
 
-    // Initializing
-    d3.select("#plotRegi").append("h4").attr("id", "init").text("Initializing...")
-
 }

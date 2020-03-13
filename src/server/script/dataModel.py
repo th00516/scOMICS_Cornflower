@@ -13,8 +13,9 @@ class dataModel:
 
             'dataQualityLevel': ['low', 'high', 'ref'],
 
+            'studyType': ['RNA-Seq', 'DNA-Seq', 'ATAC-Seq']
+            'seqMethod': ['full-length', '5-terminal', '3-terminal'],
             'libMethod': ['iDrop', '10x'],
-            'seqMethod': ['full-length', '3-terminal'],
 
         }
 
@@ -23,32 +24,48 @@ class dataModel:
             'identity': '',
 
             'species': '',
+            'sex': '',
             'age': '',
             'tissue': '',
+            'sampleDescription': 0,
 
         }
 
-        self.dataModel = {
+        self.dataObj = {
 
             'identity': '',
             'alias': [],
 
             # Append sample object here
-            'usedSample': [],
+            'totalUsedSample': [],
 
-            'libMethod': '',
+            'studyType': '',
             'seqMethod': '',
+            'libMethod': '',
 
             'totalCellNumber': 0,
-            'clusterNumber': 0,
 
+            'dataQualityLevel': '',
+
+        }
+
+        self.runObj = {
+
+            'identity': '',
+
+            'usedData': '',
+            'usedSampleInData': [],
+
+            'usedCellNumber': 0,
+
+            'runningParameter': '',
+
+            'clusterNumber': 0,
             'cellNumberInEachCluster': [],
             'markerGeneInEachCluster': [[]],
 
-            'totalExpSpan': [0, 0],
+            'expSpan': [0, 0],
             'expSpanInEachCluster': [[]],
-
-            'dataQualityLevel': '',
 
         }
 

@@ -1,233 +1,239 @@
 /* Scatterplot */
 
 
-$("#showScatterplot").bind("click", function drawScatterplot() {
+$(document).ready(function () {
 
-    /* Preparing */
-    prepareCanvas("cleanupAll")
+    $("#showScatterplot").bind("click", function drawScatterplot() {
 
-    $.getScript("../script/module/toolbox.js")
-    $.getScript("../script/module/selectedList.js")
-    $.getScript("../script/module/tip.js")
+        /* Preparing */
+        prepareCanvas("cleanupAll")
 
-
-    /* Element initialization */
-    choosed = new selectedClusters()
-    colorList = generateRandomColor()
-
-    // Initializing
-    d3.select("#plotRegi").append("h4").attr("id", "init").text("Initializing...")
+        $.getScript("../script/module/toolbox.js")
+        $.getScript("../script/module/selectedList.js")
+        $.getScript("../script/module/tip.js")
 
 
-    /* Running */
-    sample = $("#sampleSelection option:selected")
-    seqType = $("#seqTypeSelection option:selected")
-    clusterType = $("#clusterTypeSelection option:selected")
+        /* Element initialization */
+        choosed = new selectedClusters()
+        colorList = generateRandomColor()
 
-    d3.tsv("../demo_data/" + sample.val() + "." + seqType.val() + ".tsv").then(d => scatterPlot(d))
-
-
-    /* Drawing */
-    // Draw scatter plot
-    function scatterPlot(dat) {
-
-        // Set the width & height of the graph
-        let margin = { top: 40, right: 40, bottom: 40, left: 40 },
-
-            width = 820 - margin.left - margin.right,
-            height = 800 - margin.top - margin.bottom
+        // Initializing
+        $("#plotRegi").append("<h4 id='init'>Initializing...</h4>")
 
 
-        // Set the scales of the graph
-        let scale_x = d3
-            .scaleLinear()
-            .domain([-50, 50])
-            .range([0, width])
+        /* Running */
+        sample = $("#sampleSelection option:selected")
+        seqType = $("#seqTypeSelection option:selected")
+        clusterType = $("#clusterTypeSelection option:selected")
 
-        let scale_y = d3
-            .scaleLinear()
-            .domain([-50, 50])
-            .range([height, 0])
+        d3.tsv("../demo_data/" + sample.val() + "." + seqType.val() + ".tsv").then(d => scatterPlot(d))
 
 
-        // Generate canvas
-        d3.select("#plotRegi").select("#init").remove()
-
-        let app = new PIXI.Application({
-
-            width: width,
-            height: height,
-            antialias: true,
-            resolution: 1,
-            backgroundColor: 0xFFFFFF
-
-        })
-
-        app.renderer.view.id = "canvasPanel"
 
 
-        // Append sprite
-        let spriteGroup = new Object()
-        let spriteNumber = new Object()
+        /* Drawing */
+        // Draw scatter plot
+        function scatterPlot(dat) {
 
-        d3
-            .select(app.renderer.view)
-            .selectAll("NONE")
-            .data(dat, d => d)
-            .enter()
-            .each(d => {
+            // Set the width & height of the graph
+            const margin = { top: 40, right: 40, bottom: 40, left: 40 },
 
-                let cluster = "cluster_" + d.seurat_clusters
+                width = 820 - margin.left - margin.right,
+                height = 800 - margin.top - margin.bottom
 
-                if (!spriteGroup.hasOwnProperty(cluster)) {
 
-                    spriteGroup[cluster] = new PIXI.Container()
-                    spriteNumber[cluster] = 1
+            // Set the scales of the graph
+            const scale_x = d3
+                .scaleLinear()
+                .domain([-50, 50])
+                .range([0, width])
 
-                }
+            const scale_y = d3
+                .scaleLinear()
+                .domain([-50, 50])
+                .range([height, 0])
 
-                const circle = new PIXI.Graphics()
 
-                spriteNumber[cluster] += 1
+            // Generate canvas
+            d3.select("#plotRegi").select("#init").remove()
 
-                circle.beginFill(
-                    "0x" +
-                    colorList[0][d.seurat_clusters] +
-                    colorList[1][d.seurat_clusters] +
-                    colorList[2][d.seurat_clusters]
-                )
-                circle.drawCircle(scale_x(d[clusterType.val() + "_1"]), scale_y(d[clusterType.val() + "_2"]), 3)
-                circle.endFill()
+            const app = new PIXI.Application({
 
-                spriteGroup[cluster].addChild(circle)
+                width: width,
+                height: height,
+                antialias: true,
+                resolution: 1,
+                backgroundColor: 0xFFFFFF
 
             })
 
-
-        // Append activity
-        let keys_list = Object.keys(spriteGroup)
-        for (let k of keys_list) {
-
-            spriteGroup[k].alpha = 0.5
-
-            spriteGroup[k].interactive = true
-
-            spriteGroup[k].on("mouseover", function () {
-
-                if (event) {
-
-                    tip
-                        .style("display", "block")
-                        .style("left", (event.pageX + 20) + "px")
-                        .style("top", (event.pageY + 20) + "px")
-                        .text(k)
-
-                }
-
-            })
+            app.renderer.view.id = "canvasPanel"
 
 
-            spriteGroup[k].on("pointerout", function () { tip.style("display", "none") })
+            // Append sprite
+            const spriteGroup = new Object()
+            const spriteNumber = new Object()
 
+            d3
+                .select(app.renderer.view)
+                .selectAll("NONE")
+                .data(dat, d => d)
+                .enter()
+                .each(d => {
 
-            spriteGroup[k].on("pointertap", function () {
+                    const cluster = "cluster_" + d.seurat_clusters
 
-                if (choosed.has(k)) {
+                    if (!spriteGroup.hasOwnProperty(cluster)) {
 
-                    choosed.del(k)
-
-                } else {
-
-                    choosed.add(k)
-
-                }
-
-
-                selectedClusterList.text("SELECTED")
-
-                if (choosed.selected.size > 0) {
-
-                    let keys_list = Object.keys(spriteGroup).sort()
-                    for (let k of keys_list) { spriteGroup[k].alpha = 0.1 }
-
-                    selectedClusterList.append("hr")
-
-                    let selected_keys_list = Array.from(choosed.selected)
-                    for (let k of selected_keys_list) {
-
-                        spriteGroup[k].alpha = 1
-
-                        selectedClusterList
-                            .append("table")
-                            .text(k + "|" + spriteNumber[k])
+                        spriteGroup[cluster] = new PIXI.Container()
+                        spriteNumber[cluster] = 1
 
                     }
 
-                } else {
+                    const circle = new PIXI.Graphics()
 
-                    let keys_list = Object.keys(spriteGroup).sort()
-                    for (let k of keys_list) { spriteGroup[k].alpha = 0.5 }
+                    spriteNumber[cluster] += 1
 
-                    selectedClusterList.append("hr")
+                    circle.beginFill(
+                        "0x" +
+                        colorList[0][d.seurat_clusters] +
+                        colorList[1][d.seurat_clusters] +
+                        colorList[2][d.seurat_clusters]
+                    )
+                    circle.drawCircle(scale_x(d[clusterType.val() + "_1"]), scale_y(d[clusterType.val() + "_2"]), 3)
+                    circle.endFill()
 
-                    selectedClusterList
-                        .append("table")
-                        .text("(ALL)")
+                    spriteGroup[cluster].addChild(circle)
 
-                }
-
-            })
-
-            app.stage.addChild(spriteGroup[k])
-
-        }
-
-        document.getElementById("plotRegi").appendChild(app.renderer.view)
+                })
 
 
-        // Set up toolbox
-        toolbox
-            .select("#clear")
-            .on("click", function () {
+            // Append activity
+            const keys_list = Object.keys(spriteGroup)
+            for (let k of keys_list) {
 
-                if (choosed.selected.size > 0) {
+                spriteGroup[k].alpha = 0.5
+
+                spriteGroup[k].interactive = true
+
+                spriteGroup[k].on("mouseover", function () {
+
+                    if (event) {
+
+                        tip
+                            .style("display", "block")
+                            .style("left", (event.pageX + 20) + "px")
+                            .style("top", (event.pageY + 20) + "px")
+                            .text(k)
+
+                    }
+
+                })
+
+
+                spriteGroup[k].on("pointerout", function () { tip.style("display", "none") })
+
+
+                spriteGroup[k].on("pointertap", function () {
+
+                    if (choosed.has(k)) {
+
+                        choosed.del(k)
+
+                    } else {
+
+                        choosed.add(k)
+
+                    }
+
 
                     selectedClusterList.text("SELECTED")
 
-                    selectedClusterList.append("hr")
+                    if (choosed.selected.size > 0) {
 
-                    selectedClusterList
-                        .append("table")
-                        .text("(ALL)")
+                        const keys_list = Object.keys(spriteGroup).sort()
+                        for (let k of keys_list) { spriteGroup[k].alpha = 0.1 }
 
-                    let keys_list = Object.keys(spriteGroup)
-                    for (let k of keys_list) { spriteGroup[k].alpha = 0.5 }
+                        selectedClusterList.append("hr")
 
-                    for (let k of choosed.selected) { choosed.del(k) }
+                        const selected_keys_list = Array.from(choosed.selected)
+                        for (let k of selected_keys_list) {
 
-                }
+                            spriteGroup[k].alpha = 1
 
-            })
+                            selectedClusterList
+                                .append("table")
+                                .text(k + "|" + spriteNumber[k])
 
-        toolbox
-            .select("#exp")
-            .on("click", function () {
+                        }
 
-                if (choosed.selected.size > 0) {
+                    } else {
 
-                    drawBoxplot()
+                        const keys_list = Object.keys(spriteGroup).sort()
+                        for (let k of keys_list) { spriteGroup[k].alpha = 0.5 }
 
-                } else {
+                        selectedClusterList.append("hr")
 
-                    let keys_list = Object.keys(spriteGroup)
-                    for (let k of keys_list) { choosed.selected.add(k) }
+                        selectedClusterList
+                            .append("table")
+                            .text("(ALL)")
 
-                    drawBoxplot()
+                    }
 
-                }
+                })
 
-            })
+                app.stage.addChild(spriteGroup[k])
 
-    }
+            }
+
+            document.getElementById("plotRegi").appendChild(app.renderer.view)
+
+
+            // Set up toolbox
+            toolbox
+                .select("#clear")
+                .on("click", function () {
+
+                    if (choosed.selected.size > 0) {
+
+                        selectedClusterList.text("SELECTED")
+
+                        selectedClusterList.append("hr")
+
+                        selectedClusterList
+                            .append("table")
+                            .text("(ALL)")
+
+                        const keys_list = Object.keys(spriteGroup)
+                        for (let k of keys_list) { spriteGroup[k].alpha = 0.5 }
+
+                        for (let k of choosed.selected) { choosed.del(k) }
+
+                    }
+
+                })
+
+            toolbox
+                .select("#exp")
+                .on("click", function () {
+
+                    if (choosed.selected.size > 0) {
+
+                        drawBoxplot()
+
+                    } else {
+
+                        const keys_list = Object.keys(spriteGroup)
+                        for (let k of keys_list) { choosed.selected.add(k) }
+
+                        drawBoxplot()
+
+                    }
+
+                })
+
+        }
+
+    })
 
 })

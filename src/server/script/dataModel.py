@@ -5,33 +5,48 @@ import sys
 from mysql.connector import connect
 
 
-class dataModel:
+class cornflowerInfoModel:
 
     def __init__(self):
 
-        self.option = {
+        self.optionPool = {
 
             'dataQualityLevel': ['low', 'high', 'ref'],
 
-            'studyType': ['RNA-Seq', 'DNA-Seq', 'ATAC-Seq']
+            'studyType': ['RNA-Seq', 'DNA-Seq', 'ATAC-Seq'],
             'seqMethod': ['full-length', '5-terminal', '3-terminal'],
             'libMethod': ['iDrop', '10x'],
 
         }
 
-        self.sampleObj = {
+        self.projModel = {
 
             'identity': '',
+            'alias': [],
+
+        }
+
+        self.sampleModel = {
+
+            'identity': '',
+            'alias': [],
 
             'species': '',
             'sex': '',
             'age': '',
             'tissue': '',
-            'sampleDescription': 0,
+            'sampleDescription': '',
 
         }
 
-        self.dataObj = {
+        self.geneModel = {
+
+            'identity': '',
+            'alias': [],
+
+        }
+
+        self.RNASeqDataModel = {
 
             'identity': '',
             'alias': [],
@@ -39,7 +54,6 @@ class dataModel:
             # Append sample object here
             'totalUsedSample': [],
 
-            'studyType': '',
             'seqMethod': '',
             'libMethod': '',
 
@@ -49,7 +63,24 @@ class dataModel:
 
         }
 
-        self.runObj = {
+        self.ATACSeqDataModel = {
+
+            'identity': '',
+            'alias': [],
+
+            # Append sample object here
+            'totalUsedSample': [],
+
+            'seqMethod': '',
+            'libMethod': '',
+
+            'totalCellNumber': 0,
+
+            'dataQualityLevel': '',
+
+        }
+
+        self.runVerModel = {
 
             'identity': '',
 

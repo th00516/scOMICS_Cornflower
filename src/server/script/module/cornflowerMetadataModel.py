@@ -14,22 +14,22 @@ class cornflowerMetadataModel:
 
             'identity': '',
             'alias': [],
+            'description': '',
 
             'species': '',
-            'description': '',
 
         }
 
-        self.sampleInfoModel = {
+        self.cellInfoModel = {
 
             'identity': '',
             'alias': [],
+            'description': '',
 
             'species': '',
             'sex': '',
-            'tissue': '',
-            'date': '',
-            'description': '',
+            'source': '',
+            'samplingDate': '',
 
         }
 
@@ -37,6 +37,7 @@ class cornflowerMetadataModel:
 
             'identity': '',
             'alias': [],
+            'description': '',
 
             'generatedData': [],
 
@@ -52,7 +53,7 @@ class cornflowerMetadataModel:
             'seqMethod': '',
             'libMethod': '',
 
-            'sampleNumber': 0,
+            'cellNumber': 0,
 
         }
 
@@ -63,7 +64,7 @@ class cornflowerMetadataModel:
             'seqMethod': '',
             'libMethod': '',
 
-            'sampleNumber': 0,
+            'cellNumber': 0,
 
         }
 
@@ -72,10 +73,10 @@ class cornflowerMetadataModel:
             'identity': '',
 
             'data': '',
-            'parameter': '',
+            'clusterMethod': '',
 
             'clusterNumber': 0,
-            'sampleNumberInEachCluster': [],
+            'cellNumberInEachCluster': [],
             'markerGeneInEachCluster': [[]],
 
             'expSpan': [0, 0],
@@ -88,10 +89,10 @@ class cornflowerMetadataModel:
             'identity': '',
 
             'data': '',
-            'parameter': '',
+            'clusterMethod': '',
 
             'clusterNumber': 0,
-            'sampleNumberInEachCluster': [],
+            'cellNumberInEachCluster': [],
             'markerGeneInEachCluster': [[]],
 
             ## ... ##
@@ -108,12 +109,12 @@ class cornflowerMetadataModel:
 
         )
 
-        self.sampleInfoDB = connect(
+        self.cellInfoDB = connect(
 
             host='localhost',
             user='cornflower',
             passwd='$th00516',
-            database='cornflowerSampleInfo',
+            database='cornflowerCellInfo',
 
         )
 
@@ -170,7 +171,7 @@ class cornflowerMetadataModel:
         pass
 
     @staticmethod
-    def autoGenerateSampleInfoIdentity():
+    def autoGenerateCellInfoIdentity():
         """"""
 
         pass
@@ -211,10 +212,10 @@ class cornflowerMetadataModel:
 
         dbCursor = self.geneInfoDB.cursor()
 
-    def handleSampleInfoDB(self):
+    def handleCellInfoDB(self):
         """"""
 
-        dbCursor = self.sampleInfoDB.cursor()
+        dbCursor = self.cellInfoDB.cursor()
 
     def handleStudyInfoDB(self):
         """"""

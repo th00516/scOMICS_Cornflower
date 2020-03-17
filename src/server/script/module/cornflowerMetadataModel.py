@@ -10,30 +10,6 @@ class cornflowerMetadataModel:
     def __init__(self):
 
         # metadata model #
-        self.projModel = {
-
-            'identity': '',
-            'alias': [],
-
-            'sample': [],
-
-        }
-
-        self.sampleModel = {
-
-            'identity': '',
-            'alias': [],
-
-            'species': '',
-            'sex': '',
-            'tissue': '',
-            'date': '',
-            'description': '',
-
-            'data': [],
-
-        }
-
         self.geneInfoModel = {
 
             'identity': '',
@@ -44,12 +20,34 @@ class cornflowerMetadataModel:
 
         }
 
-        self.RNASeqDataModel = {
+        self.sampleInfoModel = {
 
             'identity': '',
             'alias': [],
 
-            'totalUsedSample': [],
+            'species': '',
+            'sex': '',
+            'tissue': '',
+            'date': '',
+            'description': '',
+
+        }
+
+        self.studyInfoModel = {
+
+            'identity': '',
+            'alias': [],
+
+            'generatedData': [],
+
+            'org': [],
+            'publication': [],
+
+        }
+
+        self.RNASeqDataModel = {
+
+            'identity': '',
 
             'seqMethod': '',
             'libMethod': '',
@@ -58,32 +56,25 @@ class cornflowerMetadataModel:
 
         }
 
-        # self.ATACSeqDataModel = {
+        self.ATACSeqDataModel = {
 
-        #     'identity': '',
-        #     'alias': [],
+            'identity': '',
 
-        #     'totalUsedSample': [],
+            'seqMethod': '',
+            'libMethod': '',
 
-        #     'seqMethod': '',
-        #     'libMethod': '',
+            'sampleNumber': 0,
 
-        #     'sampleNumber': 0,
-
-        # }
+        }
 
         self.RNASeqClusterModel = {
 
             'identity': '',
-            'alias': '',
 
-            'usedSample': [],
-            'usedSampleNumber': 0,
-
+            'data': '',
             'parameter': '',
 
             'clusterNumber': 0,
-
             'sampleNumberInEachCluster': [],
             'markerGeneInEachCluster': [[]],
 
@@ -92,44 +83,46 @@ class cornflowerMetadataModel:
 
         }
 
-        # self.ATACSeqClusterModel = {
+        self.ATACSeqClusterModel = {
 
-        #     'identity': '',
-        #     'alias': '',
+            'identity': '',
 
-        #     'usedSample': [],
-        #     'usedSampleNumber': 0,
+            'data': '',
+            'parameter': '',
 
-        #     'parameter': '',
+            'clusterNumber': 0,
+            'sampleNumberInEachCluster': [],
+            'markerGeneInEachCluster': [[]],
 
-        #     ## ... ##
+            ## ... ##
 
-        # }
+        }
 
-        self.projDB = connect(
-
-            host='localhost',
-            user='cornflower',
-            passwd='$th00516',
-            database='cornflowerProj',
-
-        )
-
-        self.sampleDB = connect(
-
-            host='localhost',
-            user='cornflower',
-            passwd='$th00516',
-            database='cornflowerSample',
-
-        )
-
+        # DB handler #
         self.geneInfoDB = connect(
 
             host='localhost',
             user='cornflower',
             passwd='$th00516',
             database='cornflowerGeneInfo',
+
+        )
+
+        self.sampleInfoDB = connect(
+
+            host='localhost',
+            user='cornflower',
+            passwd='$th00516',
+            database='cornflowerSampleInfo',
+
+        )
+
+        self.studyInfoDB = connect(
+
+            host='localhost',
+            user='cornflower',
+            passwd='$th00516',
+            database='cornflowerStudyInfo',
 
         )
 
@@ -142,14 +135,14 @@ class cornflowerMetadataModel:
 
         )
 
-        # self.ATACSeqDataDB = connect(
+        self.ATACSeqDataDB = connect(
 
-        #     host='localhost',
-        #     user='cornflower',
-        #     passwd='$th00516',
-        #     database='cornflowerATACSeqData',
+            host='localhost',
+            user='cornflower',
+            passwd='$th00516',
+            database='cornflowerATACSeqData',
 
-        # )
+        )
 
         self.RNASeqClusterDB = connect(
 
@@ -160,30 +153,30 @@ class cornflowerMetadataModel:
 
         )
 
-        # self.ATACSeqClusterDB = connect(
+        self.ATACSeqClusterDB = connect(
 
-        #     host='localhost',
-        #     user='cornflower',
-        #     passwd='$th00516',
-        #     database='cornflowerATACSeqCluster',
+            host='localhost',
+            user='cornflower',
+            passwd='$th00516',
+            database='cornflowerATACSeqCluster',
 
-        # )
+        )
 
     # static method #
     @staticmethod
-    def autoGenerateProjIdentity():
-        """"""
-
-        pass
-
-    @staticmethod
-    def autoGenerateSampleIdentity():
-        """"""
-
-        pass
-
-    @staticmethod
     def autoGenerateGeneInfoIdentity():
+        """"""
+
+        pass
+
+    @staticmethod
+    def autoGenerateSampleInfoIdentity():
+        """"""
+
+        pass
+
+    @staticmethod
+    def autoGenerateStudyInfoIdentity():
         """"""
 
         pass
@@ -194,11 +187,11 @@ class cornflowerMetadataModel:
 
         pass
 
-    # @staticmethod
-    # def autoGenerateATACSeqDataIdentity():
-    #     """"""
+    @staticmethod
+    def autoGenerateATACSeqDataIdentity():
+        """"""
 
-    #     pass
+        pass
 
     @staticmethod
     def autoGenerateRNASeqClusterIdentity():
@@ -206,47 +199,47 @@ class cornflowerMetadataModel:
 
         pass
 
-    # @staticmethod
-    # def autoGenerateATACSeqClusterIdentity():
-    #     """"""
+    @staticmethod
+    def autoGenerateATACSeqClusterIdentity():
+        """"""
 
-    #     pass
+        pass
 
     # headle DB #
-    def handleProjDB(self):
-        """"""
-
-        dbCursor = self.projDB.cursor()
-
-    def handleSampleDB(self):
-        """"""
-
-        dbCursor = self.sampleDB.cursor()
-
     def handleGeneInfoDB(self):
         """"""
 
         dbCursor = self.geneInfoDB.cursor()
+
+    def handleSampleInfoDB(self):
+        """"""
+
+        dbCursor = self.sampleInfoDB.cursor()
+
+    def handleStudyInfoDB(self):
+        """"""
+
+        dbCursor = self.studyInfoDB.cursor()
 
     def handleRNASeqDataDB(self):
         """"""
 
         dbCursor = self.RNASeqDataDB.cursor()
 
-    # def handleATACSeqDataDB(self):
-    #     """"""
+    def handleATACSeqDataDB(self):
+        """"""
 
-    #     dbCursor = self.ATACSeqDataDB.cursor()
+        dbCursor = self.ATACSeqDataDB.cursor()
 
     def handleRNASeqClusterDB(self):
         """"""
 
         dbCursor = self.RNASeqClusterDB.cursor()
 
-    # def handleATACSeqClusterDB(self):
-    #     """"""
+    def handleATACSeqClusterDB(self):
+        """"""
 
-    #     dbCursor = self.ATACSeqClusterDB.cursor()
+        dbCursor = self.ATACSeqClusterDB.cursor()
 
     # implement method #
     def parseInputFile(self, sampleFiles):

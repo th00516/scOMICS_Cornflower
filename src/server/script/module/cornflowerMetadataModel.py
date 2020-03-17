@@ -39,6 +39,7 @@ class cornflowerMetadataModel:
             'identity': '',
             'alias': [],
 
+            'species': '',
             'description': '',
 
         }
@@ -57,21 +58,21 @@ class cornflowerMetadataModel:
 
         }
 
-        self.ATACSeqDataModel = {
+        # self.ATACSeqDataModel = {
 
-            'identity': '',
-            'alias': [],
+        #     'identity': '',
+        #     'alias': [],
 
-            'totalUsedSample': [],
+        #     'totalUsedSample': [],
 
-            'seqMethod': '',
-            'libMethod': '',
+        #     'seqMethod': '',
+        #     'libMethod': '',
 
-            'sampleNumber': 0,
+        #     'sampleNumber': 0,
 
-        }
+        # }
 
-        self.RNASeqMatModel = {
+        self.RNASeqClusterModel = {
 
             'identity': '',
             'alias': '',
@@ -91,19 +92,19 @@ class cornflowerMetadataModel:
 
         }
 
-        self.ATACSeqMatModel = {
+        # self.ATACSeqClusterModel = {
 
-            'identity': '',
-            'alias': '',
+        #     'identity': '',
+        #     'alias': '',
 
-            'usedSample': [],
-            'usedSampleNumber': 0,
+        #     'usedSample': [],
+        #     'usedSampleNumber': 0,
 
-            'parameter': '',
+        #     'parameter': '',
 
-            ## ... ##
+        #     ## ... ##
 
-        }
+        # }
 
         self.projDB = connect(
 
@@ -141,32 +142,32 @@ class cornflowerMetadataModel:
 
         )
 
-        self.ATACSeqDataDB = connect(
+        # self.ATACSeqDataDB = connect(
+
+        #     host='localhost',
+        #     user='cornflower',
+        #     passwd='$th00516',
+        #     database='cornflowerATACSeqData',
+
+        # )
+
+        self.RNASeqClusterDB = connect(
 
             host='localhost',
             user='cornflower',
             passwd='$th00516',
-            database='cornflowerATACSeqData',
+            database='cornflowerRNASeqCluster',
 
         )
 
-        self.RNASeqMatDB = connect(
+        # self.ATACSeqClusterDB = connect(
 
-            host='localhost',
-            user='cornflower',
-            passwd='$th00516',
-            database='cornflowerRNASeqMat',
+        #     host='localhost',
+        #     user='cornflower',
+        #     passwd='$th00516',
+        #     database='cornflowerATACSeqCluster',
 
-        )
-
-        self.ATACSeqMatDB = connect(
-
-            host='localhost',
-            user='cornflower',
-            passwd='$th00516',
-            database='cornflowerATACSeqMat',
-
-        )
+        # )
 
     # static method #
     @staticmethod
@@ -193,23 +194,23 @@ class cornflowerMetadataModel:
 
         pass
 
+    # @staticmethod
+    # def autoGenerateATACSeqDataIdentity():
+    #     """"""
+
+    #     pass
+
     @staticmethod
-    def autoGenerateATACSeqDataIdentity():
+    def autoGenerateRNASeqClusterIdentity():
         """"""
 
         pass
 
-    @staticmethod
-    def autoGenerateRNASeqMatIdentity():
-        """"""
+    # @staticmethod
+    # def autoGenerateATACSeqClusterIdentity():
+    #     """"""
 
-        pass
-
-    @staticmethod
-    def autoGenerateATACSeqMatIdentity():
-        """"""
-
-        pass
+    #     pass
 
     # headle DB #
     def handleProjDB(self):
@@ -232,20 +233,20 @@ class cornflowerMetadataModel:
 
         dbCursor = self.RNASeqDataDB.cursor()
 
-    def handleATACSeqDataDB(self):
+    # def handleATACSeqDataDB(self):
+    #     """"""
+
+    #     dbCursor = self.ATACSeqDataDB.cursor()
+
+    def handleRNASeqClusterDB(self):
         """"""
 
-        dbCursor = self.ATACSeqDataDB.cursor()
+        dbCursor = self.RNASeqClusterDB.cursor()
 
-    def handleRNASeqMatDB(self):
-        """"""
+    # def handleATACSeqClusterDB(self):
+    #     """"""
 
-        dbCursor = self.RNASeqMatDB.cursor()
-
-    def handleATACSeqMatDB(self):
-        """"""
-
-        dbCursor = self.ATACSeqMatDB.cursor()
+    #     dbCursor = self.ATACSeqClusterDB.cursor()
 
     # implement method #
     def parseInputFile(self, sampleFiles):

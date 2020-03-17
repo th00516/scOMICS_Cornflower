@@ -1,10 +1,13 @@
 ﻿/*jQuery*/
 
-$(document).ready(function() {
+$(document).ready(function () {
 
-  $("#year").html(function() {
-                    var thisYear = new Date();
-                    return thisYear.getFullYear();
-                  });
+    $("#year").html(function () {
+
+        const thisYear = new Date();
+
+        return thisYear.getFullYear();
+
+    });
 
 });

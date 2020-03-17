@@ -6,14 +6,14 @@ function prepareCanvas(k) {
     // Cleanup
     if (k == "cleanupAll") {
 
-        d3.select("#controlPanel").select("#toolbox").remove()
-        d3.select("#controlPanel").select("#selectedClusterList").remove()
+        $("#controlPanel > #toolbox").remove()
+        $("#controlPanel > #selectedClusterList").remove()
 
     }
 
-    d3.select("#plotRegi").select("#canvasPanel").remove()
-    d3.select("#plotRegi").select("#Box").remove()
-    d3.select("#plotRegi").select("#tip").remove()
-    d3.select("#plotRegi").select("#init").remove()
+    $("#plotRegi > #canvasPanel").remove()
+    $("#plotRegi > #Box").remove()
+    $("#plotRegi > #tip").remove()
+    $("#plotRegi > #init").remove()
 
 }

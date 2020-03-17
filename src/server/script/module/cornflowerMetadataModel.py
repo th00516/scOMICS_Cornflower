@@ -209,6 +209,11 @@ class cornflowerMetadataModel:
 
         dbCursor = self.RNASeqMatDB.cursor()
 
+    def handleATACSeqMatDB(self):
+        """"""
+
+        dbCursor = self.ATACSeqMatDB.cursor()
+
     def parseInputFile(self, sampleFiles):
         """"""
 

@@ -9,6 +9,7 @@ class cornflowerMetadataModel:
 
     def __init__(self):
 
+        # metadata model #
         self.projModel = {
 
             'identity': '',
@@ -167,6 +168,7 @@ class cornflowerMetadataModel:
 
         )
 
+    # static method #
     @staticmethod
     def autoGenerateProjIdentity():
         """"""
@@ -209,6 +211,7 @@ class cornflowerMetadataModel:
 
         pass
 
+    # headle DB #
     def handleProjDB(self):
         """"""
 
@@ -244,6 +247,7 @@ class cornflowerMetadataModel:
 
         dbCursor = self.ATACSeqMatDB.cursor()
 
+    # implement method #
     def parseInputFile(self, sampleFiles):
         """"""
 

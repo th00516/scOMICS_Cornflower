@@ -2,6 +2,7 @@
 
 
 import sys
+
 from mysql.connector import connect
 
 
@@ -10,6 +11,22 @@ class cornflowerMetadataModel:
     def __init__(self):
 
         # metadata model #
+        self.seqDataModel = {
+
+            'identity': '',
+
+            'usedSample': [],
+            'usedGene': [],
+            'involvedStudy': [],
+
+            'type': '',
+            'seqMethod': '',
+            'libMethod': '',
+
+            'cellNumber': 0,
+
+        }
+
         self.geneInfoModel = {
 
             'identity': '',
@@ -46,33 +63,11 @@ class cornflowerMetadataModel:
 
         }
 
-        self.RNASeqDataModel = {
-
-            'identity': '',
-
-            'seqMethod': '',
-            'libMethod': '',
-
-            'cellNumber': 0,
-
-        }
-
-        self.ATACSeqDataModel = {
-
-            'identity': '',
-
-            'seqMethod': '',
-            'libMethod': '',
-
-            'cellNumber': 0,
-
-        }
-
         self.RNASeqClusterModel = {
 
             'identity': '',
 
-            'data': '',
+            'usedData': '',
             'clusterMethod': '',
 
             'clusterNumber': 0,
@@ -88,7 +83,7 @@ class cornflowerMetadataModel:
 
             'identity': '',
 
-            'data': '',
+            'usedData': '',
             'clusterMethod': '',
 
             'clusterNumber': 0,
@@ -100,6 +95,15 @@ class cornflowerMetadataModel:
         }
 
         # DB handler #
+        self.seqDataDB = connect(
+
+            host='localhost',
+            user='cornflower',
+            passwd='$th00516',
+            database='cornflowerRNASeqData',
+
+        )
+
         self.geneInfoDB = connect(
 
             host='localhost',
@@ -127,24 +131,6 @@ class cornflowerMetadataModel:
 
         )
 
-        self.RNASeqDataDB = connect(
-
-            host='localhost',
-            user='cornflower',
-            passwd='$th00516',
-            database='cornflowerRNASeqData',
-
-        )
-
-        self.ATACSeqDataDB = connect(
-
-            host='localhost',
-            user='cornflower',
-            passwd='$th00516',
-            database='cornflowerATACSeqData',
-
-        )
-
         self.RNASeqClusterDB = connect(
 
             host='localhost',
@@ -165,6 +151,12 @@ class cornflowerMetadataModel:
 
     # static method #
     @staticmethod
+    def autoGenerateSeqDataIdentity():
+        """"""
+
+        pass
+
+    @staticmethod
     def autoGenerateGeneInfoIdentity():
         """"""
 
@@ -183,18 +175,6 @@ class cornflowerMetadataModel:
         pass
 
     @staticmethod
-    def autoGenerateRNASeqDataIdentity():
-        """"""
-
-        pass
-
-    @staticmethod
-    def autoGenerateATACSeqDataIdentity():
-        """"""
-
-        pass
-
-    @staticmethod
     def autoGenerateRNASeqClusterIdentity():
         """"""
 
@@ -207,6 +187,11 @@ class cornflowerMetadataModel:
         pass
 
     # headle DB #
+    def handleSeqDataDB(self):
+        """"""
+
+        dbCursor = self.seqDataDB.cursor()
+
     def handleGeneInfoDB(self):
         """"""
 
@@ -221,16 +206,6 @@ class cornflowerMetadataModel:
         """"""
 
         dbCursor = self.studyInfoDB.cursor()
-
-    def handleRNASeqDataDB(self):
-        """"""
-
-        dbCursor = self.RNASeqDataDB.cursor()
-
-    def handleATACSeqDataDB(self):
-        """"""
-
-        dbCursor = self.ATACSeqDataDB.cursor()
 
     def handleRNASeqClusterDB(self):
         """"""

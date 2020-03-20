@@ -23,7 +23,7 @@ class cornflowerMetadataModel:
             'seqMethod': '',
             'libMethod': '',
 
-            'cellNumber': 0,
+            'numberOfCell': 0,
 
         }
 
@@ -67,10 +67,11 @@ class cornflowerMetadataModel:
 
             'identity': '',
 
-            'usedData': '',
+            'usedData': [],
             'clusterMethod': '',
+            'clusterParameter': '',
 
-            'clusterNumber': 0,
+            'numberOfCluster': 0,
             'cellNumberInEachCluster': [],
             'markerGeneInEachCluster': [[]],
 
@@ -83,10 +84,11 @@ class cornflowerMetadataModel:
 
             'identity': '',
 
-            'usedData': '',
+            'usedData': [],
             'clusterMethod': '',
+            'clusterParameter': '',
 
-            'clusterNumber': 0,
+            'numberOfCluster': 0,
             'cellNumberInEachCluster': [],
             'markerGeneInEachCluster': [[]],
 

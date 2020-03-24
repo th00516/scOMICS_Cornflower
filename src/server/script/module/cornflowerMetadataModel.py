@@ -15,22 +15,22 @@ class cornflowerMetadataModel:
 
             'identity': '',
 
-            'usedSample': [],
-            'usedGene': [],
-            'involvedStudy': [],
+            'usedSample': '',
+            'usedGene': '',
+            'involvedStudy': '',
 
             'type': '',
             'seqMethod': '',
             'libMethod': '',
 
-            'numberOfCell': 0,
+            'numberOfCell': '',
 
         }
 
         self.geneInfoModel = {
 
             'identity': '',
-            'alias': [],
+            'alias': '',
             'description': '',
 
             'species': '',
@@ -40,7 +40,7 @@ class cornflowerMetadataModel:
         self.cellInfoModel = {
 
             'identity': '',
-            'alias': [],
+            'alias': '',
             'description': '',
 
             'species': '',
@@ -53,13 +53,13 @@ class cornflowerMetadataModel:
         self.studyInfoModel = {
 
             'identity': '',
-            'alias': [],
+            'alias': '',
             'description': '',
 
-            'generatedData': [],
+            'generatedData': '',
 
-            'org': [],
-            'publication': [],
+            'organization': '',
+            'publication': '',
 
         }
 
@@ -67,16 +67,16 @@ class cornflowerMetadataModel:
 
             'identity': '',
 
-            'usedData': [],
+            'usedData': '',
             'clusterMethod': '',
             'clusterParameter': '',
 
-            'numberOfCluster': 0,
-            'cellNumberInEachCluster': [],
-            'markerGeneInEachCluster': [[]],
+            'numberOfCluster': '',
+            'cellNumberInEachCluster': '',
+            'markerGeneInEachCluster': '',
 
-            'expSpan': [0, 0],
-            'expSpanInEachCluster': [[]],
+            'expSpan': '',
+            'expSpanInEachCluster': '',
 
         }
 
@@ -84,13 +84,13 @@ class cornflowerMetadataModel:
 
             'identity': '',
 
-            'usedData': [],
+            'usedData': '',
             'clusterMethod': '',
             'clusterParameter': '',
 
-            'numberOfCluster': 0,
-            'cellNumberInEachCluster': [],
-            'markerGeneInEachCluster': [[]],
+            'numberOfCluster': '',
+            'cellNumberInEachCluster': '',
+            'markerGeneInEachCluster': '',
 
             ## ... ##
 
@@ -156,7 +156,21 @@ class cornflowerMetadataModel:
     def autoGenerateSeqDataIdentity():
         """"""
 
-        pass
+        seqDataFlagTemplate = {
+
+            'isRNASeq':     2 ** 0,
+            'isATACSeq':    2 ** 1,
+
+            'is3':          2 ** 3,
+            'is5':          2 ** 4,
+            'isFull':       2 ** 5,
+
+            ''
+
+            'isIDrop':      2 ** 7,
+            'is10XData':    2 ** 8,
+
+        }
 
     @staticmethod
     def autoGenerateGeneInfoIdentity():

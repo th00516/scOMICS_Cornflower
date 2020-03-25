@@ -2,6 +2,7 @@
 
 
 import sys
+import time
 
 from mysql.connector import connect
 
@@ -153,24 +154,28 @@ class cornflowerMetadataModel:
 
     # static method #
     @staticmethod
-    def autoGenerateSeqDataIdentity():
+    def autoGenerateSeqDataIdentity(seqType):
         """"""
 
-        seqDataFlagTemplate = {
+        seqDataFlagTemplate = list()
 
-            'isRNASeq':     2 ** 0,
-            'isATACSeq':    2 ** 1,
+        seqDataFlagTemplate[0] = '%05X' % int(time.strftime("%Y%m", time.localtime(time.time())))
 
-            'is3':          2 ** 3,
-            'is5':          2 ** 4,
-            'isFull':       2 ** 5,
+        seqDataFlagTemplate[1] = {
 
-            ''
-
-            'isIDrop':      2 ** 7,
-            'is10XData':    2 ** 8,
+            'WGS':     0,
+            'RNASeq':  1,
+            'ATACSeq': 2,
 
         }
+
+        seqDataFlagTemplate[2] = '%04X' % 65535
+
+        seqDataFlagTemplate = seqDataFlagTemplate[0] + \
+                              seqDataFlagTemplate[1][seqType] + \
+                              seqDataFlagTemplate[2]
+        
+        return seqDataFlagTemplate
 
     @staticmethod
     def autoGenerateGeneInfoIdentity():

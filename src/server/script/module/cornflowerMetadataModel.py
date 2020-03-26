@@ -15,6 +15,7 @@ class cornflowerMetadataModel:
         self.seqDataModel = {
 
             'identity': '',
+            'description': '',
 
             'usedSample': '',
             'usedGene': '',
@@ -31,8 +32,9 @@ class cornflowerMetadataModel:
         self.geneInfoModel = {
 
             'identity': '',
-            'alias': '',
             'description': '',
+
+            'alias': '',
 
             'species': '',
 
@@ -41,8 +43,9 @@ class cornflowerMetadataModel:
         self.cellInfoModel = {
 
             'identity': '',
-            'alias': '',
             'description': '',
+
+            'alias': '',
 
             'species': '',
             'sex': '',
@@ -54,8 +57,9 @@ class cornflowerMetadataModel:
         self.studyInfoModel = {
 
             'identity': '',
-            'alias': '',
             'description': '',
+
+            'alias': '',
 
             'generatedData': '',
 
@@ -67,6 +71,7 @@ class cornflowerMetadataModel:
         self.RNASeqClusterModel = {
 
             'identity': '',
+            'description': '',
 
             'usedData': '',
             'clusterMethod': '',
@@ -84,6 +89,7 @@ class cornflowerMetadataModel:
         self.ATACSeqClusterModel = {
 
             'identity': '',
+            'description': '',
 
             'usedData': '',
             'clusterMethod': '',
@@ -103,7 +109,7 @@ class cornflowerMetadataModel:
             host='localhost',
             user='cornflower',
             passwd='$th00516',
-            database='cornflowerRNASeqData',
+            database='cornflowerSeqData',
 
         )
 
@@ -163,19 +169,15 @@ class cornflowerMetadataModel:
 
         seqDataFlagTemplate[1] = {
 
-            'WGS':     0,
-            'RNASeq':  1,
-            'ATACSeq': 2,
+            'WGS':           0,
+            'RNASeq':        1,
+            'ATACSeq':       2,
+            'HiCSeq':        3,
+            'BisulfiteSeq':  4,
 
         }
 
-        seqDataFlagTemplate[2] = '%04X' % 65535
-
-        seqDataFlagTemplate = seqDataFlagTemplate[0] + \
-                              seqDataFlagTemplate[1][seqType] + \
-                              seqDataFlagTemplate[2]
-        
-        return seqDataFlagTemplate
+        return seqDataFlagTemplate[0] + seqDataFlagTemplate[1][seqType]
 
     @staticmethod
     def autoGenerateGeneInfoIdentity():

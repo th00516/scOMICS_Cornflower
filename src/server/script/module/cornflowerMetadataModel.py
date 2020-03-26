@@ -2,8 +2,8 @@
 
 
 import sys
-import time
 
+from time import time, localtime, strftime
 from mysql.connector import connect
 
 
@@ -17,7 +17,7 @@ class cornflowerMetadataModel:
             'identity': '',
             'description': '',
 
-            'usedSample': '',
+            'usedCell': '',
             'usedGene': '',
             'involvedStudy': '',
 
@@ -163,33 +163,46 @@ class cornflowerMetadataModel:
     def autoGenerateSeqDataIdentity(seqType):
         """"""
 
-        seqDataFlagTemplate = list()
+        flagTemplate = ['', '', '']
 
-        seqDataFlagTemplate[0] = '%05X' % int(time.strftime("%Y%m", time.localtime(time.time())))
+        flagTemplate[0] = '%X' % int(strftime("%y", localtime(time())))
+        flagTemplate[1] = '%X' % int(strftime("%m", localtime(time())))
 
-        seqDataFlagTemplate[1] = {
+        flagTemplate[2] = {
 
-            'WGS':           0,
-            'RNASeq':        1,
-            'ATACSeq':       2,
-            'HiCSeq':        3,
-            'BisulfiteSeq':  4,
+            'WGS':           '0',
+            'RNASeq':        '1',
+            'ATACSeq':       '2',
+            'HiCSeq':        '3',
+            'BisulfiteSeq':  '4',
 
         }
 
-        return seqDataFlagTemplate[0] + seqDataFlagTemplate[1][seqType]
+        return flagTemplate[0] + flagTemplate[1] + flagTemplate[2][seqType]
 
     @staticmethod
-    def autoGenerateGeneInfoIdentity():
+    def autoGenerateGeneInfoIdentity(species):
         """"""
 
-        pass
+        tmp = species.split(' ')
+
+        flagTemplate = ['', '']
+
+        flagTemplate[0] = tmp[0][:3].upper()
+        flagTemplate[1] = tmp[1][:2].upper()
+
+        return flagTemplate[0] + flagTemplate[1]
 
     @staticmethod
     def autoGenerateCellInfoIdentity():
         """"""
 
-        pass
+        flagTemplate = ['', '']
+
+        flagTemplate[0] = '%X' % int(strftime("%y", localtime(time())))
+        flagTemplate[1] = '%X' % int(strftime("%m", localtime(time())))
+
+        return flagTemplate[0] + flagTemplate[1]
 
     @staticmethod
     def autoGenerateStudyInfoIdentity():
@@ -209,16 +222,109 @@ class cornflowerMetadataModel:
 
         pass
 
+
+
     # headle DB #
-    def handleSeqDataDB(self):
+    def handleSeqDataDB(self, seqType):
         """"""
+
+        tableName = cornflowerMetadataModel.autoGenerateSeqDataIdentity(seqType)
 
         dbCursor = self.seqDataDB.cursor()
+        dbCursor.execute(
 
-    def handleGeneInfoDB(self):
+            'create table if not exists `' + tableName + '` (' + \
+            '`identity` char(7) not null primary key, ' + \
+            '`description` mediumtext, ' + \
+            '`usedCell` longtext not null, ' + \
+            '`usedGene` mediumtext not null, ' + \
+            '`involvedStudy` text, ' + \
+            '`type` varchar(16) not null, ' + \
+            '`seqMethod` varchar(16) not null, ' + \
+            '`libMethod` varchar(16) not null, ' + \
+            '`numberOfCell` int not null)' + \
+            'engine=InnoDB default charset=utf8 row_format=compressed key_block_size=8'
+            
+        )
+
+        dbCursor.execute('select `identity` from `' + tableName + '` order by `identity` desc limit 1')
+
+        lastRecord = dbCursor.fetchone()
+
+        if lastRecord is not None:
+
+            self.seqDataModel['identity'] = tableName + '%03X' % (int(lastRecord[0][4:], 16) + 1)
+
+        else:
+
+            self.seqDataModel['identity'] = tableName + '000'
+
+        dbCursor.execute(
+            
+            'insert into `' + tableName + '` set ' + \
+
+            '`identity` = "' +      self.seqDataModel['identity']       + '",' + \
+            '`description` = "' +   self.seqDataModel['description']    + '",' + \
+            '`usedCell` = "' +      self.seqDataModel['usedCell']       + '",' + \
+            '`usedGene` = "' +      self.seqDataModel['usedGene']       + '",' + \
+            '`involvedStudy` = "' + self.seqDataModel['involvedStudy']  + '",' + \
+            '`type` = "' +          self.seqDataModel['type']           + '",' + \
+            '`seqMethod` = "' +     self.seqDataModel['seqMethod']      + '",' + \
+            '`libMethod` = "' +     self.seqDataModel['libMethod']      + '",' + \
+            '`numberOfCell` = ' +   self.seqDataModel['numberOfCell']   + ''
+
+        )
+
+        self.seqDataDB.commit()
+
+
+
+    def handleGeneInfoDB(self, species):
         """"""
 
+        tableName = cornflowerMetadataModel.autoGenerateGeneInfoIdentity(species)
+
         dbCursor = self.geneInfoDB.cursor()
+        dbCursor.execute(
+
+            'create table if not exists `' + tableName + '` (' + \
+            '`identity` char(7) not null primary key, ' + \
+            '`description` mediumtext, ' + \
+            '`alias` longtext not null, ' + \
+            '`species` mediumtext not null) ' + \
+            'engine=InnoDB default charset=utf8 row_format=compressed key_block_size=8'
+            
+        )
+
+        dbCursor.execute('select `identity` from `' + tableName + '` order by `identity` desc limit 1')
+
+        lastRecord = dbCursor.fetchone()
+
+        if lastRecord is not None:
+
+            self.seqDataModel['identity'] = tableName + '%03X' % (int(lastRecord[0][4:], 16) + 1)
+
+        else:
+
+            self.seqDataModel['identity'] = tableName + '000'
+
+        dbCursor.execute(
+            
+            'insert into `' + tableName + '` set ' + \
+
+            '`identity` = "' +      self.seqDataModel['identity']       + '",' + \
+            '`description` = "' +   self.seqDataModel['description']    + '",' + \
+            '`usedCell` = "' +      self.seqDataModel['usedCell']       + '",' + \
+            '`usedGene` = "' +      self.seqDataModel['usedGene']       + '",' + \
+            '`involvedStudy` = "' + self.seqDataModel['involvedStudy']  + '",' + \
+            '`type` = "' +          self.seqDataModel['type']           + '",' + \
+            '`seqMethod` = "' +     self.seqDataModel['seqMethod']      + '",' + \
+            '`libMethod` = "' +     self.seqDataModel['libMethod']      + '",' + \
+            '`numberOfCell` = ' +   self.seqDataModel['numberOfCell']   + ''
+
+        )
+
+        self.seqDataDB.commit()
 
     def handleCellInfoDB(self):
         """"""

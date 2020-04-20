@@ -44,4 +44,4 @@ class Parser:
         posOrNeg = self.METADATA.DATATABLE[fieldName1].to_numpy() * self.METADATA.DATATABLE[fieldName2].to_numpy()
         posOrNeg[posOrNeg > 0] = 1
         
-        self.METADATA.DATATABLE[fieldName1 + '_' + fieldName2] = posOrNeg
+        self.METADATA.DATATABLE[fieldName1 + '/' + fieldName2] = posOrNeg

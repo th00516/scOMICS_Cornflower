@@ -21,13 +21,13 @@ class  Illustration:
 
         self.FIGURE = None
 
-        self.TITLE_SIZE = 28
+        self.TITLE_SIZE = 18
 
 
     def drawMultiScatter(self, sources):
         """"""
 
-        self.FIGURE = make_subplots(1, len(sources))
+        self.FIGURE = make_subplots(1, len(sources), subplot_titles=(sources))
         
         for i in range(0, len(sources)):
 
@@ -38,7 +38,7 @@ class  Illustration:
 
                 self.FIGURE.add_trace(
                     go.Scattergl(
-                        name=sources[i],
+                        name=trace + ' (' + sources[i] + ')',
 
                         x=X,
                         y=Y,
@@ -47,14 +47,14 @@ class  Illustration:
                         marker=dict(
                         
                             size=2,
-                            color=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0]
+                            color=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0],
 
                         ),
                         
                         hoverinfo='text',
                         hovertext=trace,
 
-                        showlegend=False
+                        legendgroup=trace
                     ),
 
                     1,
@@ -80,6 +80,10 @@ class  Illustration:
 
             ),
 
-            showlegend=True
+            legend=dict(
 
+                itemsizing='constant'
+
+            )
+            
         )

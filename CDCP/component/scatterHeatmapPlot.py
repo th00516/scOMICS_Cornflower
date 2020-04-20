@@ -18,7 +18,7 @@ class  Illustration:
 
         self.FIGURE = None
 
-        self.TITLE_SIZE = 28
+        self.TITLE_SIZE = 18
 
 
     def drawScatterHeatmap(self, fieldName):
@@ -41,6 +41,7 @@ class  Illustration:
                 
                     size=2,
                     color=self.METADATA.DATATABLE[fieldName].to_list()[0],
+                    colorscale=['darkblue', 'yellow', 'red'],
                     showscale=True
 
                 ),

@@ -21,15 +21,17 @@ class  Illustration:
 
         self.FIGURE = None
 
-        self.TITLE_SIZE = 28
+        self.TITLE_SIZE = 18
 
 
     def drawMultiScatterHeatmap(self, fieldNames):
         """"""
 
-        self.FIGURE = make_subplots(3, 3, specs=[[{"rowspan": 2, "colspan": 3}, None, None], 
-                                                 [None, None, None], 
-                                                 [{}, {}, {}]])
+        self.FIGURE = make_subplots(2, 2, specs=[[None, {}], 
+                                                 [{}, {}]],
+                                                 subplot_titles=(fieldNames[0] + ' (Exp.)', 
+                                                    'Co-exp. ' + fieldNames[1],
+                                                    'Co-exp. ' + fieldNames[2]))
 
         X = self.METADATA.DATATABLE['UMAP1'].to_list()[0]
         Y = self.METADATA.DATATABLE['UMAP2'].to_list()[0]
@@ -55,7 +57,7 @@ class  Illustration:
                 hovertext=self.METADATA.DATATABLE[fieldNames[0]].to_list()[0]
             ),
 
-            1, 1
+            1, 2
         )
         
         for i in range(1, len(fieldNames)):
@@ -72,7 +74,8 @@ class  Illustration:
                     
                         size=2,
                         color=self.METADATA.DATATABLE[fieldNames[i]].to_list()[0],
-                        colorscale=['lightgrey', 'green']
+                        colorscale=['lightgrey', 'green'],
+                        opacity = 0.6
 
                     ),
 
@@ -81,7 +84,7 @@ class  Illustration:
                     showlegend=False
                 ),
 
-                3, i
+                2, i
             )
 
         self.FIGURE.update_xaxes(matches='x')

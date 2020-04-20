@@ -27,8 +27,6 @@ class Metadata:
             'typeSet': [],
             'sourceSet': [],
 
-            'color': []
-
         }
 
 

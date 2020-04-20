@@ -20,10 +20,10 @@ class  Illustration:
 
         self.FIGURE = None
 
-        self.TITLE_SIZE = 28
+        self.TITLE_SIZE = 18
 
 
-    def drawBar(self):
+    def drawViolin(self, fieldName):
         """"""
 
         self.FIGURE = go.Figure()
@@ -31,14 +31,18 @@ class  Illustration:
         for trace in self.METADATA.FEATURE['typeSet']:
 
             self.FIGURE.add_trace(
-                go.Bar(
+                go.Violin(
                     name=trace,
 
-                    x=[trace],
-                    y=[self.METADATA.DATATABLE[f.TYPE == trace, 'CELL'].nrows],
+                    y=self.METADATA.DATATABLE[f.TYPE == trace, fieldName].to_list()[0],
 
-                    marker_color=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0],
-                    marker_line_color='white',
+                    fillcolor=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0],
+                    line_color=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0],
+                    opacity = 0.7,
+
+                    line_width=2,
+
+                    points=False,
 
                     hoverinfo='text',
                     hovertext=trace,
@@ -55,15 +59,13 @@ class  Illustration:
 
                 text='Cell Number in Clusters', 
                 font=dict(
-                    
+
                     family='Arial', 
                     size=self.TITLE_SIZE
-
+                    
                 )
 
             ),
 
-            yaxis_type='log', 
             xaxis_tickangle=-45
-
         )

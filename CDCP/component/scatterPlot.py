@@ -20,7 +20,7 @@ class  Illustration:
 
         self.FIGURE = None
 
-        self.TITLE_SIZE = 28
+        self.TITLE_SIZE = 18
 
 
     def drawScatter(self, dim):
@@ -47,7 +47,7 @@ class  Illustration:
                         marker=dict(
                         
                             size=2,
-                            color=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0]
+                            color=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0],
 
                         ),
 
@@ -71,6 +71,7 @@ class  Illustration:
                         
                             size=2,
                             color=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0],
+                            opacity = 0.6,
 
                         ),
                         

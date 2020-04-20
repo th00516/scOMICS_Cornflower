@@ -41,3 +41,8 @@ class Metadata:
 
         self.FEATURE['typeSet'] = sorted(set(self.DATATABLE['TYPE'].to_list()[0]))
         self.FEATURE['sourceSet'] = sorted(set(self.DATATABLE['SOURCE'].to_list()[0]))
+
+        self.FEATURE['posExpRate'] = {
+            _: np.nonzero(self.DATATABLE[_].to_numpy())[0].size / self.FEATURE['numCell'] * 100
+            for _ in self.DATATABLE.keys()[6:6 + self.FEATURE['numGene']]
+        }

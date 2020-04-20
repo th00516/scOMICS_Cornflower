@@ -21,7 +21,7 @@ class WebFramework():
         self.FRAMEWORK = frameworkObj
 
 
-    def build(self, metadataObj, plotObjs):
+    def build(self, metadataObj):
         """"""
 
         self.FRAMEWORK.app.layout = html.Div(
@@ -120,116 +120,109 @@ class WebFramework():
 
                                         )
                                     ),
-
-                                    html.Div(
-                                        [
-                                            html.Button(
-                                                'Co-Exp.',
-
-                                                style=dict(
-
-                                                    border='1px solid #D3D3D3',
-                                                    margin=5,
-                                                    padding=5,
-
-                                                    width=70,
-                                                    height=30
-
-                                                )
-                                            ),
-
-                                            html.Button(
-                                                'Stat.',
-
-                                                style=dict(
-
-                                                    border='1px solid #D3D3D3',
-                                                    margin=5,
-                                                    padding=5,
-
-                                                    width=70,
-                                                    height=30
-
-                                                )
-                                            ),
-
-                                            html.Button(
-                                                'Show',
-
-                                                style=dict(
-
-                                                    border='1px solid #D3D3D3',
-                                                    margin=5,
-                                                    padding=5,
-
-                                                    width=70,
-                                                    height=30
-
-                                                )
-                                            )
-                                        ],
-
-                                        id='controlPanelRegion',
-                                        
-                                        style=dict(
-
-                                            display='flex',
-                                            flexWrap='nowrap',
-                                            flexDirection='row',
-                                            justifyContent='space-around',
-
-                                            border='1px solid #D3D3D3',
-                                            margin=5,
-                                            padding=10,
-
-                                            width=250
-
-                                        )
-                                    ),
                                     
                                     html.Div(
-                                        dcc.Loading(
-                                            dt.DataTable(
-                                                data=[{'Pos %': 100, 'Gene List': g} for g in metadataObj.DATATABLE.keys()[6:6 + metadataObj.FEATURE['numGene']]],
-                                                columns=[{'name':'Pos %', 'id':'Pos %'}, {'name': 'Gene List', 'id': 'Gene List'}],
+                                        [
+                                            html.Div(
+                                                [
+                                                    html.Button(
+                                                        'Co-Exp.',
 
-                                                id = 'geneList',
+                                                        id='co-exp',
 
-                                                filter_action='native',
+                                                        style=dict(
 
-                                                row_selectable='multi',
+                                                            border='1px solid #D3D3D3',
+                                                            margin=5,
+                                                            padding=5,
 
-                                                fixed_rows={'headers': True},
+                                                            width=100,
+                                                            height=30
 
-                                                style_table=dict(
+                                                        )
+                                                    ),
 
-                                                    height=200
+                                                    html.Button(
+                                                        'CLEAN',
 
-                                                ),
+                                                        id='clean',
 
-                                                style_header=dict(
-                                                    
-                                                    fontFamily='Arial',
-                                                    fontStyle='normal',
-                                                    fontWeight='bold',
-                                                    fontSize=18
+                                                        style=dict(
 
-                                                ),
+                                                            border='1px solid #D3D3D3',
+                                                            margin=5,
+                                                            padding=5,
 
-                                                style_cell=dict(
+                                                            width=100,
+                                                            height=30
 
-                                                    padding=5,
+                                                        )
+                                                    )
+                                                ],
 
-                                                    fontFamily='Arial',
-                                                    fontStyle='italic',
+                                                id='controlPanelRegion',
+                                                
+                                                style=dict(
 
-                                                    cursor='default'
+                                                    display='flex',
+                                                    flexWrap='nowrap',
+                                                    flexDirection='row',
+                                                    justifyContent='space-around',
+
+                                                    margin=5,
+                                                    padding=10
 
                                                 )
                                             ),
 
-                                            type='circle'
-                                        ),
+                                            dcc.Loading(
+                                                dt.DataTable(
+                                                    data=[
+                                                        {'Pos %': '%0.2f' % metadataObj.FEATURE['posExpRate'][g], 'Gene List': g} 
+                                                        for g in metadataObj.DATATABLE.keys()[6:6 + metadataObj.FEATURE['numGene']]
+                                                    ],
+                                                    columns=[{'name':'Pos %', 'id':'Pos %'}, {'name': 'Gene List', 'id': 'Gene List'}],
+
+                                                    id = 'geneList',
+
+                                                    filter_action='native',
+
+                                                    row_selectable='multi',
+
+                                                    fixed_rows={'headers': True},
+
+                                                    style_table=dict(
+
+                                                        height=200
+
+                                                    ),
+
+                                                    style_header=dict(
+                                                        
+                                                        fontFamily='Arial',
+                                                        fontStyle='normal',
+                                                        fontWeight='bold',
+                                                        fontSize=18
+
+                                                    ),
+
+                                                    style_cell=dict(
+
+                                                        padding=5,
+
+                                                        width=100,
+
+                                                        fontFamily='Arial',
+                                                        fontStyle='italic',
+
+                                                        cursor='default'
+
+                                                    )
+                                                ),
+
+                                                type='circle'
+                                            )
+                                        ],
 
                                         id='geneListRegion',
 
@@ -240,7 +233,7 @@ class WebFramework():
                                             padding=10,
 
                                             width=250,
-                                            height=280
+                                            height=350
 
                                         )
                                     )
@@ -265,8 +258,6 @@ class WebFramework():
                             html.Div(
                                 dcc.Loading(
                                     dcc.Graph(
-                                        figure=plotObjs[0],
-
                                         id='mainPlot',
 
                                         style=dict(
@@ -355,6 +346,8 @@ class WebFramework():
                                         type='circle'
                                     )
                                 ],
+
+                                id='supplementaryPlotRegion',
 
                                 style=dict(
 

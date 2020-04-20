@@ -36,9 +36,8 @@ class  Illustration:
 
                     y=self.METADATA.DATATABLE[f.TYPE == trace, fieldName].to_list()[0],
 
-                    fillcolor=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0],
-                    line_color=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0],
-                    opacity = 0.7,
+                    fillcolor=self.METADATA.COLOR[f.GROUP == trace, 'COLOR'][0, 0],
+                    line_color=self.METADATA.COLOR[f.GROUP == trace, 'COLOR'][0, 0],
 
                     line_width=2,
 
@@ -57,7 +56,7 @@ class  Illustration:
 
             title=dict(
 
-                text='Cell Number in Clusters', 
+                text='Exp. Distribution of <i>' + fieldName +'</i> in Each Cluster', 
                 font=dict(
 
                     family='Arial', 

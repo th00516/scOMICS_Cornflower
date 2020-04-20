@@ -23,18 +23,17 @@ class  Illustration:
         self.TITLE_SIZE = 18
 
 
-    def drawScatter(self, dim):
+    def drawScatter(self, cluster_class):
         """"""
 
         self.FIGURE = go.Figure()
 
-        for trace in self.METADATA.FEATURE['typeSet']:
+        if cluster_class == 'Cell Type':
 
-            X = self.METADATA.DATATABLE[f.TYPE == trace, 'UMAP1'].to_list()[0]
-            Y = self.METADATA.DATATABLE[f.TYPE == trace, 'UMAP2'].to_list()[0]
-            Z = self.METADATA.DATATABLE[f.TYPE == trace, 'UMAP3'].to_list()[0]
+            for trace in self.METADATA.FEATURE['typeSet']:
 
-            if dim == 2:
+                X = self.METADATA.DATATABLE[f.TYPE == trace, 'UMAP1'].to_list()[0]
+                Y = self.METADATA.DATATABLE[f.TYPE == trace, 'UMAP2'].to_list()[0]
 
                 self.FIGURE.add_trace(
                     go.Scattergl(
@@ -47,7 +46,7 @@ class  Illustration:
                         marker=dict(
                         
                             size=2,
-                            color=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0],
+                            color=self.METADATA.COLOR[f.GROUP == trace, 'COLOR'][0, 0],
 
                         ),
 
@@ -56,25 +55,28 @@ class  Illustration:
                     )
                 )
 
-            if dim == 3:
+        if cluster_class == 'Source':
+
+            for trace in self.METADATA.FEATURE['sourceSet']:
+
+                X = self.METADATA.DATATABLE[f.SOURCE == trace, 'UMAP1'].to_list()[0]
+                Y = self.METADATA.DATATABLE[f.SOURCE == trace, 'UMAP2'].to_list()[0]
 
                 self.FIGURE.add_trace(
-                    go.Scatter3d(
+                    go.Scattergl(
                         name=trace,
 
                         x=X,
                         y=Y,
-                        z=Z,
 
                         mode='markers',
                         marker=dict(
                         
                             size=2,
-                            color=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0],
-                            opacity = 0.6,
+                            color=self.METADATA.COLOR[f.GROUP == trace, 'COLOR'][0, 0],
 
                         ),
-                        
+
                         hoverinfo='text',
                         hovertext=trace
                     )
@@ -87,7 +89,7 @@ class  Illustration:
 
             title=dict(
 
-                text='Cell Type Cluster',
+                text='Cluster by ' + cluster_class,
                 font=dict(
 
                     family='Arial', 

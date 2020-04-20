@@ -47,7 +47,7 @@ class  Illustration:
                         marker=dict(
                         
                             size=2,
-                            color=self.METADATA.COLOR[f.TYPE == trace, 'COLOR'][0, 0],
+                            color=self.METADATA.COLOR[f.GROUP == trace, 'COLOR'][0, 0],
 
                         ),
                         
@@ -70,7 +70,7 @@ class  Illustration:
 
             title=dict(
 
-                text='Cell Type Cluster (Multiplot)', 
+                text='Cluster by Cell Type (Multiplot)', 
                 font=dict(
 
                     family='Arial', 

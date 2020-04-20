@@ -27,7 +27,7 @@ class  Illustration:
     def drawMultiScatterHeatmap(self, fieldNames):
         """"""
 
-        self.FIGURE = make_subplots(2, 2, specs=[[None, {}], 
+        self.FIGURE = make_subplots(2, 2, specs=[[{}, {}], 
                                                  [{}, {}]],
                                                  subplot_titles=(fieldNames[0] + ' (Exp.)', 
                                                     'Co-exp. ' + fieldNames[1],

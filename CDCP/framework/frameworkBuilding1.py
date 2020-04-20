@@ -3,14 +3,13 @@
 
 
 
+import dash_table as dt
 import dash_html_components as html
 import dash_core_components as dcc
-import dash_table as dt
 
 from . import frameworkDeploy
 
-from dash.dependencies import Input, Output
-import time
+
 
 
 class WebFramework():
@@ -20,6 +19,7 @@ class WebFramework():
         """"""
 
         self.FRAMEWORK = frameworkObj
+
 
     def build(self, metadataObj, plotObjs):
         """"""
@@ -34,7 +34,7 @@ class WebFramework():
 
                         style=dict(
 
-                            border='1px solid black',
+                            border='1px solid #D3D3D3',
                             margin=5,
 
                             width=1100,
@@ -49,61 +49,200 @@ class WebFramework():
                                 [
                                     html.Div(
                                         [
-                                            html.P(
-                                                'control panel'
+                                            html.Div('Select a data set', style=dict(padding=5)),
+
+                                            dcc.Dropdown(
+                                                options=[
+
+                                                    {'label': '(All)', 'value': 'All'},
+                                                    {'label': 'Aorta', 'value': 'Aorta'},
+                                                    {'label': 'Kidney', 'value': 'Kidney'},
+                                                    {'label': 'Liver', 'value': 'Liver'},
+                                                    {'label': 'Lung', 'value': 'Lung'},
+                                                    {'label': 'Neocortex', 'value': 'Neocortex'},
+                                                    {'label': 'Pancreas', 'value': 'Pancreas'},
+                                                    {'label': 'Parotid', 'value': 'Parotid'},
+                                                    {'label': 'PBMC', 'value': 'PBMC'},
+                                                    {'label': 'Thyroid', 'value': 'Thyroid'}
+                                                    
+                                                ],
+                                                value='All',
+
+                                                id='selectDataSet',
+
+                                                clearable=False,
+                                                searchable=False
                                             )
                                         ],
 
-                                        id='controlPanel',
+                                        id='selectDataSetRegion',
+
+                                        style=dict(
+
+                                            border='1px solid #D3D3D3',
+                                            margin=5,
+                                            padding=10,
+
+                                            width=250
+
+                                        )
+                                    ),
+
+                                    html.Div(
+                                        [
+                                            html.Div('Select a cluster mode', style=dict(padding=5)),
+                                            
+                                            dcc.Dropdown(
+                                                options=[
+
+                                                    {'label': 'by Cell Type', 'value': 'CT'},
+                                                    {'label': 'by Source', 'value': 'SO'},
+                                                    
+                                                ],
+                                                value='CT',
+
+                                                id='selectClusterMode',
+
+                                                clearable=False,
+                                                searchable=False
+                                            )
+                                        ],
+
+                                        id='selectClusterModeRegion',
+
+                                        style=dict(
+
+                                            border='1px solid #D3D3D3',
+                                            margin=5,
+                                            padding=10,
+
+                                            width=250
+
+                                        )
+                                    ),
+
+                                    html.Div(
+                                        [
+                                            html.Button(
+                                                'Co-Exp.',
+
+                                                style=dict(
+
+                                                    border='1px solid #D3D3D3',
+                                                    margin=5,
+                                                    padding=5,
+
+                                                    width=70,
+                                                    height=30
+
+                                                )
+                                            ),
+
+                                            html.Button(
+                                                'Stat.',
+
+                                                style=dict(
+
+                                                    border='1px solid #D3D3D3',
+                                                    margin=5,
+                                                    padding=5,
+
+                                                    width=70,
+                                                    height=30
+
+                                                )
+                                            ),
+
+                                            html.Button(
+                                                'Show',
+
+                                                style=dict(
+
+                                                    border='1px solid #D3D3D3',
+                                                    margin=5,
+                                                    padding=5,
+
+                                                    width=70,
+                                                    height=30
+
+                                                )
+                                            )
+                                        ],
+
+                                        id='controlPanelRegion',
                                         
                                         style=dict(
 
-                                            border='1px solid black',
+                                            display='flex',
+                                            flexWrap='nowrap',
+                                            flexDirection='row',
+                                            justifyContent='space-around',
+
+                                            border='1px solid #D3D3D3',
                                             margin=5,
-                                            padding=10
+                                            padding=10,
+
+                                            width=250
 
                                         )
                                     ),
                                     
-                                    dt.DataTable(
-                                        data=[{'Gene List': g} for g in metadataObj.DATATABLE.keys()[6:6 + metadataObj.FEATURE['numGene']]],
-                                        columns=[{'name': 'Gene List', 'id': 'Gene List'}],
+                                    html.Div(
+                                        dcc.Loading(
+                                            dt.DataTable(
+                                                data=[{'Pos %': 100, 'Gene List': g} for g in metadataObj.DATATABLE.keys()[6:6 + metadataObj.FEATURE['numGene']]],
+                                                columns=[{'name':'Pos %', 'id':'Pos %'}, {'name': 'Gene List', 'id': 'Gene List'}],
 
-                                        id = 'geneList',
+                                                id = 'geneList',
 
-                                        filter_action='native',
+                                                filter_action='native',
 
-                                        row_selectable=True,
+                                                row_selectable='multi',
 
-                                        fixed_rows={'headers': True},
+                                                fixed_rows={'headers': True},
 
-                                        style_table=dict(
+                                                style_table=dict(
 
+                                                    height=200
+
+                                                ),
+
+                                                style_header=dict(
+                                                    
+                                                    fontFamily='Arial',
+                                                    fontStyle='normal',
+                                                    fontWeight='bold',
+                                                    fontSize=18
+
+                                                ),
+
+                                                style_cell=dict(
+
+                                                    padding=5,
+
+                                                    fontFamily='Arial',
+                                                    fontStyle='italic',
+
+                                                    cursor='default'
+
+                                                )
+                                            ),
+
+                                            type='circle'
+                                        ),
+
+                                        id='geneListRegion',
+
+                                        style=dict(
+
+                                            border='1px solid #D3D3D3',
                                             margin=5,
+                                            padding=10,
 
-                                            width=190,
-                                            height=200
-
-                                        ),
-
-                                        style_header=dict(
-                                            
-                                            fontFamily='Arial',
-                                            fontStyle='normal',
-                                            fontWeight='bold',
-                                            fontSize=18
-
-                                        ),
-
-                                        style_cell=dict(
-
-                                            fontFamily='Arial',
-                                            fontStyle='italic',
-
-                                            cursor='default'
+                                            width=250,
+                                            height=280
 
                                         )
-
                                     )
                                 ],
 
@@ -116,10 +255,9 @@ class WebFramework():
                                     flexDirection='column',
                                     justifyContent='flex-start',
 
-                                    # border='1px solid black',
                                     margin=5,
 
-                                    width=200
+                                    width=250
 
                                 )
                             ),
@@ -140,6 +278,8 @@ class WebFramework():
 
                                     type='circle'
                                 ),
+
+                                id='mainPlotRegion',
 
                                 style=dict(
 
@@ -164,7 +304,7 @@ class WebFramework():
                             flexDirection='row',
                             justifyContent='space-around',
 
-                            border='1px solid black',
+                            border='1px solid #D3D3D3',
                             margin=5,
 
                             width=1100
@@ -176,21 +316,44 @@ class WebFramework():
                         [
                             html.Div(
                                 [
-                                    # dcc.Loading(
-                                    #     dcc.Graph(
-                                    #         figure=plotObjs[1],
+                                    dcc.Loading(
+                                        dcc.Graph(                                            
+                                            id='supplementaryPlot1',
 
-                                    #         id='supplementaryPlot1'
-                                    #     )
-                                    # ),
+                                            style=dict(
 
-                                    # dcc.Loading(
-                                    #     dcc.Graph(
-                                    #         figure=plotObjs[2],
+                                                width=1000
 
-                                    #         id='supplementaryPlot2'
-                                    #     )
-                                    # )
+                                            )
+                                        ),
+
+                                        type='circle'
+                                    ),
+
+                                    html.Hr(
+                                        style=dict(
+
+                                            border='1px solid #D3D3D3',
+                                            margin=20,
+
+                                            height=0
+
+                                        )
+                                    ),
+
+                                    dcc.Loading(
+                                        dcc.Graph(
+                                            id='supplementaryPlot2',
+
+                                            style=dict(
+
+                                                width=1000
+
+                                            )
+                                        ),
+
+                                        type='circle'
+                                    )
                                 ],
 
                                 style=dict(
@@ -199,9 +362,7 @@ class WebFramework():
                                     flexWrap='nowrap',
                                     flexDirection='column',
                                     justifyContent='space-around',
-                                    alignContent='space-around',
-
-                                    border='1px solid black'
+                                    alignContent='space-around'
 
                                 )
                             )
@@ -216,7 +377,7 @@ class WebFramework():
                             flexDirection='row',
                             justifyContent='space-around',
 
-                            border='1px solid black',
+                            border='1px solid #D3D3D3',
                             margin=5,
 
                             width=1100
@@ -246,21 +407,3 @@ class WebFramework():
 
             )
         )
-
-
-
-
-        @self.FRAMEWORK.app.callback(Output("mainPlot", "id"), [Input("L1", "children")])
-        def loading_mainPlot(DUMP):
-            time.sleep(2)
-            return 'mainPlot'
-
-        # @self.FRAMEWORK.app.callback(Output("supplementaryPlot1", "id"), [Input("L2", "children")])
-        # def loading_supplementaryPlot1(DUMP):
-        #     time.sleep(2)
-        #     return 'supplementaryPlot1'
-
-        # @self.FRAMEWORK.app.callback(Output("supplementaryPlot2", "id"), [Input("L2", "children")])
-        # def loading_supplementaryPlot2(DUMP):
-        #     time.sleep(2)
-        #     return 'supplementaryPlot2'

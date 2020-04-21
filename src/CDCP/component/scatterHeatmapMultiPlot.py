@@ -25,41 +25,17 @@ class  Illustration:
     def drawMultiScatterHeatmap(self, fieldNames):
         """"""
 
-        if len(fieldNames) > 4:
-            fieldNames = fieldNames[:4]
-
-        title = []
-
-        if len(fieldNames) == 2:
-
-            title = [
-
-                fieldNames[1] + ' (Co-exp.)', 
-                fieldNames[0] + ' (Exp.)'
-
-            ]
-
-        if len(fieldNames) == 3:
-
-            title = [
-
-                fieldNames[1] + ' (Co-exp.)', 
-                fieldNames[0] + ' (Exp.)', 
-                fieldNames[2] + ' (Co-exp.)'
-
-            ]
-
-        if len(fieldNames) == 4:
-
-            title = [
-
-                fieldNames[1] + ' (Co-exp.)', 
-                fieldNames[0] + ' (Exp.)', 
-                fieldNames[2] + ' (Co-exp.)',
-                fieldNames[3] + ' (Co-exp.)'
-
-            ]
+        title = [
             
+            fieldNames[1] + ' (Co-exp.)', 
+            fieldNames[0] + ' (Exp.)'
+
+        ]
+
+        if len(fieldNames) > 2:
+            for i in range(2, len(fieldNames)):
+                title.append(fieldNames[i] + ' (Co-exp.)')
+
 
         self.FIGURE = make_subplots(2, 2, specs=[[{}, {}], [{}, {}]], subplot_titles=title)
 
@@ -145,6 +121,7 @@ class  Illustration:
 
                     2, i - 1
                 )
+
 
         self.FIGURE.update_xaxes(matches='x')
         self.FIGURE.update_yaxes(matches='y')

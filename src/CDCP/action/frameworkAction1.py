@@ -3,11 +3,14 @@
 
 
 
+import time
+
 from dash.dependencies import Input, Output, State
 from . import basicComparison
 
 from CDCP.component import scatterHeatmapPlot
 from CDCP.component import scatterHeatmapMultiPlot
+from CDCP.component import heatmapPlot_expCorrelation
 from CDCP.component import violinPlot
 
 
@@ -27,21 +30,30 @@ class WebFrameworkAction():
 
         ## 初始化 ##
         @self.FRAMEWORK.app.callback(
+            Output('time', 'children'), 
+            [Input('mainPlot', 'figure')])
+        def loading_framework(DUMP):
+            return 'Copyright for CDCP group of BGI in ' + time.strftime("%Y", time.localtime())
+
+
+
+
+        @self.FRAMEWORK.app.callback(
             Output('geneList', 'id'), 
-            [Input('geneListRegion', 'children')])
+            [Input('geneList', 'data')])
         def loading_geneList(DUMP):
             return 'geneList'
 
         @self.FRAMEWORK.app.callback(
             Output('mainPlot', 'id'), 
-            [Input('mainPlotRegion', 'children')])
+            [Input('mainPlot', 'figure')])
         def loading_mainPlot(DUMP):
             return 'mainPlot'
 
 
         @self.FRAMEWORK.app.callback(
             Output('supplementaryPlot1', 'id'), 
-            [Input('supplementaryPlotRegion', 'children')])
+            [Input('supplementaryPlot1', 'figure')])
         def loading_supplementaryPlot1(DUMP):
             return 'supplementaryPlot1'
 
@@ -91,12 +103,19 @@ class WebFrameworkAction():
                 
                 gene_list = [metadataPool[value1].FEATURE['geneList'][_] for _ in value3]
 
-                if len(value3) > 1:
+                if len(value3) == 1:
+
+                    PL = scatterHeatmapPlot.Illustration(metadataPool[value1])
+                    PL.drawScatterHeatmap(gene_list[0])
+
+                    return PL.FIGURE
+
+                if 4 >= len(value3) > 1:
 
                     comp_list = [gene_list[0]]
 
                     for i in range(1, len(gene_list)):
-                        PS.compareFields(gene_list[0], gene_list[i])
+                        PS.genePairCoExp(gene_list[0], gene_list[i])
                         comp_list.append(gene_list[0] + '/' + gene_list[i])
 
                     PL = scatterHeatmapMultiPlot.Illustration(metadataPool[value1])
@@ -104,10 +123,12 @@ class WebFrameworkAction():
 
                     return PL.FIGURE
 
-                else:
+                if len(value3) > 4:
 
-                    PL = scatterHeatmapPlot.Illustration(metadataPool[value1])
-                    PL.drawScatterHeatmap(gene_list[0])
+                    PS.multiGenesExpCor(gene_list)
+
+                    PL = heatmapPlot_expCorrelation.Illustration(metadataPool[value1])
+                    PL.drawHeatmap(gene_list)
 
                     return PL.FIGURE
 
@@ -143,21 +164,19 @@ class WebFrameworkAction():
         ## 其他 ##
         @self.FRAMEWORK.app.callback(   
             Output('selectDataSet', 'disabled'), 
-            [Input('selectClusterMode', 'value'),
-             Input('geneList', 'selected_rows')])
-        def disable_selectDataSet(value1, value2):
+            [Input('geneList', 'selected_rows')])
+        def disable_selectDataSet(value):
 
-            if value1 != 'CT' or value2 is not None and len(value2) > 0:
+            if value is not None and len(value) > 0:
                 return True
 
 
         @self.FRAMEWORK.app.callback(   
             Output('selectClusterMode', 'disabled'), 
-            [Input('selectDataSet', 'value'),
-             Input('geneList', 'selected_rows')])
-        def disable_selectClusterMode(value1, value2):
+            [Input('geneList', 'selected_rows')])
+        def disable_selectClusterMode(value):
 
-            if value1 != 'All' or value2 is not None and len(value2) > 0:
+            if value is not None and len(value) > 0:
                 return True
 
 
@@ -189,6 +208,8 @@ class WebFrameworkAction():
 
 
         #### 调用反馈函数并赋予None参数，用于满足语法检查需求 ####
+        loading_framework(None)
+
         loading_geneList(None)
         loading_mainPlot(None)
         loading_supplementaryPlot1(None)
@@ -197,8 +218,8 @@ class WebFrameworkAction():
         update_mainPlot(None, None, None, None)
         update_supplementaryPlot1(None, None, None, None)
 
-        disable_selectDataSet(None, None)
-        disable_selectClusterMode(None, None)
+        disable_selectDataSet(None)
+        disable_selectClusterMode(None)
 
         disable_coExpButton(None)
         disable_cleanButton(None)

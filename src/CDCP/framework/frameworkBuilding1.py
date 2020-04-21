@@ -30,7 +30,7 @@ class WebFramework():
                     html.Img(
                         src='http://127.0.0.1/Logo.jpg',
 
-                        id='logo',
+                        id='LOGO',
 
                         style=dict(
 
@@ -190,9 +190,11 @@ class WebFramework():
 
                                                 fixed_rows={'headers': True},
 
+                                                page_size=6,
+
                                                 style_table=dict(
 
-                                                    height=200
+                                                    height=250
 
                                                 ),
 
@@ -209,7 +211,8 @@ class WebFramework():
 
                                                     padding=5,
 
-                                                    width=100,
+                                                    maxWidth=100,
+                                                    minWidth=100,
 
                                                     fontFamily='Arial',
                                                     fontStyle='italic',
@@ -351,10 +354,32 @@ class WebFramework():
                         )
                     ),
 
-                    dcc.Store(id='storeTempPool')
+                    html.Div(
+                        [
+
+                            html.H5(id='time')
+
+                        ],
+
+                        id='BOTTOM',
+
+                        style=dict(
+
+                            display='flex',
+                            flexWrap='nowrap',
+                            flexDirection='row',
+                            justifyContent='center',
+
+                            margin=5,
+
+                            width=1100,
+                            height=50
+
+                        )
+                    )
                 ],
 
-                id='main',
+                id='MAIN',
 
                 style=dict(
 

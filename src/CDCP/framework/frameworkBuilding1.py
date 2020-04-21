@@ -28,7 +28,7 @@ class WebFramework():
             html.Div(
                 [
                     html.Img(
-                        src='',
+                        src='http://127.0.0.1/Logo.jpg',
 
                         id='logo',
 

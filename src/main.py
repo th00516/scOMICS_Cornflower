@@ -18,30 +18,33 @@ from CDCP.action import frameworkAction1
 if __name__ == '__main__':
 
     ## 导入并解析数据 ##
-    DT = prepareTsv.Metadata()
-    DT.formatData('data/All')
-    
-
-
-
-    ## 预置的Plots ##
     P = {}
-
-    PL = scatterPlot.Illustration(DT)
     
-    PL.drawScatter('Cell Type')
-    P.update({'celltype': PL.FIGURE})
+    DT = prepareTsv.Metadata()
 
-    PL.drawScatter('Source')
-    P.update({'source': PL.FIGURE})
+    # for dataset in ['All', 'Aorta', 'Kidney', 'Liver', 'Lung', 'Neocortex', 'PBMC', 'Pancreas', 'Parotid', 'Thyroid']:
+    for dataset in ['All', 'Aorta']:
 
-    PL = barPlot_cellNumber.Illustration(DT)
+        P.update({dataset:{}})
 
-    PL.drawBar('Cell Type')
-    P.update({'num_celltype': PL.FIGURE})
+        DT.formatData('data/' + dataset)
+    
+        ## 预置的Plots ##
+        PL = scatterPlot.Illustration(DT)
+        
+        PL.drawScatter('Cell Type')
+        P[dataset].update({'celltype': PL.FIGURE})
 
-    PL.drawBar('Source')
-    P.update({'num_source': PL.FIGURE})
+        PL.drawScatter('Source')
+        P[dataset].update({'source': PL.FIGURE})
+
+        PL = barPlot_cellNumber.Illustration(DT)
+
+        PL.drawBar('Cell Type')
+        P[dataset].update({'num_celltype': PL.FIGURE})
+
+        PL.drawBar('Source')
+        P[dataset].update({'num_source': PL.FIGURE})
 
 
 

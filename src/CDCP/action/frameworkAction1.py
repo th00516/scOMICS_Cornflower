@@ -61,17 +61,11 @@ class WebFrameworkAction():
 
             if value3 is None or value3 == []:
 
-                if value1 == 'All':
+                if value2 == 'CT':
+                    return plotPool[value1]['celltype']
 
-                    if value2 == 'CT':
-                        return plotPool['celltype']
-
-                    if value2 == 'SO':
-                        return plotPool['source']
-
-                else:
-
-                    return plotPool['celltype']
+                if value2 == 'SO':
+                    return plotPool[value1]['source']
 
             else:
                 
@@ -108,17 +102,11 @@ class WebFrameworkAction():
             
             if value3 is None or value3 == []:
 
-                if value1 == 'All':
+                if value2 == 'CT':
+                    return plotPool[value1]['num_celltype']
 
-                    if value2 == 'CT':
-                        return plotPool['num_celltype']
-
-                    if value2 == 'SO':
-                        return plotPool['num_source']
-
-                else:
-
-                    return plotPool['num_celltype']
+                if value2 == 'SO':
+                    return plotPool[value1]['num_source']
 
             else:
 
@@ -135,10 +123,11 @@ class WebFrameworkAction():
         ## 其他 ##
         @self.FRAMEWORK.app.callback(   
             Output('selectDataSet', 'disabled'), 
-            [Input('geneList', 'selected_rows')])
-        def disable_selectDataSet(value):
+            [Input('selectClusterMode', 'value'),
+             Input('geneList', 'selected_rows')])
+        def disable_selectDataSet(value1, value2):
 
-            if value is not None and len(value) > 0:
+            if value1 != 'CT' or value2 is not None and len(value2) > 0:
                 return True
 
 
@@ -187,7 +176,7 @@ class WebFrameworkAction():
         update_mainPlot(None, None, None, None)
         update_supplementaryPlot1(None, None, None, None)
 
-        disable_selectDataSet(None)
+        disable_selectDataSet(None, None)
         disable_selectClusterMode(None, None)
 
         disable_coExpButton(None)

@@ -18,7 +18,7 @@ class Parser:
         self.METADATA = metadataObj
 
 
-    def compareFields(self, fieldName1, fieldName2):
+    def genePairCoExp(self, fieldName1, fieldName2):
         """"""
 
         if fieldName1 + '/' + fieldName2 not in self.METADATA.DATATABLE.keys():
@@ -27,3 +27,12 @@ class Parser:
             posOrNeg[posOrNeg > 0] = 1
             
             self.METADATA.DATATABLE[fieldName1 + '/' + fieldName2] = posOrNeg
+
+
+    def multiGenesExpCor(self, fieldNames):
+        """"""
+        
+        mat = np.vstack([self.METADATA.DATATABLE[_].to_list()[0] for _ in fieldNames])
+        mat = np.where(mat != 1e-8, np.log(mat + 1e-8), 0)
+
+        self.METADATA.MATRIX = np.corrcoef(mat)

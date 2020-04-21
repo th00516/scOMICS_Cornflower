@@ -57,7 +57,7 @@ class  Illustration:
 
             title=dict(
 
-                text='Expression Heatmap', 
+                text='Expression Heatmap of <i>' + fieldName +'</i>', 
                 font=dict(
 
                     family='Arial', 

@@ -49,7 +49,7 @@ class WebFramework():
                                 [
                                     html.Div(
                                         [
-                                            html.Div('Select a data set', style=dict(padding=5)),
+                                            html.Div('Select a data set', style=dict(padding=10)),
 
                                             dcc.Dropdown(
                                                 options=[
@@ -90,7 +90,7 @@ class WebFramework():
 
                                     html.Div(
                                         [
-                                            html.Div('Select a cluster mode', style=dict(padding=5)),
+                                            html.Div('Select a cluster mode', style=dict(padding=10)),
                                             
                                             dcc.Dropdown(
                                                 options=[
@@ -128,7 +128,9 @@ class WebFramework():
                                                     html.Button(
                                                         'Co-Exp.',
 
-                                                        id='co-exp',
+                                                        id='co-expButton',
+
+                                                        n_clicks=0,
 
                                                         style=dict(
 
@@ -145,7 +147,9 @@ class WebFramework():
                                                     html.Button(
                                                         'CLEAN',
 
-                                                        id='clean',
+                                                        id='cleanButton',
+
+                                                        n_clicks=0,
 
                                                         style=dict(
 
@@ -175,52 +179,48 @@ class WebFramework():
                                                 )
                                             ),
 
-                                            dcc.Loading(
-                                                dt.DataTable(
-                                                    data=[
-                                                        {'Pos %': '%0.2f' % metadataObj.FEATURE['posExpRate'][g], 'Gene List': g} 
-                                                        for g in metadataObj.DATATABLE.keys()[6:6 + metadataObj.FEATURE['numGene']]
-                                                    ],
-                                                    columns=[{'name':'Pos %', 'id':'Pos %'}, {'name': 'Gene List', 'id': 'Gene List'}],
+                                            dt.DataTable(
+                                                data=[
+                                                    {'Pos %': '%0.2f' % metadataObj.FEATURE['posExpRate'][g], 'Gene List': g} 
+                                                    for g in metadataObj.DATATABLE.keys()[6:6 + metadataObj.FEATURE['numGene']]
+                                                ],
+                                                columns=[{'name':'Pos %', 'id':'Pos %'}, {'name': 'Gene List', 'id': 'Gene List'}],
 
-                                                    id = 'geneList',
+                                                id = 'geneList',
 
-                                                    filter_action='native',
+                                                filter_action='native',
 
-                                                    row_selectable='multi',
+                                                row_selectable='multi',
 
-                                                    fixed_rows={'headers': True},
+                                                fixed_rows={'headers': True},
 
-                                                    style_table=dict(
+                                                style_table=dict(
 
-                                                        height=200
+                                                    height=200
 
-                                                    ),
-
-                                                    style_header=dict(
-                                                        
-                                                        fontFamily='Arial',
-                                                        fontStyle='normal',
-                                                        fontWeight='bold',
-                                                        fontSize=18
-
-                                                    ),
-
-                                                    style_cell=dict(
-
-                                                        padding=5,
-
-                                                        width=100,
-
-                                                        fontFamily='Arial',
-                                                        fontStyle='italic',
-
-                                                        cursor='default'
-
-                                                    )
                                                 ),
 
-                                                type='circle'
+                                                style_header=dict(
+                                                    
+                                                    fontFamily='Arial',
+                                                    fontStyle='normal',
+                                                    fontWeight='bold',
+                                                    fontSize=18
+
+                                                ),
+
+                                                style_cell=dict(
+
+                                                    padding=5,
+
+                                                    width=100,
+
+                                                    fontFamily='Arial',
+                                                    fontStyle='italic',
+
+                                                    cursor='default'
+
+                                                )
                                             )
                                         ],
 
@@ -313,32 +313,7 @@ class WebFramework():
 
                                             style=dict(
 
-                                                width=1000
-
-                                            )
-                                        ),
-
-                                        type='circle'
-                                    ),
-
-                                    html.Hr(
-                                        style=dict(
-
-                                            border='1px solid #D3D3D3',
-                                            margin=20,
-
-                                            height=0
-
-                                        )
-                                    ),
-
-                                    dcc.Loading(
-                                        dcc.Graph(
-                                            id='supplementaryPlot2',
-
-                                            style=dict(
-
-                                                width=1000
+                                                width=1100
 
                                             )
                                         ),
@@ -376,7 +351,9 @@ class WebFramework():
                             width=1100
 
                         )
-                    )
+                    ),
+
+                    dcc.Store(id='storeTempPool')
                 ],
 
                 id='main',

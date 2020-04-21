@@ -3,7 +3,12 @@
 
 
 
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
+from . import basicComparison
+
+from CDCP.component import scatterHeatmapPlot
+from CDCP.component import scatterHeatmapMultiPlot
+from CDCP.component import violinPlot
 
 
 
@@ -17,9 +22,10 @@ class WebFrameworkAction():
         self.FRAMEWORK = frameworkObj
 
 
-    def activate(self, metadataObj, plotDict):
+    def activate(self, metadataObj, plotPool):
         """"""
 
+        ## 初始化 ##
         @self.FRAMEWORK.app.callback(
             Output('geneList', 'id'), 
             [Input('geneListRegion', 'children')])
@@ -43,53 +49,148 @@ class WebFrameworkAction():
 
 
 
+        # 更新Plot ##
+        PS = basicComparison.Parser(metadataObj)
         @self.FRAMEWORK.app.callback(
             Output('mainPlot', 'figure'), 
-            [Input('selectDataSet', 'value'), Input('selectClusterMode', 'value')])
-        def update_mainPlot(value1, value2):
-            if value1 == 'All':
-                if value2 == 'CT':
-                    return plotDict['celltype']
+            [Input('selectDataSet', 'value'), 
+             Input('selectClusterMode', 'value'),
+             Input('co-expButton', 'n_clicks')],
+            [State('geneList', 'selected_rows')])
+        def update_mainPlot(value1, value2, DUMP, value3):
 
-                if value2 == 'SO':
-                    return plotDict['source']
+            if value3 is None or value3 == []:
+
+                if value1 == 'All':
+
+                    if value2 == 'CT':
+                        return plotPool['celltype']
+
+                    if value2 == 'SO':
+                        return plotPool['source']
+
+                else:
+
+                    return plotPool['celltype']
 
             else:
-                return plotDict['celltype']
+                
+                gene_list = [metadataObj.FEATURE['geneList'][_] for _ in value3]
+
+                if len(value3) > 1:
+
+                    comp_list = [gene_list[0]]
+
+                    for i in range(1, len(gene_list)):
+                        PS.compareFields(gene_list[0], gene_list[i])
+                        comp_list.append(gene_list[0] + '/' + gene_list[i])
+
+                    PL = scatterHeatmapMultiPlot.Illustration(metadataObj)
+                    PL.drawMultiScatterHeatmap(comp_list)
+
+                    return PL.FIGURE
+
+                else:
+
+                    PL = scatterHeatmapPlot.Illustration(metadataObj)
+                    PL.drawScatterHeatmap(gene_list[0])
+
+                    return PL.FIGURE
 
 
         @self.FRAMEWORK.app.callback(
             Output('supplementaryPlot1', 'figure'), 
-            [Input('selectDataSet', 'value'), Input('selectClusterMode', 'value')])
-        def update_supplementaryPlot1(value1, value2):
-            if value1 == 'All':
-                if value2 == 'CT':
-                    return plotDict['num_celltype']
+            [Input('selectDataSet', 'value'), 
+             Input('selectClusterMode', 'value'),
+             Input('co-expButton', 'n_clicks')],
+            [State('geneList', 'selected_rows')])
+        def update_supplementaryPlot1(value1, value2, DUMP, value3):
+            
+            if value3 is None or value3 == []:
 
-                if value2 == 'SO':
-                    return plotDict['num_source']
+                if value1 == 'All':
+
+                    if value2 == 'CT':
+                        return plotPool['num_celltype']
+
+                    if value2 == 'SO':
+                        return plotPool['num_source']
+
+                else:
+
+                    return plotPool['num_celltype']
 
             else:
-                return plotDict['num_celltype']
+
+                gene_list = metadataObj.FEATURE['geneList'][value3[0]]
+
+                PL = violinPlot.Illustration(metadataObj)
+                PL.drawViolin(gene_list)
+
+                return PL.FIGURE
 
 
+        
+        
+        ## 其他 ##
+        @self.FRAMEWORK.app.callback(   
+            Output('selectDataSet', 'disabled'), 
+            [Input('geneList', 'selected_rows')])
+        def disable_selectDataSet(value):
+
+            if value is not None and len(value) > 0:
+                return True
 
 
         @self.FRAMEWORK.app.callback(   
             Output('selectClusterMode', 'disabled'), 
-            [Input('selectDataSet', 'value')])
-        def disable_selectClusterMode(value):
-            if value != 'All':
-                return 'CT'
+            [Input('selectDataSet', 'value'),
+             Input('geneList', 'selected_rows')])
+        def disable_selectClusterMode(value1, value2):
+
+            if value1 != 'All' or value2 is not None and len(value2) > 0:
+                return True
+
+
+        @self.FRAMEWORK.app.callback(   
+            Output('co-expButton', 'disabled'), 
+            [Input('geneList', 'selected_rows')])
+        def disable_coExpButton(value):
+
+            if value is None or value == []:
+                return True
+
+
+        @self.FRAMEWORK.app.callback(   
+            Output('cleanButton', 'disabled'), 
+            [Input('geneList', 'selected_rows')])
+        def disable_cleanButton(value):
+
+            if value is None or value == []:
+                return True
+
+
+        @self.FRAMEWORK.app.callback(   
+            Output('geneList', 'selected_rows'), 
+            [Input('cleanButton', 'n_clicks')])
+        def clean_selectGene(DUMP):
+            return []
 
 
 
 
+        #### 调用反馈函数并赋予None参数，用于满足语法检查需求 ####
         loading_geneList(None)
         loading_mainPlot(None)
         loading_supplementaryPlot1(None)
 
-        update_mainPlot(None, None)
-        update_supplementaryPlot1(None, None)
+        update_mainPlot(None, None, None, None)
+        update_supplementaryPlot1(None, None, None, None)
 
-        disable_selectClusterMode(None)
+        disable_selectDataSet(None)
+        disable_selectClusterMode(None, None)
+
+        disable_coExpButton(None)
+        disable_cleanButton(None)
+
+        clean_selectGene(None)

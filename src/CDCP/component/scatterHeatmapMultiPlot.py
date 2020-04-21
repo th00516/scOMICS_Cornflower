@@ -6,8 +6,6 @@
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from datatable import f
-
 
 
 
@@ -27,11 +25,43 @@ class  Illustration:
     def drawMultiScatterHeatmap(self, fieldNames):
         """"""
 
-        self.FIGURE = make_subplots(2, 2, specs=[[{}, {}], 
-                                                 [{}, {}]],
-                                                 subplot_titles=(fieldNames[0] + ' (Exp.)', 
-                                                    'Co-exp. ' + fieldNames[1],
-                                                    'Co-exp. ' + fieldNames[2]))
+        if len(fieldNames) > 4:
+            fieldNames = fieldNames[:4]
+
+        title = []
+
+        if len(fieldNames) == 2:
+
+            title = [
+
+                fieldNames[1] + ' (Co-exp.)', 
+                fieldNames[0] + ' (Exp.)'
+
+            ]
+
+        if len(fieldNames) == 3:
+
+            title = [
+
+                fieldNames[1] + ' (Co-exp.)', 
+                fieldNames[0] + ' (Exp.)', 
+                fieldNames[2] + ' (Co-exp.)'
+
+            ]
+
+        if len(fieldNames) == 4:
+
+            title = [
+
+                fieldNames[1] + ' (Co-exp.)', 
+                fieldNames[0] + ' (Exp.)', 
+                fieldNames[2] + ' (Co-exp.)',
+                fieldNames[3] + ' (Co-exp.)'
+
+            ]
+            
+
+        self.FIGURE = make_subplots(2, 2, specs=[[{}, {}], [{}, {}]], subplot_titles=title)
 
         X = self.METADATA.DATATABLE['UMAP1'].to_list()[0]
         Y = self.METADATA.DATATABLE['UMAP2'].to_list()[0]
@@ -59,33 +89,62 @@ class  Illustration:
 
             1, 2
         )
-        
-        for i in range(1, len(fieldNames)):
 
-            self.FIGURE.add_trace(
-                go.Scattergl(
-                    name=fieldNames[i],
+        self.FIGURE.add_trace(
+            go.Scattergl(
+                name=fieldNames[1],
 
-                    x=X,
-                    y=Y,
+                x=X,
+                y=Y,
 
-                    mode='markers',
-                    marker=dict(
-                    
-                        size=2,
-                        color=self.METADATA.DATATABLE[fieldNames[i]].to_list()[0],
-                        colorscale=['lightgrey', 'green'],
-                        opacity = 0.6
+                mode='markers',
+                marker=dict(
+                
+                    size=2,
+                    color=self.METADATA.DATATABLE[fieldNames[1]].to_list()[0],
+                    colorscale=['lightgrey', 'green'],
+                    showscale=False,
+                    opacity = 0.6
 
-                    ),
-
-                    hoverinfo='text',
-
-                    showlegend=False
                 ),
 
-                2, i
-            )
+                hoverinfo='text',
+
+                showlegend=False
+            ),
+
+            1, 1
+        )
+        
+        if len(fieldNames) > 2:
+
+            for i in range(2, len(fieldNames)):
+
+                self.FIGURE.add_trace(
+                    go.Scattergl(
+                        name=fieldNames[i],
+
+                        x=X,
+                        y=Y,
+
+                        mode='markers',
+                        marker=dict(
+                        
+                            size=2,
+                            color=self.METADATA.DATATABLE[fieldNames[i]].to_list()[0],
+                            colorscale=['lightgrey', 'green'],
+                            showscale=False,
+                            opacity = 0.6
+
+                        ),
+
+                        hoverinfo='text',
+
+                        showlegend=False
+                    ),
+
+                    2, i - 1
+                )
 
         self.FIGURE.update_xaxes(matches='x')
         self.FIGURE.update_yaxes(matches='y')
@@ -96,7 +155,7 @@ class  Illustration:
 
             title=dict(
 
-                text='Expression Heatmap (Multiplot)', 
+                text='Expression and Co-expression Heatmap', 
                 font=dict(
 
                     family='Arial', 

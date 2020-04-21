@@ -22,7 +22,7 @@ class WebFrameworkAction():
         self.FRAMEWORK = frameworkObj
 
 
-    def activate(self, metadataObj, plotPool):
+    def activate(self, metadataPool, plotPool):
         """"""
 
         ## 初始化 ##
@@ -31,7 +31,6 @@ class WebFrameworkAction():
             [Input('geneListRegion', 'children')])
         def loading_geneList(DUMP):
             return 'geneList'
-
 
         @self.FRAMEWORK.app.callback(
             Output('mainPlot', 'id'), 
@@ -49,8 +48,24 @@ class WebFrameworkAction():
 
 
 
-        # 更新Plot ##
-        PS = basicComparison.Parser(metadataObj)
+        ## 更新Gene List ##
+        @self.FRAMEWORK.app.callback(
+            Output('geneList', 'data'), 
+            [Input('selectDataSet', 'value')])
+        def update_geneList(value):
+            
+            if value is None:
+                value = 'All'
+
+            return [
+                {'Pos %': '%0.2f' % metadataPool[value].FEATURE['posExpRate'][_], 'Gene List': _} 
+                for _ in metadataPool[value].FEATURE['geneList']
+            ]
+
+
+
+
+        ## 更新Plots ##
         @self.FRAMEWORK.app.callback(
             Output('mainPlot', 'figure'), 
             [Input('selectDataSet', 'value'), 
@@ -58,6 +73,11 @@ class WebFrameworkAction():
              Input('co-expButton', 'n_clicks')],
             [State('geneList', 'selected_rows')])
         def update_mainPlot(value1, value2, DUMP, value3):
+            
+            if value1 is None:
+                value1 = 'All'
+
+            PS = basicComparison.Parser(metadataPool[value1])
 
             if value3 is None or value3 == []:
 
@@ -69,7 +89,7 @@ class WebFrameworkAction():
 
             else:
                 
-                gene_list = [metadataObj.FEATURE['geneList'][_] for _ in value3]
+                gene_list = [metadataPool[value1].FEATURE['geneList'][_] for _ in value3]
 
                 if len(value3) > 1:
 
@@ -79,14 +99,14 @@ class WebFrameworkAction():
                         PS.compareFields(gene_list[0], gene_list[i])
                         comp_list.append(gene_list[0] + '/' + gene_list[i])
 
-                    PL = scatterHeatmapMultiPlot.Illustration(metadataObj)
+                    PL = scatterHeatmapMultiPlot.Illustration(metadataPool[value1])
                     PL.drawMultiScatterHeatmap(comp_list)
 
                     return PL.FIGURE
 
                 else:
 
-                    PL = scatterHeatmapPlot.Illustration(metadataObj)
+                    PL = scatterHeatmapPlot.Illustration(metadataPool[value1])
                     PL.drawScatterHeatmap(gene_list[0])
 
                     return PL.FIGURE
@@ -110,9 +130,9 @@ class WebFrameworkAction():
 
             else:
 
-                gene_list = metadataObj.FEATURE['geneList'][value3[0]]
+                gene_list = metadataPool[value1].FEATURE['geneList'][value3[0]]
 
-                PL = violinPlot.Illustration(metadataObj)
+                PL = violinPlot.Illustration(metadataPool[value1])
                 PL.drawViolin(gene_list)
 
                 return PL.FIGURE
@@ -173,6 +193,7 @@ class WebFrameworkAction():
         loading_mainPlot(None)
         loading_supplementaryPlot1(None)
 
+        update_geneList(None)
         update_mainPlot(None, None, None, None)
         update_supplementaryPlot1(None, None, None, None)
 

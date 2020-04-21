@@ -19,18 +19,19 @@ if __name__ == '__main__':
 
     ## 导入并解析数据 ##
     P = {}
-    
-    DT = prepareTsv.Metadata()
+    D = {}
 
     # for dataset in ['All', 'Aorta', 'Kidney', 'Liver', 'Lung', 'Neocortex', 'PBMC', 'Pancreas', 'Parotid', 'Thyroid']:
     for dataset in ['All', 'Aorta']:
 
         P.update({dataset:{}})
+        D.update({dataset:{}})
 
-        DT.formatData('data/' + dataset)
+        D[dataset] = prepareTsv.Metadata()
+        D[dataset].formatData('data/' + dataset)
     
         ## 预置的Plots ##
-        PL = scatterPlot.Illustration(DT)
+        PL = scatterPlot.Illustration(D[dataset])
         
         PL.drawScatter('Cell Type')
         P[dataset].update({'celltype': PL.FIGURE})
@@ -38,7 +39,7 @@ if __name__ == '__main__':
         PL.drawScatter('Source')
         P[dataset].update({'source': PL.FIGURE})
 
-        PL = barPlot_cellNumber.Illustration(DT)
+        PL = barPlot_cellNumber.Illustration(D[dataset])
 
         PL.drawBar('Cell Type')
         P[dataset].update({'num_celltype': PL.FIGURE})
@@ -53,9 +54,9 @@ if __name__ == '__main__':
     APP = frameworkDeploy.WebCDCP(None, None)
 
     BF1 = frameworkBuilding1.WebFramework(APP)
-    BF1.build(DT)
+    BF1.build()
 
     ABF1 = frameworkAction1.WebFrameworkAction(APP)
-    ABF1.activate(DT, P)
+    ABF1.activate(D, P)
 
     APP.deploy(None)

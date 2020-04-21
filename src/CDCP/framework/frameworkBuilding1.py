@@ -21,7 +21,7 @@ class WebFramework():
         self.FRAMEWORK = frameworkObj
 
 
-    def build(self, metadataObj):
+    def build(self):
         """"""
 
         self.FRAMEWORK.app.layout = html.Div(
@@ -180,10 +180,6 @@ class WebFramework():
                                             ),
 
                                             dt.DataTable(
-                                                data=[
-                                                    {'Pos %': '%0.2f' % metadataObj.FEATURE['posExpRate'][g], 'Gene List': g} 
-                                                    for g in metadataObj.DATATABLE.keys()[6:6 + metadataObj.FEATURE['numGene']]
-                                                ],
                                                 columns=[{'name':'Pos %', 'id':'Pos %'}, {'name': 'Gene List', 'id': 'Gene List'}],
 
                                                 id = 'geneList',
@@ -313,7 +309,8 @@ class WebFramework():
 
                                             style=dict(
 
-                                                width=1100
+                                                width=1100,
+                                                height=700
 
                                             )
                                         ),
@@ -348,7 +345,8 @@ class WebFramework():
                             border='1px solid #D3D3D3',
                             margin=5,
 
-                            width=1100
+                            width=1100,
+                            height=700
 
                         )
                     ),

@@ -36,15 +36,12 @@ class Metadata:
         self.DATATABLE = dt.fread(dataDir + '/meta.tsv', nthreads=8)
         self.COLOR = dt.fread(dataDir + '/color.tsv', nthreads=8)
 
-        self.FEATURE['numCell'] = self.DATATABLE.nrows
-        self.FEATURE['numGene'] = self.DATATABLE.ncols - 6
-
         self.FEATURE['geneList'] = self.DATATABLE.keys()[6:self.DATATABLE.ncols]
 
         self.FEATURE['typeSet'] = sorted(set(self.DATATABLE['TYPE'].to_list()[0]))
         self.FEATURE['sourceSet'] = sorted(set(self.DATATABLE['SOURCE'].to_list()[0]))
 
         self.FEATURE['posExpRate'] = {
-            _: np.nonzero(self.DATATABLE[_].to_numpy())[0].size / self.FEATURE['numCell'] * 100
+            _: np.nonzero(self.DATATABLE[_].to_numpy())[0].size / self.DATATABLE.nrows * 100
             for _ in self.FEATURE['geneList']
         }

@@ -21,8 +21,7 @@ if __name__ == '__main__':
     P = {}
     D = {}
 
-    # for dataset in ['All', 'Aorta', 'Kidney', 'Liver', 'Lung', 'Neocortex', 'PBMC', 'Pancreas', 'Parotid', 'Thyroid']:
-    for dataset in ['All', 'Aorta']:
+    for dataset in ['All', 'Aorta', 'Kidney', 'Liver', 'Lung', 'Neocortex', 'PBMC', 'Pancreas', 'Parotid', 'Thyroid']:
 
         P.update({dataset:{}})
         D.update({dataset:{}})

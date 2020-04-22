@@ -3,7 +3,7 @@
 
 
 
-from CDCP.model import prepareTsv
+from CDCP.model import prepareData
 
 from CDCP.component import scatterPlot
 from CDCP.component import barPlot_cellNumber
@@ -21,12 +21,13 @@ if __name__ == '__main__':
     P = {}
     D = {}
 
-    for dataset in ['All', 'Aorta', 'Kidney', 'Liver', 'Lung', 'Neocortex', 'PBMC', 'Pancreas', 'Parotid', 'Thyroid']:
+    # for dataset in ['All', 'Aorta', 'Kidney', 'Liver', 'Lung', 'Neocortex', 'PBMC', 'Pancreas', 'Parotid', 'Thyroid']:
+    for dataset in ['All', 'Pancreas']:
 
         P.update({dataset:{}})
         D.update({dataset:{}})
 
-        D[dataset] = prepareTsv.Metadata()
+        D[dataset] = prepareData.Metadata()
         D[dataset].formatData('data/' + dataset)
     
         ## 预置的Plots ##

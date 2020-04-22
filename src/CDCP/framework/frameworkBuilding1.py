@@ -313,7 +313,7 @@ class WebFramework():
                                             style=dict(
 
                                                 width=1100,
-                                                height=700
+                                                height=600
 
                                             )
                                         ),
@@ -349,7 +349,7 @@ class WebFramework():
                             margin=5,
 
                             width=1100,
-                            height=700
+                            height=600
 
                         )
                     ),

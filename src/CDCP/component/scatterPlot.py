@@ -32,11 +32,12 @@ class  Illustration:
 
             for trace in self.METADATA.FEATURE['typeSet']:
 
-                tip = trace
+                tip = trace + ' | ' + self.METADATA.COLOR[f.GROUP == trace, 'CLUSTER']
 
                 if 'MARKER' in self.METADATA.COLOR.keys():
                     
-                    tip = trace + '<br />Maker gene: ' + self.METADATA.COLOR[f.GROUP == trace, 'MARKER'][0, 0]
+                    tip = trace + ' | ' + self.METADATA.COLOR[f.GROUP == trace, 'CLUSTER'] + \
+                          '<br />Maker gene: ' + self.METADATA.COLOR[f.GROUP == trace, 'MARKER'][0, 0]
 
                 X = self.METADATA.DATATABLE[f.TYPE == trace, 'UMAP1'].to_list()[0]
                 Y = self.METADATA.DATATABLE[f.TYPE == trace, 'UMAP2'].to_list()[0]
@@ -66,6 +67,8 @@ class  Illustration:
 
             for trace in self.METADATA.FEATURE['sourceSet']:
 
+                tip = trace
+
                 X = self.METADATA.DATATABLE[f.SOURCE == trace, 'UMAP1'].to_list()[0]
                 Y = self.METADATA.DATATABLE[f.SOURCE == trace, 'UMAP2'].to_list()[0]
 
@@ -85,7 +88,7 @@ class  Illustration:
                         ),
 
                         hoverinfo='text',
-                        hovertext=trace
+                        hovertext=tip
                     )
                 )
 

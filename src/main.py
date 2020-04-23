@@ -23,11 +23,12 @@ if __name__ == '__main__':
 
     for dataset in ['All', 'Aorta', 'Kidney', 'Liver', 'Lung', 'Neocortex', 'PBMC', 'Pancreas', 'Parotid', 'Thyroid']:
 
-        P.update({dataset:{}})
         D.update({dataset:{}})
+        P.update({dataset:{}})
 
         D[dataset] = prepareData.Metadata()
         D[dataset].formatData('data/' + dataset)
+
     
         ## 预置的Plots ##
         PL = scatterPlot.Illustration(D[dataset])

@@ -33,8 +33,8 @@ class Metadata:
     def formatData(self, dataDir):
         """"""
 
-        self.DATATABLE = dt.fread(dataDir + '/meta', nthreads=10)
-        self.COLOR = dt.fread(dataDir + '/color', nthreads=10)
+        self.DATATABLE = dt.fread(dataDir + '/meta', nthreads=8)
+        self.COLOR = dt.fread(dataDir + '/color', nthreads=8)
 
         self.FEATURE['geneList'] = self.DATATABLE.keys()[6:self.DATATABLE.ncols]
 

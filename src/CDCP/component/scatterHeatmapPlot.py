@@ -5,6 +5,8 @@
 
 import plotly.graph_objects as go
 
+from datatable import f
+
 
 
 
@@ -26,28 +28,56 @@ class  Illustration:
 
         self.FIGURE = go.Figure()
 
-        X = self.METADATA.DATATABLE['UMAP1'].to_list()[0]
-        Y = self.METADATA.DATATABLE['UMAP2'].to_list()[0]
+        X1 = self.METADATA.DATATABLE[f[fieldName] == 0, 'UMAP1'].to_list()[0]
+        Y1 = self.METADATA.DATATABLE[f[fieldName] == 0, 'UMAP2'].to_list()[0]
+
+        X2 = self.METADATA.DATATABLE[f[fieldName] > 0, 'UMAP1'].to_list()[0]
+        Y2 = self.METADATA.DATATABLE[f[fieldName] > 0, 'UMAP2'].to_list()[0]
 
         self.FIGURE.add_trace(
             go.Scattergl(
-                name='Expression',
+                name='Unexp.',
 
-                x=X,
-                y=Y,
+                x=X1,
+                y=Y1,
 
                 mode='markers',
                 marker=dict(
                 
                     size=2,
-                    color=self.METADATA.DATATABLE[fieldName].to_list()[0],
+                    color='darkblue',
+                    showscale=False
+
+                ),
+                
+                hoverinfo='text',
+                hovertext=self.METADATA.DATATABLE[f[fieldName] == 0, fieldName].to_list()[0],
+
+                showlegend=False
+            )
+        )
+
+        self.FIGURE.add_trace(
+            go.Scattergl(
+                name='Exp.',
+
+                x=X2,
+                y=Y2,
+
+                mode='markers',
+                marker=dict(
+                
+                    size=2,
+                    color=self.METADATA.DATATABLE[f[fieldName] > 0, fieldName].to_list()[0],
                     colorscale=['darkblue', 'yellow', 'red'],
                     showscale=True
 
                 ),
                 
                 hoverinfo='text',
-                hovertext=self.METADATA.DATATABLE[fieldName].to_list()[0]
+                hovertext=self.METADATA.DATATABLE[f[fieldName] > 0, fieldName].to_list()[0],
+
+                showlegend=False
             )
         )
 

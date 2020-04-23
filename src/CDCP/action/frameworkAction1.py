@@ -11,7 +11,9 @@ from . import basicComparison
 from CDCP.component import scatterHeatmapPlot
 from CDCP.component import scatterHeatmapMultiPlot
 from CDCP.component import heatmapPlot_expCorrelation
+
 from CDCP.component import violinPlot
+from CDCP.component import violinSplitPlot
 
 
 
@@ -151,12 +153,26 @@ class WebFrameworkAction():
 
             else:
 
-                gene_list = metadataPool[value1].FEATURE['geneList'][value3[0]]
+                if len(value3) == 1:
 
-                PL = violinPlot.Illustration(metadataPool[value1])
-                PL.drawViolin(gene_list)
+                    gene_list = metadataPool[value1].FEATURE['geneList'][value3[0]]
 
-                return PL.FIGURE
+                    PL = violinPlot.Illustration(metadataPool[value1])
+                    PL.drawViolin(gene_list)
+
+                    return PL.FIGURE
+
+                else:
+
+                    gene_list1 = metadataPool[value1].FEATURE['geneList'][value3[0]]
+                    gene_list2 = metadataPool[value1].FEATURE['geneList'][value3[1]]
+
+                    PL = violinSplitPlot.Illustration(metadataPool[value1])
+                    PL.drawSplitViolin(gene_list1, gene_list2)
+
+                    return PL.FIGURE
+
+
 
 
         

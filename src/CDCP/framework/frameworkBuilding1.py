@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 
 
+"""
+
+    Author: Hao Yu (yuhao@genomics.cn)
+    Date:   2020-04-24
+    
+"""
+
+
 
 
 import dash_table as dt

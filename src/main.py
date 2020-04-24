@@ -3,6 +3,7 @@
 
 
 
+from CDCP.config import parseConf
 from CDCP.model import prepareData
 
 from CDCP.component import scatterPlot
@@ -18,10 +19,13 @@ from CDCP.action import frameworkAction1
 if __name__ == '__main__':
 
     ## 导入并解析数据 ##
-    P = {}
-    D = {}
+    C = parseConf.Config()
+    C.parseConf('conf/config.cnf')
 
-    for dataset in ['All', 'Aorta', 'Kidney', 'Liver', 'Lung', 'Neocortex', 'PBMC', 'Pancreas', 'Parotid', 'Thyroid']:
+    D = {}
+    P = {}
+
+    for dataset in C.CONF['data_set']:
 
         D.update({dataset:{}})
         P.update({dataset:{}})
@@ -51,12 +55,12 @@ if __name__ == '__main__':
 
 
     ## 启动服务器，构建WebApp ##
-    APP = frameworkDeploy.WebCDCP(None, None)
+    APP = frameworkDeploy.WebCDCP(C.CONF['name'][0], C.CONF['root'][0])
 
-    BF1 = frameworkBuilding1.WebFramework(APP)
+    BF1 = frameworkBuilding1.WebFramework(APP, C)
     BF1.build()
 
-    ABF1 = frameworkAction1.WebFrameworkAction(APP)
+    ABF1 = frameworkAction1.WebFrameworkAction(APP, C)
     ABF1.activate(D, P)
 
-    APP.deploy(None)
+    APP.deploy(C.CONF['port'][0])

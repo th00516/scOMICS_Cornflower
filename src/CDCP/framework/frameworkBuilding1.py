@@ -15,10 +15,11 @@ from . import frameworkDeploy
 class WebFramework():
     """"""
 
-    def __init__(self, frameworkObj):
+    def __init__(self, frameworkObj, configObj):
         """"""
 
         self.FRAMEWORK = frameworkObj
+        self.CONFIG = configObj
 
 
     def build(self):
@@ -52,21 +53,8 @@ class WebFramework():
                                             html.Div('Select a data set', style=dict(padding=10)),
 
                                             dcc.Dropdown(
-                                                options=[
-
-                                                    {'label': '(All)', 'value': 'All'},
-                                                    {'label': 'Aorta', 'value': 'Aorta'},
-                                                    {'label': 'Kidney', 'value': 'Kidney'},
-                                                    {'label': 'Liver', 'value': 'Liver'},
-                                                    {'label': 'Lung', 'value': 'Lung'},
-                                                    {'label': 'Neocortex', 'value': 'Neocortex'},
-                                                    {'label': 'Pancreas', 'value': 'Pancreas'},
-                                                    {'label': 'Parotid', 'value': 'Parotid'},
-                                                    {'label': 'PBMC', 'value': 'PBMC'},
-                                                    {'label': 'Thyroid', 'value': 'Thyroid'}
-                                                    
-                                                ],
-                                                value='All',
+                                                options=self.CONFIG.CONF['options'],
+                                                value=self.CONFIG.CONF['options'][0]['value'],
 
                                                 id='selectDataSet',
 

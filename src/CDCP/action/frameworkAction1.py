@@ -21,10 +21,11 @@ from CDCP.component import violinSplitPlot
 class WebFrameworkAction():
     """"""
 
-    def __init__(self, frameworkObj):
+    def __init__(self, frameworkObj, configObj):
         """"""
 
         self.FRAMEWORK = frameworkObj
+        self.CONFIG = configObj
 
 
     def activate(self, metadataPool, plotPool):
@@ -69,7 +70,7 @@ class WebFrameworkAction():
         def update_geneList(value):
             
             if value is None:
-                value = 'All'
+                value = self.CONFIG.CONF['data_set'][0]
 
             return [
                 {'Pos %': '%0.2f' % metadataPool[value].FEATURE['posExpRate'][_], 'Gene List': _} 
@@ -89,7 +90,7 @@ class WebFrameworkAction():
         def update_mainPlot(value1, value2, DUMP, value3):
             
             if value1 is None:
-                value1 = 'All'
+                value1 = self.CONFIG.CONF['data_set'][0]
 
             PS = basicComparison.Parser(metadataPool[value1])
 

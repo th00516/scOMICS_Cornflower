@@ -211,7 +211,7 @@ class  Illustration:
                         marker=dict(
                         
                             size=4,
-                            color=self.METADATA.DATATABLE[f[fieldNames[0]] == 1, fieldNames[i]].to_list()[0],
+                            color=self.METADATA.DATATABLE[f[fieldNames[i]] == 1, fieldNames[i]].to_list()[0],
                             colorscale=['lightgrey', 'green'],
                             showscale=False
 

@@ -37,7 +37,7 @@ class WebFramework():
             html.Div(
                 [
                     html.Img(
-                        src='http://172.17.14.1/Logo.jpg',
+                        src=self.FRAMEWORK.app.get_asset_url('Logo.jpg'),
 
                         id='LOGO',
 

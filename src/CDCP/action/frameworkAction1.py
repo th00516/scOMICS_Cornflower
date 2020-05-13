@@ -45,7 +45,7 @@ class WebFrameworkAction():
             [Input('mainPlot', 'figure')])
         def loading_framework(DUMP):
             return 'Copyright for ' + self.CONFIG.CONF['our_group'][0] + ' group of BGI in ' + \
-                    time.strftime('%Y', time.localtime()) + '. Support by CDCP project of BGI.'
+                    time.strftime('%Y', time.localtime()) + '. Supported by CDCP project of BGI.'
 
 
         @self.FRAMEWORK.app.callback(

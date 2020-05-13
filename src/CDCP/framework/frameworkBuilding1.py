@@ -270,7 +270,9 @@ class WebFramework():
                             border='1px solid #D3D3D3',
                             margin=5,
 
-                            width=1100
+                            width=1100,
+
+                            zIndex=1
 
                         )
                     ),
@@ -310,9 +312,7 @@ class WebFramework():
                             margin=5,
 
                             width=1100,
-                            height=600,
-
-                            zIndex=-1
+                            height=600
 
                         )
                     ),

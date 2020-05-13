@@ -15,8 +15,6 @@ import plotly.graph_objects as go
 
 from datatable import f
 
-import numpy as np
-
 
 
 
@@ -32,9 +30,6 @@ class  Illustration:
 
         self.TITLE_SIZE = 18
 
-        self.FILTER_MIN = 0
-        self.FILTER_MAX = 100
-
 
     def drawViolin(self, fieldName):
         """"""
@@ -43,23 +38,11 @@ class  Illustration:
 
         for trace in self.METADATA.FEATURE['typeSet']:
 
-            Y = self.METADATA.DATATABLE[f.TYPE == trace, fieldName].to_list()[0]
-
-            Y = np.array(Y)
-
-            Yl = np.percentile(Y, (self.FILTER_MIN))
-            Yh = np.percentile(Y, (self.FILTER_MAX))
-
-            Y[Y < Yl] = Yl
-            Y[Y > Yh] = Yh
-
-            Y = list(Y)
-
             self.FIGURE.add_trace(
                 go.Violin(
                     name=trace,
 
-                    y=Y,
+                    y=self.METADATA.DATATABLE[f.TYPE == trace, fieldName].to_list()[0],
 
                     fillcolor=self.METADATA.COLOR[f.GROUP == trace, 'COLOR'][0, 0],
                     line_color=self.METADATA.COLOR[f.GROUP == trace, 'COLOR'][0, 0],

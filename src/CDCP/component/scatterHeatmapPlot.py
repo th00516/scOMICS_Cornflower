@@ -15,8 +15,6 @@ import plotly.graph_objects as go
 
 from datatable import f
 
-import numpy as np
-
 
 
 
@@ -32,32 +30,28 @@ class  Illustration:
 
         self.TITLE_SIZE = 18
 
-        self.FILTER_MIN = 0
-        self.FILTER_MAX = 100
 
-
-    def drawScatterHeatmap(self, fieldName):
+    def drawScatterHeatmap(self, cluster_class, fieldName):
         """"""
 
         self.FIGURE = go.Figure()
+
+        tip1 = ''
+        tip2 = ''
+
+        if cluster_class == 'Cell Type':
+            tip1 = self.METADATA.DATATABLE[f[fieldName] == 0, 'TYPE'].to_list()[0]
+            tip2 = self.METADATA.DATATABLE[f[fieldName] > 0, 'TYPE'].to_list()[0]
+
+        if cluster_class == 'Tissue':
+            tip1 = self.METADATA.DATATABLE[f[fieldName] == 0, 'SOURCE'].to_list()[0]
+            tip2 = self.METADATA.DATATABLE[f[fieldName] > 0, 'SOURCE'].to_list()[0]
 
         X1 = self.METADATA.DATATABLE[f[fieldName] == 0, 'UMAP1'].to_list()[0]
         Y1 = self.METADATA.DATATABLE[f[fieldName] == 0, 'UMAP2'].to_list()[0]
 
         X2 = self.METADATA.DATATABLE[f[fieldName] > 0, 'UMAP1'].to_list()[0]
         Y2 = self.METADATA.DATATABLE[f[fieldName] > 0, 'UMAP2'].to_list()[0]
-
-        C = self.METADATA.DATATABLE[f[fieldName] > 0, fieldName].to_list()[0]
-
-        C = np.array(C)
-
-        Cl = np.percentile(C, (self.FILTER_MIN))
-        Ch = np.percentile(C, (self.FILTER_MAX))
-
-        C[C < Cl] = Cl
-        C[C > Ch] = Ch
-
-        C = list(C)
 
         self.FIGURE.add_trace(
             go.Scattergl(
@@ -76,7 +70,7 @@ class  Illustration:
                 ),
                 
                 hoverinfo='text',
-                hovertext=self.METADATA.DATATABLE[f[fieldName] == 0, 'TYPE'].to_list()[0],
+                hovertext=tip1,
 
                 showlegend=False
             )
@@ -93,14 +87,14 @@ class  Illustration:
                 marker=dict(
                 
                     size=2,
-                    color=C,
+                    color=self.METADATA.DATATABLE[f[fieldName] > 0, fieldName].to_list()[0],
                     colorscale=['darkblue', 'yellow', 'red'],
                     showscale=True
 
                 ),
                 
                 hoverinfo='text',
-                hovertext=self.METADATA.DATATABLE[f[fieldName] > 0, 'TYPE'].to_list()[0],
+                hovertext=tip2,
 
                 showlegend=False
             )

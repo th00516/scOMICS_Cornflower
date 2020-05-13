@@ -97,14 +97,14 @@ class WebFramework():
                                                 ],
                                                 value='CT',
 
-                                                id='selectClusterMode',
+                                                id='selectColorMode',
 
                                                 clearable=False,
                                                 searchable=False
                                             )
                                         ],
 
-                                        id='selectClusterModeRegion',
+                                        id='selectColorModeRegion',
 
                                         style=dict(
 

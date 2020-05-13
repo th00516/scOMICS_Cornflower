@@ -108,7 +108,7 @@ class WebFrameworkAction():
         @self.FRAMEWORK.app.callback(
             Output('mainPlot', 'figure'), 
             [Input('selectDataSet', 'value'), 
-             Input('selectClusterMode', 'value'),
+             Input('selectColorMode', 'value'),
              Input('primaryGeneList', 'value'),
              Input('analysisButton', 'n_clicks')],
             [State('supplementaryGeneList', 'value')])
@@ -130,7 +130,12 @@ class WebFrameworkAction():
                 if value4 is None or value4 == []:
 
                     PL = scatterHeatmapPlot.Illustration(metadataPool[value1])
-                    PL.drawScatterHeatmap(value3)
+
+                    if value2 == 'CT':
+                        PL.drawScatterHeatmap('Cell Type', value3)
+
+                    if value2 == 'SO':
+                        PL.drawScatterHeatmap('Tissue', value3)
 
                     return PL.FIGURE
 
@@ -148,7 +153,12 @@ class WebFrameworkAction():
                             compListLabel.append(value3 + '/' + value4[i])
 
                         PL = scatterHeatmapMultiPlot.Illustration(metadataPool[value1])
-                        PL.drawMultiScatterHeatmap(compListLabel)
+
+                        if value2 == 'CT':
+                            PL.drawMultiScatterHeatmap('Cell Type', compListLabel)
+
+                        if value2 == 'SO':
+                            PL.drawMultiScatterHeatmap('Tissue', compListLabel)
 
                         return PL.FIGURE
 
@@ -167,7 +177,7 @@ class WebFrameworkAction():
         @self.FRAMEWORK.app.callback(
             Output('supplementaryPlot1', 'figure'), 
             [Input('selectDataSet', 'value'), 
-             Input('selectClusterMode', 'value'),
+             Input('selectColorMode', 'value'),
              Input('primaryGeneList', 'value'),
              Input('analysisButton', 'n_clicks')],
             [State('supplementaryGeneList', 'value')])
@@ -206,15 +216,6 @@ class WebFrameworkAction():
         
         
         ## 其他 ##
-        @self.FRAMEWORK.app.callback(   
-            Output('selectClusterMode', 'disabled'), 
-            [Input('primaryGeneList', 'value')])
-        def disable_selectClusterMode(value):
-
-            if value is not None and len(value) > 0:
-                return True
-        
-
         @self.FRAMEWORK.app.callback(   
             Output('supplementaryGeneList', 'disabled'), 
             [Input('primaryGeneList', 'value')])

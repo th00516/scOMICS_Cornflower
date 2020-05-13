@@ -57,7 +57,7 @@ class  Illustration:
                     )
                 )
 
-        if cluster_class == 'Source':
+        if cluster_class == 'Tissue':
 
             for trace in self.METADATA.FEATURE['sourceSet']:
 
@@ -85,6 +85,8 @@ class  Illustration:
 
             title=dict(
 
+                x=0.5,
+
                 text='Cell Number in Each ' + cluster_class, 
                 font=dict(
                     
@@ -95,7 +97,6 @@ class  Illustration:
 
             ),
 
-            yaxis_type='log', 
             xaxis_tickangle=-45
 
         )

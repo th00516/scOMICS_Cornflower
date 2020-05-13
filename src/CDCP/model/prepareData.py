@@ -44,7 +44,7 @@ class Metadata:
         self.DATATABLE = dt.fread(dataDir + '/meta', nthreads=8)
         self.COLOR = dt.fread(dataDir + '/color', nthreads=8)
 
-        self.FEATURE['geneList'] = self.DATATABLE.keys()[6:self.DATATABLE.ncols]
+        self.FEATURE['geneList'] = self.DATATABLE.keys()[6: self.DATATABLE.ncols]
 
         self.FEATURE['typeSet'] = sorted(set(self.DATATABLE['TYPE'].to_list()[0]))
         self.FEATURE['sourceSet'] = sorted(set(self.DATATABLE['SOURCE'].to_list()[0]))

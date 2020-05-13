@@ -96,6 +96,8 @@ class  Illustration:
 
             title=dict(
 
+                x=0.5,
+
                 text='Cluster by Cell Type',
                 font=dict(
 
@@ -156,12 +158,12 @@ class  Illustration:
 
                                 {
 
-                                    'title.text': 'Cluster by Source'
+                                    'title.text': 'Cluster by Tissue'
                                     
                                 }
                             ],
 
-                            label='by Source',
+                            label='by Tissue',
                             method='update'
 
                         )

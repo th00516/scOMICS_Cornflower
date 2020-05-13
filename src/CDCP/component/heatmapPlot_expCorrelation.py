@@ -64,6 +64,8 @@ class  Illustration:
 
             title=dict(
 
+                x=0.5,
+
                 text='Correlation of Expression',
                 font=dict(
 

@@ -78,6 +78,8 @@ class  Illustration:
 
             title=dict(
 
+                x=0.5,
+
                 text='Cluster by Cell Type (Multiplot)', 
                 font=dict(
 

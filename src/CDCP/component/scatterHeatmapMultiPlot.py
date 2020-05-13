@@ -16,6 +16,8 @@ from plotly.subplots import make_subplots
 
 from datatable import f
 
+import numpy as np
+
 
 
 
@@ -31,20 +33,23 @@ class  Illustration:
 
         self.TITLE_SIZE = 18
 
+        self.FILTER_MIN = 0
+        self.FILTER_MAX = 100
+
 
     def drawMultiScatterHeatmap(self, fieldNames):
         """"""
 
         title = [
             
-            fieldNames[1] + ' (Co-exp.)', 
+            fieldNames[1] + ' (Do-pos.)', 
             fieldNames[0] + ' (Exp.)'
 
         ]
 
         if len(fieldNames) > 2:
             for i in range(2, len(fieldNames)):
-                title.append(fieldNames[i] + ' (Co-exp.)')
+                title.append(fieldNames[i] + ' (Do-pos.)')
 
 
         self.FIGURE = make_subplots(2, 2, specs=[[{}, {}], [{}, {}]], subplot_titles=title)
@@ -56,6 +61,18 @@ class  Illustration:
 
         X2 = self.METADATA.DATATABLE[f[fieldNames[0]] > 0, 'UMAP1'].to_list()[0]
         Y2 = self.METADATA.DATATABLE[f[fieldNames[0]] > 0, 'UMAP2'].to_list()[0]
+
+        C = self.METADATA.DATATABLE[f[fieldNames[0]] > 0, fieldNames[0]].to_list()[0]
+
+        C = np.array(C)
+
+        Cl = np.percentile(C, (self.FILTER_MIN))
+        Ch = np.percentile(C, (self.FILTER_MAX))
+
+        C[C < Cl] = Cl
+        C[C > Ch] = Ch
+
+        C = list(C)
 
         self.FIGURE.add_trace(
             go.Scattergl(
@@ -74,7 +91,7 @@ class  Illustration:
                 ),
                 
                 hoverinfo='text',
-                hovertext=self.METADATA.DATATABLE[f[fieldNames[0]] == 0, fieldNames[0]].to_list()[0],
+                hovertext=self.METADATA.DATATABLE[f[fieldNames[0]] == 0, 'TYPE'].to_list()[0],
 
                 showlegend=False
             ),
@@ -93,14 +110,14 @@ class  Illustration:
                 marker=dict(
                 
                     size=2,
-                    color=self.METADATA.DATATABLE[f[fieldNames[0]] > 0, fieldNames[0]].to_list()[0],
+                    color=C,
                     colorscale=['darkblue', 'yellow', 'red'],
                     showscale=True
 
                 ),
                 
                 hoverinfo='text',
-                hovertext=self.METADATA.DATATABLE[f[fieldNames[0]] > 0, fieldNames[0]].to_list()[0],
+                hovertext=self.METADATA.DATATABLE[f[fieldNames[0]] > 0, 'TYPE'].to_list()[0],
 
                 showlegend=False
             ),
@@ -133,6 +150,7 @@ class  Illustration:
                 ),
 
                 hoverinfo='text',
+                hovertext=self.METADATA.DATATABLE[f[fieldNames[1]] == 0, 'TYPE'].to_list()[0],
 
                 showlegend=False
             ),
@@ -158,6 +176,7 @@ class  Illustration:
                 ),
 
                 hoverinfo='text',
+                hovertext=self.METADATA.DATATABLE[f[fieldNames[1]] == 1, 'TYPE'].to_list()[0],
 
                 showlegend=False
             ),
@@ -193,6 +212,7 @@ class  Illustration:
                         ),
 
                         hoverinfo='text',
+                        hovertext=self.METADATA.DATATABLE[f[fieldNames[i]] == 0, 'TYPE'].to_list()[0],
 
                         showlegend=False
                     ),
@@ -218,6 +238,7 @@ class  Illustration:
                         ),
 
                         hoverinfo='text',
+                        hovertext=self.METADATA.DATATABLE[f[fieldNames[i]] == 1, 'TYPE'].to_list()[0],
 
                         showlegend=False
                     ),
@@ -235,7 +256,9 @@ class  Illustration:
 
             title=dict(
 
-                text='Expression and Co-expression Heatmap', 
+                x=0.5,
+
+                text='Exp. of <i>' + fieldNames[0] + '</i> & Double Positive with Others', 
                 font=dict(
 
                     family='Arial', 

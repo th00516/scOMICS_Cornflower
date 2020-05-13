@@ -1,4 +1,7 @@
-data_set	All	Aorta	Kidney	Liver	Lung	Neocortex	PBMC	Pancreas	Parotid	Thyroid
+#data_set	All	Aorta	Kidney	Liver	Lung	Neocortex	PBMC	Pancreas	Parotid	Thyroid
+#data_set	Aorta	Lung	PBMC
+data_set	Aorta
 name	NHPCA
 root	/NHPCA/
 port	8050
+our_group	CDCP

@@ -58,7 +58,7 @@ class WebFramework():
                                 [
                                     html.Div(
                                         [
-                                            html.Div('Select a data set', style=dict(padding=10)),
+                                            html.Div('Select a Tissue', style=dict(padding=10)),
 
                                             dcc.Dropdown(
                                                 options=self.CONFIG.CONF['options'],
@@ -79,20 +79,20 @@ class WebFramework():
                                             margin=5,
                                             padding=10,
 
-                                            width=250
+                                            width=300
 
                                         )
                                     ),
 
                                     html.Div(
                                         [
-                                            html.Div('Select a cluster mode', style=dict(padding=10)),
+                                            html.Div('Color mode', style=dict(padding=10)),
                                             
                                             dcc.Dropdown(
                                                 options=[
 
-                                                    {'label': 'by Cell Type', 'value': 'CT'},
-                                                    {'label': 'by Source', 'value': 'SO'},
+                                                    {'label': 'Coloring by Cell Type', 'value': 'CT'},
+                                                    {'label': 'Coloring by Tissue', 'value': 'SO'},
                                                     
                                                 ],
                                                 value='CT',
@@ -112,108 +112,85 @@ class WebFramework():
                                             margin=5,
                                             padding=10,
 
-                                            width=250
+                                            width=300
 
                                         )
                                     ),
                                     
                                     html.Div(
                                         [
+                                            html.Div('Analysis of Expression', style=dict(padding=10)),
+
                                             html.Div(
                                                 [
-                                                    html.Button(
-                                                        'Co-Exp.',
+                                                    html.Div('Primary Gene List', style=dict(padding=10)),
 
-                                                        id='co-expButton',
+                                                    dcc.Dropdown(
+                                                        id='primaryGeneList',
 
-                                                        n_clicks=0,
-
-                                                        style=dict(
-
-                                                            border='1px solid #D3D3D3',
-                                                            margin=5,
-                                                            padding=5,
-
-                                                            width=100,
-                                                            height=30
-
-                                                        )
-                                                    ),
-
-                                                    html.Button(
-                                                        'CLEAN',
-
-                                                        id='cleanButton',
-
-                                                        n_clicks=0,
+                                                        placeholder="Search a Primary Gene",
 
                                                         style=dict(
 
-                                                            border='1px solid #D3D3D3',
-                                                            margin=5,
-                                                            padding=5,
-
-                                                            width=100,
-                                                            height=30
+                                                            zIndex=2
 
                                                         )
+
                                                     )
                                                 ],
 
-                                                id='controlPanelRegion',
-                                                
                                                 style=dict(
 
-                                                    display='flex',
-                                                    flexWrap='nowrap',
-                                                    flexDirection='row',
-                                                    justifyContent='space-around',
-
+                                                    border='1px solid #D3D3D3',
                                                     margin=5,
                                                     padding=10
 
                                                 )
                                             ),
 
-                                            dt.DataTable(
-                                                columns=[{'name':'Pos %', 'id':'Pos %'}, {'name': 'Gene List', 'id': 'Gene List'}],
+                                            html.Div(
+                                                [
+                                                    html.Div('Supplementary Gene List', style=dict(padding=10)),
 
-                                                id = 'geneList',
+                                                    html.Button(
+                                                        id='analysisButton',
 
-                                                filter_action='native',
+                                                        n_clicks=0,
 
-                                                row_selectable='multi',
+                                                        style=dict(
 
-                                                fixed_rows={'headers': True},
+                                                            border='1px solid #D3D3D3',
+                                                            margin=10,
+                                                            padding=5,
 
-                                                page_size=6,
+                                                            width=250,
+                                                            height=30
 
-                                                style_table=dict(
+                                                        )
+                                                    ),
 
-                                                    height=250
+                                                    dcc.Dropdown(
+                                                        id='supplementaryGeneList',
 
-                                                ),
+                                                        multi=True,
 
-                                                style_header=dict(
-                                                    
-                                                    fontFamily='Arial',
-                                                    fontStyle='normal',
-                                                    fontWeight='bold',
-                                                    fontSize=18
+                                                        placeholder="Search Supplementary Genes",
 
-                                                ),
+                                                        style=dict(
 
-                                                style_cell=dict(
+                                                            height=100
 
-                                                    padding=5,
+                                                        )
+                                                    )
+                                                ],
 
-                                                    maxWidth=100,
-                                                    minWidth=100,
+                                                style=dict(
 
-                                                    fontFamily='Arial',
-                                                    fontStyle='italic',
+                                                    border='1px solid #D3D3D3',
+                                                    margin=5,
+                                                    padding=10,
 
-                                                    cursor='default'
+                                                    height=185
 
                                                 )
                                             )
@@ -227,7 +204,7 @@ class WebFramework():
                                             margin=5,
                                             padding=10,
 
-                                            width=250,
+                                            width=300,
                                             height=350
 
                                         )
@@ -245,7 +222,7 @@ class WebFramework():
 
                                     margin=5,
 
-                                    width=250
+                                    width=300
 
                                 )
                             ),
@@ -301,34 +278,22 @@ class WebFramework():
                     html.Div(
                         [
                             html.Div(
-                                [
-                                    dcc.Loading(
-                                        dcc.Graph(                                            
-                                            id='supplementaryPlot1',
+                                dcc.Loading(
+                                    dcc.Graph(                                            
+                                        id='supplementaryPlot1',
 
-                                            style=dict(
+                                        style=dict(
 
-                                                width=1100,
-                                                height=600
+                                            width=1100,
+                                            height=600
 
-                                            )
-                                        ),
+                                        )
+                                    ),
 
-                                        type='circle'
-                                    )
-                                ],
+                                    type='circle'
+                                ),
 
-                                id='supplementaryPlotRegion',
-
-                                style=dict(
-
-                                    display='flex',
-                                    flexWrap='nowrap',
-                                    flexDirection='column',
-                                    justifyContent='space-around',
-                                    alignContent='space-around'
-
-                                )
+                                id='supplementaryPlotRegion'
                             )
                         ],
 
@@ -345,7 +310,9 @@ class WebFramework():
                             margin=5,
 
                             width=1100,
-                            height=600
+                            height=600,
+
+                            zIndex=-1
 
                         )
                     ),

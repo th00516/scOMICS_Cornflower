@@ -68,7 +68,7 @@ class  Illustration:
                     )
                 )
 
-        if cluster_class == 'Source':
+        if cluster_class == 'Tissue':
 
             for trace in self.METADATA.FEATURE['sourceSet']:
 
@@ -103,6 +103,8 @@ class  Illustration:
             template='plotly_white',
 
             title=dict(
+
+                x=0.5,
 
                 text='Cluster by ' + cluster_class,
                 font=dict(

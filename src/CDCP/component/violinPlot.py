@@ -15,6 +15,8 @@ import plotly.graph_objects as go
 
 from datatable import f
 
+import numpy as np
+
 
 
 
@@ -30,6 +32,9 @@ class  Illustration:
 
         self.TITLE_SIZE = 18
 
+        self.FILTER_MIN = 0
+        self.FILTER_MAX = 100
+
 
     def drawViolin(self, fieldName):
         """"""
@@ -38,11 +43,23 @@ class  Illustration:
 
         for trace in self.METADATA.FEATURE['typeSet']:
 
+            Y = self.METADATA.DATATABLE[f.TYPE == trace, fieldName].to_list()[0]
+
+            Y = np.array(Y)
+
+            Yl = np.percentile(Y, (self.FILTER_MIN))
+            Yh = np.percentile(Y, (self.FILTER_MAX))
+
+            Y[Y < Yl] = Yl
+            Y[Y > Yh] = Yh
+
+            Y = list(Y)
+
             self.FIGURE.add_trace(
                 go.Violin(
                     name=trace,
 
-                    y=self.METADATA.DATATABLE[f.TYPE == trace, fieldName].to_list()[0],
+                    y=Y,
 
                     fillcolor=self.METADATA.COLOR[f.GROUP == trace, 'COLOR'][0, 0],
                     line_color=self.METADATA.COLOR[f.GROUP == trace, 'COLOR'][0, 0],
@@ -65,7 +82,9 @@ class  Illustration:
 
             title=dict(
 
-                text='Exp. Distribution of <i>' + fieldName +'</i> in Each Cluster', 
+                x=0.5,
+
+                text='Expression of <i>' + fieldName + '</i> in Each Cluster',
                 font=dict(
 
                     family='Arial', 

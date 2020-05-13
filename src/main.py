@@ -48,16 +48,16 @@ if __name__ == '__main__':
         PL.drawScatter('Cell Type')
         P[dataset].update({'celltype': PL.FIGURE})
 
-        PL.drawScatter('Source')
-        P[dataset].update({'source': PL.FIGURE})
+        PL.drawScatter('Tissue')
+        P[dataset].update({'tissue': PL.FIGURE})
 
         PL = barPlot_cellNumber.Illustration(D[dataset])
 
         PL.drawBar('Cell Type')
         P[dataset].update({'num_celltype': PL.FIGURE})
 
-        PL.drawBar('Source')
-        P[dataset].update({'num_source': PL.FIGURE})
+        PL.drawBar('Tissue')
+        P[dataset].update({'num_tissue': PL.FIGURE})
 
 
 

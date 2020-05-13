@@ -125,8 +125,7 @@ class  Illustration:
 
                 text='Exp. Distribution of ' + \
                     '<i>' + fieldName1 + '</i> (<b>LEFT side</b>) and ' + \
-                    '<i>' + fieldName2 + '</i> (<b>RIGHT side</b>) in Each Cluster (' + \
-                    str(self.FILTER_MIN) + '% to ' + str(self.FILTER_MAX) + '%)', 
+                    '<i>' + fieldName2 + '</i> (<b>RIGHT side</b>) in Each Cluster', 
                 font=dict(
 
                     family='Arial', 

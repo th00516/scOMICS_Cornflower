@@ -178,7 +178,7 @@ class WebFramework():
 
                                                         style=dict(
 
-                                                            height=100
+                                                            height=95
 
                                                         )
                                                     )

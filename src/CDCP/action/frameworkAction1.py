@@ -93,13 +93,13 @@ class WebFrameworkAction():
         def update_analysisButton(value):
 
             if value is None or len(value) == 0:
-                return 'SHOW ...'
+                return 'EXHIBIT ...'
 
             if value is not None and 4 > len(value) > 0:
-                return 'SHOW Double Positive'
+                return 'EXHIBIT Double-positive'
 
             if value is not None and len(value) >= 4:
-                return 'SHOW Expression Correlation'
+                return 'EXHIBIT Expression-correlation'
 
 
 
